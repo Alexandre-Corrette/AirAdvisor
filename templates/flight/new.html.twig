@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Flight{% endblock %}
+
+{% block body %}
+    <h1>Create new Flight</h1>
+
+    {{ include('flight/_form.html.twig') }}
+
+    <a href="{{ path('flight_index') }}">back to list</a>
+{% endblock %}
