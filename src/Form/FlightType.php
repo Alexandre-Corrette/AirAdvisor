@@ -6,15 +6,18 @@ use App\Entity\Flight;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class FlightType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('flightNumber')
-            ->add('departureCity')
-            ->add('arrivalCity')
+            ->add('flightNumber', TextType::class, [
+                'attr' => ['placeholder' => 'ex: AF887'],
+            ])
+            ->add('departureCity', TextType::class)
+            ->add('arrivalCity', TextType::class)
         ;
     }
 

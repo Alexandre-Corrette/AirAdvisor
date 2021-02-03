@@ -1,6 +1,47 @@
 {% extends "base.html.twig" %}
+{% block header %}
+   {{ include('_navigation.html.twig') }}
+{% endblock %}
 {% block body %}
 <body>
-   <h1>{{ website }} index</h1>
+   <div class="mainContainer">
+      <section class="imgContainer">
+         <img class="mainImage" src="{{ asset('build/images/plane_main.png') }}">
+         <h1 class="indexTitle">Trouvez le meilleur vol pour votre prochain voyage</h1>
+      </section>
+      <section class="articleContainer">
+         <div class="article1 item">
+            <img class="articleImage" src="https://via.placeholder.com/140.png"> 
+            <div class="textContainer">
+               <p class="articleTitle">Title Title</p>
+               <p class="articleContent">Lorem ipsum dolor sit amet,
+               consectetur adipiscing elit...
+               </p>
+            </div>
+         </div>
+         <div class="trip item">
+            <img class="articleImage" src="https://via.placeholder.com/140.png">
+            {% for flight in flights %} 
+               <div class="textContainer"> 
+                  <p class="articleTitle">{{ flight.departureCity }} to {{ flight.arrivalCity }}</p>
+                  <p class="articleContent">Vol N° {{ flight.flightNumber }}</p>
+               </div>
+                
+            {% endfor %}
+         </div>
+         <div class="article2 item">
+            <div class="textContainer">
+               <p class="articleTitle">Title Title</p>
+               <p class="articleContent">Lorem ipsum dolor sit amet,
+               consectetur adipiscing elit...
+               </p>
+            </div>
+         </div>
+         
+      </section>
+   </div>
 </body>
+{% endblock %}
+{% block footer %}
+   {{ include('_footer.html.twig') }}
 {% endblock %}
