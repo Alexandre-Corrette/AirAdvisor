@@ -21,3 +21,6 @@
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
+.DS_Store
+assets/.DS_Store
+assets/styles/.DS_Store
