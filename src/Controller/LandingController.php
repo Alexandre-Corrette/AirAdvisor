@@ -6,10 +6,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+
+
 class LandingController extends AbstractController
 {
     /**
-     * @Route("/landing/", name="index")
+     * @Route("/landing", name="index")
      */
     public function index(): response
     {
@@ -19,4 +21,5 @@ class LandingController extends AbstractController
      
          ]);
     }
+    
 }
