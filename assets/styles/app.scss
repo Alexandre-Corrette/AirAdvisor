@@ -27,6 +27,9 @@ p {
     border-radius: 8px;
 
 }
+.mainMenu a  {
+    text-decoration: none;
+}
 //CSS for footer
 footer {
     min-height: 100px;
@@ -177,4 +180,9 @@ form input {
     grid-gap: 5px;
     grid-auto-rows: minmax(100px, auto);
     margin-top: 50px;
+}
+//CSS for login page 
+.loginForm {
+    display: flex;
+    flex-direction: column;
 }
