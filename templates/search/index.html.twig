@@ -1,0 +1,19 @@
+{% extends "base.html.twig" %}
+{% block header %}
+   {{ include('_navigation.html.twig') }}
+{% endblock %}
+{% block body %}
+    <div class="mainContainer"> 
+    {{ form_start(searchForm) }}
+        <p>{{ form_row(searchForm.departureCity) }}</p>
+        <p>{{ form_row(searchForm.arrivalCity) }}</p>
+        
+    {{ form_end(searchForm) }}
+
+    {% for flight in flights %}
+        {{ flight.flightNumber }}
+    {% endfor %}
+    </div>
+
+
+{% endblock %}
