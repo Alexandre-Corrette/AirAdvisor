@@ -4,8 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Flight;
 use App\Form\SearchJourneyType;
-use App\Service\SearchJourneyService;
 use App\Repository\FlightRepository;
+use App\Form\SearchCompanyFlightType;
+use App\Service\SearchJourneyService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -27,17 +28,29 @@ class SearchJourneyController extends AbstractController
         $searchJourneyForm = $this->createForm(SearchJourneyType::class, $search);
         $searchJourneyForm->handleRequest($request);
          
+            if ($searchJourneyForm->isSubmitted() && $searchJourneyForm->isValid()) {
+                $flights = $flightRepository->search($search);        
+            } else {
+                $flights = null;
+            }
+        $search = new SearchJourneyService();
+        $searchCompanyFlightForm = $this->createForm(SearchCompanyFlightType::class, $search);
+        $searchCompanyFlightForm->handleRequest($request);
 
-        if ($searchJourneyForm->isSubmitted() && $searchJourneyForm->isValid()) {
-            $flights = $flightRepository->search($search);
-            return $this->redirectToRoute('search_journeys');
-            
-        }
+            if ($searchCompanyFlightForm->isSubmitted() && $searchCompanyFlightForm->isValid()) {
+                $flights = $flightRepository->search($search);
+            } else {
+                $flights = null;
+            }
+        
         return $this->render('search/index.html.twig', [
+            'searchCompanyFlightForm' => $searchCompanyFlightForm->createView(),
             'searchForm' => $searchJourneyForm->createView(),
             'website' => 'AirAdvisor',
-            'flights' => $flightRepository->findAll(),
+            'flights' => $flights,
+            
         ]);
+        
         
     }
 }
