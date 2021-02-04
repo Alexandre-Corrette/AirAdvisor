@@ -1,0 +1,42 @@
+{% extends "base.html.twig" %}
+{% block header %}
+   {{ include('_navigation.html.twig') }}
+{% endblock %}
+{% block body %}
+    <div class="mainContainer"> 
+        <section class="search">
+            <div class="searchByCompany">
+                <p>Recherche par compagnie</p>
+                {{ form_start(searchCompanyFlightForm) }}
+                    <p>{{ form_row(searchCompanyFlightForm.flightNumber) }}</p>    
+                {{ form_end(searchCompanyFlightForm) }} 
+            </div>
+            <div class="searchDestination">
+                <p>Recherche de destination</p>
+                {{ form_start(searchForm) }}
+                    <p>{{ form_row(searchForm.departureCity) }}</p>
+                    <p>{{ form_row(searchForm.arrivalCity) }}</p>    
+                {{ form_end(searchForm) }}
+            </div>
+        </section>
+    
+        <section class="results">
+            {% for flight in flights %}
+                <div class="flight item">
+                    <p class="citiesItem">{{ flight.departureCity }} {{ flight.arrivalCity }}</p>
+                    <p>{{ flight.flightNumber }}</p>
+                    <p class="flightComment">Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+                    Ut enim ad minim veniam,
+                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                </div>
+            {% else %} 
+              <p class="resultSearchMessage">Il n'y a pas de résultat pour votre recherches</p>
+            {% endfor %}
+        </section>
+    
+    </div>
+
+
+{% endblock %}
+{% block footer %} {{ include('_footer.html.twig') }} {% endblock %}

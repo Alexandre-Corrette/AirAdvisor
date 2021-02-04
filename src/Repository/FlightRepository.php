@@ -3,8 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Flight;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Service\SearchJourneyService;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Flight|null find($id, $lockMode = null, $lockVersion = null)
@@ -47,4 +48,32 @@ class FlightRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    /**
+     * @return Flight[] Returns an array of Flight objects
+     */
+    public function search(SearchJourneyService $search): array
+    {
+        $query = $this
+            ->createQueryBuilder('f');
+
+        if (!empty($search->departureCity)) {
+            $query = $query
+            ->andWhere('f.departureCity = :departureCity')
+            ->setParameter('departureCity', $search->departureCity);
+        }
+        if (!empty($search->arrivalCity)) {
+            $query = $query
+            ->andWhere('f.arrivalCity = :arrivalCity')
+            ->setParameter('arrivalCity', $search->arrivalCity);
+        }
+        if (!empty($search->flightNumber)) {
+            $query = $query
+            ->andWhere('f.flightNumber = :flightNumber')
+            ->setParameter('flightNumber', $search->flightNumber);
+        }
+
+        return $query->getQuery()->getResult();
+
+    }
 }
