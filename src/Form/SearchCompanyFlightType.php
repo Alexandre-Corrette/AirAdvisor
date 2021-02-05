@@ -22,7 +22,7 @@ class SearchCompanyFlightType extends AbstractType
             ->add('flightNumber',TextType::class, [
                 'label'=> 'numéro de vol',
                 'attr' => [ 'placeholder' => 'Numéro de vol :'],
-                'required'=> true,
+                'required'=> false,
             ])
             ->add('save', SubmitType::class, [
                 'label' => 'GO!',

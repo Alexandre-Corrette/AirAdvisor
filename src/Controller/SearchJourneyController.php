@@ -23,23 +23,15 @@ class SearchJourneyController extends AbstractController
      * @Route("/", name="journeys")
      */
     public function search(Request $request, FlightRepository $flightRepository): Response
-    {
-        $search = new SearchJourneyService();
-        $searchJourneyForm = $this->createForm(SearchJourneyType::class, $search);
-        $searchJourneyForm->handleRequest($request);
-         
-            if ($searchJourneyForm->isSubmitted() && $searchJourneyForm->isValid()) {
-                $flights = $flightRepository->search($search);        
-            } else {
-                $flights = null;
-            }
+    {   
         $search = new SearchJourneyService();
         $searchCompanyFlightForm = $this->createForm(SearchCompanyFlightType::class, $search);
         $searchCompanyFlightForm->handleRequest($request);
-
-            if ($searchCompanyFlightForm->isSubmitted() && $searchCompanyFlightForm->isValid()) {
+        $searchJourneyForm = $this->createForm(SearchJourneyType::class, $search);
+        $searchJourneyForm->handleRequest($request);
+            if (($searchCompanyFlightForm->isSubmitted() && $searchCompanyFlightForm->isValid()) || ($searchJourneyForm->isSubmitted() && $searchJourneyForm->isValid())) {
                 $flights = $flightRepository->search($search);
-            } else {
+            }  else {
                 $flights = null;
             }
         
@@ -49,8 +41,8 @@ class SearchJourneyController extends AbstractController
             'website' => 'AirAdvisor',
             'flights' => $flights,
             
+            
         ]);
-        
-        
     }
+
 }
