@@ -19,16 +19,18 @@
                </p>
             </div>
          </div>
+         {% for flight in flights %}
          <div class="trip item">
             <img class="articleImage" src="https://via.placeholder.com/140.png">
-            {% for flight in flights %} 
+             
                <div class="textContainer"> 
                   <p class="articleTitle">{{ flight.departureCity }} to {{ flight.arrivalCity }}</p>
                   <p class="articleContent">Vol N° {{ flight.flightNumber }}</p>
                </div>
                 
-            {% endfor %}
+            
          </div>
+         {% endfor %}
          <div class="article2 item">
             <div class="textContainer">
                <p class="articleTitle">Title Title</p>
