@@ -21,7 +21,7 @@ class SearchJourneyType extends AbstractType
         $builder
             ->add('departureCity',TextType::class, [
                 'label' => 'Aéroport de Départ',
-                'required'=> true,
+                'required'=> false,
             ])
             ->add('arrivalCity', TextType::class, [
                 'label' => 'Aéroport d\'arrivée',
