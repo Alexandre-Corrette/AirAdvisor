@@ -1,17 +1,18 @@
 {% extends "base.html.twig" %}
+
 {% block header %}
    {{ include('_navigation.html.twig') }}
 {% endblock %}
+
 {% block body %}
 <body>
-   <div class="mainContainer">
-      <section class="imgContainer">
+   <section class ="img-container">
          <img class="mainImage" src="{{ asset('build/images/plane_main.png') }}">
          <a class="indexTitle" href="{{ path('search_journeys') }}"><h1 >Trouvez le meilleur vol pour votre prochain voyage</h1></a>
-      </section>
-      <section class="articleContainer">
+   </section>
+   <div class="mainContainer">
          <div class="article1 item">
-            <img class="articleImage" src="https://via.placeholder.com/140.png"> 
+            <img class="articleImage" src="https://via.placeholder.com/70.png"> 
             <div class="textContainer">
                <p class="articleTitle">Title Title</p>
                <p class="articleContent">Lorem ipsum dolor sit amet,
@@ -19,18 +20,17 @@
                </p>
             </div>
          </div>
-         {% for flight in flights %}
-         <div class="trip item">
-            <img class="articleImage" src="https://via.placeholder.com/140.png">
-             
-               <div class="textContainer"> 
-                  <p class="articleTitle">{{ flight.departureCity }} to {{ flight.arrivalCity }}</p>
-                  <p class="articleContent">Vol N° {{ flight.flightNumber }}</p>
+         <div class="flightsContainer">
+            {% for flight in flights %} 
+               <div class="trip item">
+                  <img class="articleImage" src="https://via.placeholder.com/140.png">
+                     <div class="textContainer"> 
+                        <p class="articleTitle">{{ flight.departureCity }} to {{ flight.arrivalCity }}</p>
+                        <p class="articleContent">Vol N° {{ flight.flightNumber }}</p>
+                     </div>
                </div>
-                
-            
+            {% endfor %}
          </div>
-         {% endfor %}
          <div class="article2 item">
             <div class="textContainer">
                <p class="articleTitle">Title Title</p>
@@ -39,11 +39,6 @@
                </p>
             </div>
          </div>
-         
-      </section>
    </div>
 </body>
-{% endblock %}
-{% block footer %}
-   {{ include('_footer.html.twig') }}
 {% endblock %}
