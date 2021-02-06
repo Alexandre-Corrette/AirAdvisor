@@ -3,8 +3,8 @@
    {{ include('_navigation.html.twig') }}
 {% endblock %}
 {% block body %}
-    <div class="mainContainer"> 
-        <section class="search">
+    
+        <section class="searchContainer">
             <div class="searchByCompany">
                 <p>Recherche par compagnie</p>
                 {{ form_start(searchCompanyFlightForm) }}
@@ -20,7 +20,7 @@
             </div>
         </section>
     
-        <section class="results">
+        <section class="resultsContainer">
         
             {% for flight in flights %}
                 <div class="flight item">
@@ -32,11 +32,11 @@
                     quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
                 </div>
             {% else %} 
-              <p class="resultSearchMessage">Il n'y a pas de résultat pour votre recherches</p>
+              <p class="resultSearchMessage">Il n'y a pas de résultat pour votre recherche</p>
             {% endfor %}
         </section>
     
-    </div>
+    
 
 
 {% endblock %}
