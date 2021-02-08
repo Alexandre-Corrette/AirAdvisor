@@ -1,7 +1,7 @@
 <div class="global_nav">
     <nav class="mainMenu">
         <a href="{{ path('index') }}"><h1 class="main title">AirAdvisor</h1></a>
-        <a href="{{ path('app_login') }}"><p> Ajouter un avis </p></a>
+        <a href="{{ path('comment_new', {'user': app.user.username }) }}"><p> Ajouter un avis </p></a>
         <a href="{{ path('app_login') }}"><p> login/Inscription </p></a>
 
     </nav>

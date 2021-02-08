@@ -12,7 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class LandingController extends AbstractController
 {
     /**
-     * @Route("/landing", name="index")
+     * @Route("/", name="index")
      */
     public function index(): response
     {
