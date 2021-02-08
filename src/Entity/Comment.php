@@ -18,12 +18,12 @@ class Comment
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=user::class, inversedBy="comments")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="comments")
      */
     private $author;
 
     /**
-     * @ORM\ManyToOne(targetEntity=flight::class, inversedBy="comments")
+     * @ORM\ManyToOne(targetEntity=Flight::class, inversedBy="comments")
      */
     private $flight;
 
