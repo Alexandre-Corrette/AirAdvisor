@@ -99,7 +99,7 @@ a {
     display: grid;
     grid-template-areas:
     "left-sidebar main right-sidebar";
-    grid-template-columns: minmax(180px,5fr) minmax(0,12fr) minmax(100px,7fr);
+    grid-template-columns: minmax(80px,5fr) minmax(0,12fr) minmax(100px,7fr);
     grid-gap: 5px;
     min-height: 100vw;
     border-radius: 8px;
@@ -303,12 +303,51 @@ form input {
 
 }
 
+@media screen and (min-width:360px) {
+    .searchContainer {
+        flex-direction: column;
+    }
+    .searchContainer form {
+        flex-direction: column;   
 
+    }
+    .searchDestination {
+        margin-top: 10px;
+    }
+    .searchByCompany {
+        padding-bottom: 10px;
+        margin-right: auto;
+        margin-left: auto;
+        border-bottom: solid lightgray 1px;
+    }
+    .resultSearchMessage {
+        grid-column: 1/4;
+        text-align: center;
+    }
+    .article1 {
+        flex-direction: column;
+    }
+}
+@media screen and (min-width:720px) {
+    .searchContainer {
+        flex-direction: row;
+        justify-content: space-evenly;
+        align-items: center;
+    }
+    .searchByCompany {
+        margin-right: 10px;
+        margin-left: 10px;
+        margin-bottom: 0;
+        border: none;
+    }
+}
+ 
 @media screen and (min-width: 1200px) {
     .mainMenu, .mainContainer, .mainImage, .img-container, .searchContainer, .resultsContainer {
         max-width: 1128px;
     
     }
+  
    
 
 }
