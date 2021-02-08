@@ -18,6 +18,7 @@ h1, h2 {
 .main.title  {
     font-family: 'Abril Fatface', cursive;
     color: HSL(212,100%,14%);
+    padding-left: 5px;
 }
 p {
     font-family: 'open-sans';
@@ -266,6 +267,40 @@ form input {
 .loginForm input, .loginForm label, .loginForm p {
     margin: 10px auto;
 }
+//CSS for register page 
+.registerContainer {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    min-width: 100%;
+    min-height: 100vh;
+    background-color: #ffffff;
+
+}
+.register.item {
+    flex-direction: column;
+    grid-column: 2/3;
+    grid-row: 2;
+    justify-content: flex-start;
+    align-items: center;
+    min-height: 400px;
+    border: solid 1px HSL(212,100%,14%,0.9);
+}
+.register.item form {
+    display: flex;
+    flex-direction: column;   
+    margin-top: auto;
+    margin-bottom: auto;
+}
+.register.item form div {
+    display: inline;
+}
+
+.register.item form input, .register.item form label, .register.item form p {
+    margin: 5px auto;
+    padding-right: 3px;
+
+}
+
 
 @media screen and (min-width: 1200px) {
     .mainMenu, .mainContainer, .mainImage, .img-container, .searchContainer, .resultsContainer {
