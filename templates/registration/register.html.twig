@@ -12,14 +12,18 @@
             <div class="register item">
                 <h2 class="inscription">Inscription</h2>
                 <div class="register_form">
-                   <p> {{ form_start(registrationForm) }} </p>
-                       <p> {{ form_row(registrationForm.email) }} </p>
-                        <p> {{ form_row(registrationForm.plainPassword, {
+                    {{ form_start(registrationForm) }}
+                        <p>{{ form_row(registrationForm.email) }}</p>
+                        <p>{{ form_row(registrationForm.plainPassword, {
                             label: 'Password'
-                        }) }} </p>
+                        }) }}</p>
+                        <p>{{ form_row(registrationForm.firstName)}}</p>
+                        <p>{{ form_row(registrationForm.lastName)}}</p>
+                        <p>{{ form_row(registrationForm.departureCity)}}</p>
+
                         <p class="agree"> {{ form_row(registrationForm.agreeTerms) }} </p>
 
-                        <button type="submit" class="btn">Register</button>
+                        <button type="submit" class="button go">S'inscrire</button>
                     {{ form_end(registrationForm) }}
                 </div>
             </div>
