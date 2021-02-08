@@ -1,8 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
+html{
+    background-color: HSL( 217, 12%, 16%);
+}
 
 body {
-    background-color: lightgray;
+    background-color: HSL(212,100%,14%,0.1);
     font-size: 14px;
     min-height: 100vw;
     margin: 5px;
@@ -15,6 +18,7 @@ h1, h2 {
 .main.title  {
     font-family: 'Abril Fatface', cursive;
     color: HSL(212,100%,14%);
+    padding-left: 5px;
 }
 p {
     font-family: 'open-sans';
@@ -57,6 +61,17 @@ a {
     text-decoration: none;
 }
 //CSS for landingPage
+.img-container {
+    max-width: 100%;
+    margin-top: 75px;
+    margin-left: auto;
+    margin-right: auto;
+    max-height: auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px;
+    grid-auto-rows: minmax(0px auto);
+}
 .mainImage {
     max-width: calc(100% - 5px);
     min-width: 100%;
@@ -79,39 +94,30 @@ a {
     color: HSL(212, 100%, 14%, 0.5);
 }
 
-.img-container {
-    min-width: 100%;
-    margin-top: 75px;
-    margin-left: auto;
-    margin-right: auto;
-    max-height: auto;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-gap: 10px;
-    grid-auto-rows: minmax(0px auto);
-}
+
 .mainContainer {
     display: grid;
     grid-template-areas:
     "left-sidebar main right-sidebar";
     grid-template-columns: minmax(180px,5fr) minmax(0,12fr) minmax(100px,7fr);
-    grid-gap: 10px;
-    background-color: #ffffff;
+    grid-gap: 5px;
     min-height: 100vw;
     border-radius: 8px;
     padding: 5px;
-    margin-top: 30px;
+    margin-top: 10px;
     margin-left: auto;
     margin-right: auto;
      
 }
 .item {
     display: flex;
-    border:1px solid HSL(212,100%,14%);
+    background-color: #ffffff;
     max-height: 150px;
     border-radius: 8px;
     padding: 5px;
-    margin: 5px;
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-bottom: 5px;
 }
 .article1 {
     grid-area: "left-sidebar";
@@ -123,9 +129,7 @@ a {
 .flightsContainer{
     grid-area: "main";
     display: block;
-    overflow: scroll;
-    
-    
+    overflow: scroll;    
 }
 .articleImage {
     max-width: 200px;
@@ -147,6 +151,8 @@ a {
     display: flex;
     background-color: #ffffff;
     justify-content: space-between;
+    margin-right: auto;
+    margin-left: auto;
     margin-top: 75px;
     padding-top: 15px;
     padding-bottom: 20px;
@@ -227,6 +233,8 @@ form input {
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 5px;
     grid-auto-rows: minmax(100px, auto);
+    margin-right: auto;
+    margin-left: auto;
     padding: 5px;
     margin-top: 20px;
     border-radius: 8px;
@@ -242,9 +250,10 @@ form input {
     min-height: 100vh;
     background-color: #ffffff;
 }
-.login {
+.login.item {
     justify-content: center;
     min-height: 300px;
+    border: solid 1px HSL(212,100%,14%,0.9);
     
 } 
 .loginForm {
@@ -258,9 +267,43 @@ form input {
 .loginForm input, .loginForm label, .loginForm p {
     margin: 10px auto;
 }
+//CSS for register page 
+.registerContainer {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    min-width: 100%;
+    min-height: 100vh;
+    background-color: #ffffff;
+
+}
+.register.item {
+    flex-direction: column;
+    grid-column: 2/3;
+    grid-row: 2;
+    justify-content: flex-start;
+    align-items: center;
+    min-height: 400px;
+    border: solid 1px HSL(212,100%,14%,0.9);
+}
+.register.item form {
+    display: flex;
+    flex-direction: column;   
+    margin-top: auto;
+    margin-bottom: auto;
+}
+.register.item form div {
+    display: inline;
+}
+
+.register.item form input, .register.item form label, .register.item form p {
+    margin: 5px auto;
+    padding-right: 3px;
+
+}
+
 
 @media screen and (min-width: 1200px) {
-    .mainMenu, .mainContainer {
+    .mainMenu, .mainContainer, .mainImage, .img-container, .searchContainer, .resultsContainer {
         max-width: 1128px;
     
     }
