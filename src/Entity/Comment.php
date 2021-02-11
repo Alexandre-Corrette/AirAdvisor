@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\CommentRepository;
+use App\Entity\Flight;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -54,6 +55,7 @@ class Comment
         return $this;
     }
 
+
     public function getFlight(): ?flight
     {
         return $this->flight;
@@ -88,5 +90,9 @@ class Comment
         $this->rate = $rate;
 
         return $this;
+    }
+    public function __toString()
+    {
+        return $this->author;
     }
 }

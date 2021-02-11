@@ -21,19 +21,17 @@ class CommentType extends AbstractType
         $builder
             ->add('comment', TextareaType::class)
             ->add('rate', IntegerType::class)
-            ->add('author', EntityType::class, [
+            ->add('author', EntityType::class,[
                 'class' => User::class,
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('u')
-                        ->orderBy('u.pseudo', 'ASC');
-                    
-                },
-                'choice_label' => 'pseudo',
-
+                'choice_label' => 'firstName',
+                'multiple' => false,
+                'expanded' => false,
             ])
             ->add('flight', EntityType::class, [
                 'class' => Flight::class,
-                'choice_label' => 'flightNumber'
+                'choice_label' => 'flightNumber',
+                'multiple' => false,
+                'expanded' => false,
             ])
         ;
     }

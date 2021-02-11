@@ -30,15 +30,28 @@ a {
     text-decoration: none;
 }
 .button {
+    display: flex;
     background-color: #ffffff;
     font-family: "open sans", sans-serif;
     min-width: 62px;
+    max-width: 62px;
     
 }
 .go {
     border: solid 1px HSL(212,100%,14%);
     border-radius: 8px;
     color: HSL(212,100%,14%);
+}
+
+.back, .save {
+    border: solid 1px HSL(212,100%,14%);
+    border-radius: 8px;
+    color: HSL(212,100%,14%);
+    min-width: 72px;
+    max-width: 72px;
+    align-self: center;
+    margin-top: 10px;
+
 }
 // Css for NavBar
 .global_nav {
@@ -300,6 +313,37 @@ form input {
 .register.item form input, .register.item form label, .register.item form p {
     margin: 5px auto;
     padding-right: 3px;
+
+}
+//Css for new comment page 
+.newComment {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    grid-column: 2/3;
+    grid-row: 2;
+    background-color: #ffffff;
+    border-radius: 8px;
+}
+.newComment form {
+    flex-direction: column;
+    margin-top: 65px;
+    margin-bottom: 35px;
+    align-items: flex-start;
+
+}
+.newComment form div {
+    flex-direction: row;
+    margin-top: 10px;
+    margin-right: 3px;
+}
+//CSS for comment index page 
+.comment {
+    grid-area: main;
+    flex-direction: column;
+    min-width: fit-content;
+    align-items: center;
 
 }
 
