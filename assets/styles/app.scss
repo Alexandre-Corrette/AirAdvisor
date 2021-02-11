@@ -338,6 +338,14 @@ form input {
     margin-top: 10px;
     margin-right: 3px;
 }
+//CSS for comment index page 
+.comment {
+    grid-area: main;
+    flex-direction: column;
+    min-width: fit-content;
+    align-items: center;
+
+}
 
 
 @media screen and (min-width: 1200px) {

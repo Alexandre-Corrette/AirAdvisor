@@ -39,7 +39,6 @@ class CommentController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $comment->setAuthor($this->getUser());
-            $comment->setFlight($this->getFlight());
             $entityManager->persist($comment);
             $entityManager->flush();
 

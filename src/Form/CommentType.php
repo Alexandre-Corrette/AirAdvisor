@@ -23,9 +23,15 @@ class CommentType extends AbstractType
             ->add('rate', IntegerType::class)
             ->add('author', EntityType::class,[
                 'class' => User::class,
+                'choice_label' => 'firstName',
+                'multiple' => false,
+                'expanded' => false,
             ])
             ->add('flight', EntityType::class, [
                 'class' => Flight::class,
+                'choice_label' => 'flightNumber',
+                'multiple' => false,
+                'expanded' => false,
             ])
         ;
     }
