@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Flight;
 use App\Entity\Comment;
 use App\Form\CommentType;
 use App\Repository\CommentRepository;
@@ -27,18 +28,18 @@ class CommentController extends AbstractController
     }
 
     /**
-     * @Route("/new/{user}", name="comment_new", methods={"GET","POST"})
+     * @Route("/new/{pseudo}", name="comment_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, string $pseudo): Response
     {
         $comment = new Comment();
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user = $this->getUser();
-            $comment->setAuthor($user);
             $entityManager = $this->getDoctrine()->getManager();
+            $comment->setAuthor($this->getUser());
+            $comment->setFlight($this->getFlight());
             $entityManager->persist($comment);
             $entityManager->flush();
 
@@ -47,6 +48,7 @@ class CommentController extends AbstractController
 
         return $this->render('comment/new.html.twig', [
             'comment' => $comment,
+            'pseudo' => $pseudo,
             'form' => $form->createView(),
         ]);
     }

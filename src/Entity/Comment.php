@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\CommentRepository;
+use App\Entity\Flight;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -53,6 +54,7 @@ class Comment
 
         return $this;
     }
+
 
     public function getFlight(): ?flight
     {
