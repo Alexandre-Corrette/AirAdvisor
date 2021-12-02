@@ -1,42 +1,75 @@
 {% extends "base.html.twig" %}
 {% block header %}
-   {{ include('_navigation.html.twig') }}
+{{ include('_navigation.html.twig') }}
 {% endblock %}
 {% block body %}
-    
-        <section class="searchContainer">
-            <div class="searchByCompany">
-                <p>Recherche par compagnie</p>
-                {{ form_start(searchCompanyFlightForm) }}
-                    <p>{{ form_row(searchCompanyFlightForm.flightNumber) }}</p>    
-                {{ form_end(searchCompanyFlightForm) }} 
-            </div>
-            <div class="searchDestination">
-                <p>Recherche de destination</p>
-                {{ form_start(searchForm) }}
-                    <p>{{ form_row(searchForm.departureCity) }}</p>
-                    <p>{{ form_row(searchForm.arrivalCity) }}</p>    
-                {{ form_end(searchForm) }}
-            </div>
-        </section>
-    
-        <section class="resultsContainer">
-        
-            {% for flight in flights %}
-                <div class="flight item">
-                    <p class="citiesItem">{{ flight.departureCity }} {{ flight.arrivalCity }}</p>
-                    <p>{{ flight.flightNumber }}</p>
-                    <p class="flightComment">Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-                    Ut enim ad minim veniam,
-                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+
+<section class="container bg-white mt-2 pt-5">
+    <div class="row justify-content-center mb-4">
+        <h2 class=" w-25">Recherche de vol</h2>
+    </div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-4 d-flex justify-content-center">
+
+                <div class="d-flex flex-column w-75 ">
+                    {{ form_start(searchForm) }}
+                    <div id="departureCity" class="mb-3 w-75">
+
+                        {{ form_label(searchForm.departureCity, null, {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(searchForm.departureCity) }}
+                    </div>
+                    <div class="mb-3 w-75">
+                        {{ form_label(searchForm.arrivalCity, null, {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(searchForm.arrivalCity) }}
+                    </div>
+                    <div class="mb-3 w-50">
+                        {{ form_label(searchForm.flightDate, null, {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(searchForm.flightDate) }}
+                    </div>
+                    <div class="mb-3 w-50">
+                        {{ form_label(searchForm.submit, null, {'label_attr': {'class': 'btn
+                        btn-outline-dark'}}) }}
+                        {{ form_widget(searchForm.submit) }}
+                    </div>
+                    {{ form_end(searchForm) }}
                 </div>
-            {% else %} 
-              <p class="resultSearchMessage">Il n'y a pas de résultat pour votre recherche</p>
-            {% endfor %}
-        </section>
+
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<section class="container bg-white rounded mt-4 p-4">
+    <div class="row">
+        <div class="col-12 p-4">
+            <h3>Vos résultats pour un voyage de {{ departureCity }} vers {{ arrivalCity }} le {{ departureDate | date("d/m/Y")}}</h3>
+        </div>
+        {% if flights %}
+        {% for flight in flights %}
+        <div class="col-3">
+            <div class="card m-2">
+                <div class="card-body">
+                    <h5 class="card-title">Aéroport de départ : {{ flight.departure.iataCode }}</h5>
+                    <h5 class="card-title">Aéroport d'arrivée' : {{ flight.arrival.iataCode }}</h5>
+                    <p class="card-text">
     
-    
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+        {% endfor %}
+          
+        {% else %}
+        <p class="resultSearchMessage">Il n'y a pas de résultat pour votre recherche</p>
+        {% endif %}
+    </div>
+</section>
 
 
 {% endblock %}

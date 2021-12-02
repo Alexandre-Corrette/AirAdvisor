@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Service\SearchJourney;
 
 /**
  * @Route("/flight")
@@ -24,6 +25,10 @@ class FlightController extends AbstractController
             'flights' => $flightRepository->findAll(),
         ]);
     }
+
+    /**
+     * @route("/)
+     */
 
     /**
      * @Route("/new", name="flight_new", methods={"GET","POST"})

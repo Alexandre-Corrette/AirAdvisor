@@ -6,7 +6,9 @@ use App\Entity\Flight;
 use App\Form\SearchJourneyType;
 use App\Repository\FlightRepository;
 use App\Form\SearchCompanyFlightType;
+use App\Service\CallApiService;
 use App\Service\SearchJourneyService;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,26 +24,35 @@ class SearchJourneyController extends AbstractController
     /**
      * @Route("/", name="journeys")
      */
-    public function search(Request $request, FlightRepository $flightRepository): Response
+    public function search(Request $request, CallApiService $callApiService): Response
     {   
-        $search = new SearchJourneyService();
-        $searchCompanyFlightForm = $this->createForm(SearchCompanyFlightType::class, $search);
-        $searchCompanyFlightForm->handleRequest($request);
-        $searchJourneyForm = $this->createForm(SearchJourneyType::class, $search);
-        $searchJourneyForm->handleRequest($request);
-            if (($searchCompanyFlightForm->isSubmitted() && $searchCompanyFlightForm->isValid()) || ($searchJourneyForm->isSubmitted() && $searchJourneyForm->isValid())) {
-                $flights = $flightRepository->search($search);
-            }  else {
-                $flights = null;
-            }
         
+        $searchJourneyForm = $this->createForm(SearchJourneyType::class);
+        $searchJourneyForm->handleRequest($request);
+            if (($searchJourneyForm->isSubmitted() && $searchJourneyForm->isValid())) 
+            {   
+                if(!empty($_GET)) {
+                    $query = $_GET['search_journey'];
+                    
+                    $datas = $callApiService->callApiHistoricalFlights($query);
+                    
+                }  else {
+                    $datas = null;
+                   
+            }  
+        }  else {
+            $datas = null;
+        }
+      
         return $this->render('search/index.html.twig', [
-            'searchCompanyFlightForm' => $searchCompanyFlightForm->createView(),
             'searchForm' => $searchJourneyForm->createView(),
             'website' => 'AirAdvisor',
-            'flights' => $flights,
-            
-            
+            'flights' =>  $datas['flights'],
+            'departureCity' => $datas['departureCity'],
+            'arrivalCity' => $datas['arrivalCity'],
+            'departureDate' => $datas['departureDate'],
+
+
         ]);
     }
 

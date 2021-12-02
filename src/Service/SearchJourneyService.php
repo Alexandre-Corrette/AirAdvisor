@@ -2,6 +2,9 @@
 
 namespace App\Service;
 
+use DateTime;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+
 class SearchJourneyService
 {
     /**
@@ -20,7 +23,13 @@ class SearchJourneyService
     public $flightNumber;
 
     /**
+     * @var DateTime
+     */
+    public $flightDate;
+    /**
      * @var string|null
      */
     public $depatureDate;
+
+    
 }

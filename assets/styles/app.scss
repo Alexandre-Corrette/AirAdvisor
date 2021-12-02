@@ -1,5 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
+@import "~bootstrap/scss/bootstrap";
+@import "jquery-ui.css";
+@import "jquery-ui.structure.css";
 html{
     background-color: HSL( 217, 12%, 16%);
 }
@@ -15,6 +18,10 @@ h1, h2 {
     color: HSL(212,100%,14%);
 
 }
+select {
+    max-width: 200px;
+}
+
 .main.title  {
     font-family: 'Abril Fatface', cursive;
     color: HSL(212,100%,14%);
@@ -201,29 +208,7 @@ a {
     color: HSL(212,100%,14%,0.9);
 
 }
-form {
-    display: flex;
-    align-items: center;
-    
-}
-form div {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    margin: 5px;
-    
-    align-items: center;
-}
-form label {
-    color: HSL(212,100%,14%);
-    margin-right: 3px;
-   
-}
-form input {
-    max-width: 100px;
-    border: none;
-    background-color: HSL(0, 0%, 77%, 0.2);
-}
+
 .searchDestination form div {
     flex-direction: row;
 }

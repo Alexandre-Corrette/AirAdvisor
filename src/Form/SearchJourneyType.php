@@ -13,24 +13,37 @@ use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Validator\Constraints\Date;
 
 class SearchJourneyType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('departureCity',TextType::class, [
-                'label' => 'Aéroport de Départ',
-                'required'=> false,
+            ->add('departureCity', TextType::class, [
+                'label' => "Aéroport de Départ",
+                'required' => true,
+                'attr' => ['class' => 'form-control js-user-autocomplete']
+
+            ])
+            ->add('flightDate', DateType::class, [
+                'label' => 'Date de Départ',
+                'required' => true,
+                'widget' => 'single_text',
+                // prevents rendering it as type="date", to avoid HTML5 date pickers
+                'html5' => false,
+                // adds a class that can be selected in JavaScript
+                'attr' => ['class' => 'datepicker'],
             ])
             ->add('arrivalCity', TextType::class, [
                 'label' => 'Aéroport d\'arrivée',
                 'required' => false,
+                'attr' => ['class' => 'form-control js-user-autocomplete']
             ])
-            ->add('save', SubmitType::class, [
+            ->add('submit', SubmitType::class, [
                 'label' => 'GO!',
-            ]);
-        ;
+                'attr' => ['class' => 'btn btn-outline-dark w-100']
+            ]);;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -41,5 +54,4 @@ class SearchJourneyType extends AbstractType
             'csrf_protection' => false,
         ]);
     }
-
 }

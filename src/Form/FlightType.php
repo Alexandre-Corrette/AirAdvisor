@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Validator\Constraints\Date;
 
 class FlightType extends AbstractType
 {
@@ -16,6 +17,7 @@ class FlightType extends AbstractType
             ->add('flightNumber', TextType::class, [
                 'attr' => ['placeholder' => 'ex: AF887'],
             ])
+            ->add('flightDate', Date::class)
             ->add('departureCity', TextType::class)
             ->add('arrivalCity', TextType::class)
         ;
