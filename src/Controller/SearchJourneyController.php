@@ -8,52 +8,41 @@ use App\Repository\FlightRepository;
 use App\Form\SearchCompanyFlightType;
 use App\Service\CallApiService;
 use App\Service\SearchJourneyService;
+use DateTime;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpClient\HttpClient;
 
 /**
- * @Route("search", name="search_")
+ * @Route("/", name="search_")
  */
 
 class SearchJourneyController extends AbstractController
 {
-    /**
-     * @Route("/", name="journeys")
+     /**
+     * @Route("/results/departueCity/{departureCity}/arrivalCity/{arrivalCity}/flightDate/{flightDate}", name="results", methods={"GET"})
      */
-    public function search(Request $request, CallApiService $callApiService): Response
-    {   
+    public function listResults( CallApiService $callApiService,$departureCity, $arrivalCity,$flightDate) {
+       
+        $data = new SearchJourneyService($departureCity,$arrivalCity,$flightDate);
+        //create an airport list
+        $airportList = $callApiService->callApiAirports();
+        //Get the IataCode for departure & arrival airports
+        $data->searchAirportIataCode($airportList);
+        //get a list of flights for destination requested
+        $data->getFlights($callApiService);
         
-        $searchJourneyForm = $this->createForm(SearchJourneyType::class);
-        $searchJourneyForm->handleRequest($request);
-            if (($searchJourneyForm->isSubmitted() && $searchJourneyForm->isValid())) 
-            {   
-                if(!empty($_GET)) {
-                    $query = $_GET['search_journey'];
-                    
-                    $datas = $callApiService->callApiHistoricalFlights($query);
-                    
-                }  else {
-                    $datas = null;
-                   
-            }  
-        }  else {
-            $datas = null;
-        }
-      
-        return $this->render('search/index.html.twig', [
-            'searchForm' => $searchJourneyForm->createView(),
-            'website' => 'AirAdvisor',
-            'flights' =>  $datas['flights'],
-            'departureCity' => $datas['departureCity'],
-            'arrivalCity' => $datas['arrivalCity'],
-            'departureDate' => $datas['departureDate'],
-
-
-        ]);
-    }
+        return $this->render('landing/listresults.html.twig', 
+            [
+            'results' =>$data,
+            'website' => 'AirAdvisor'
+            ]
+        );
+    
+}
 
 }

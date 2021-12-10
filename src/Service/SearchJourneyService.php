@@ -3,6 +3,9 @@
 namespace App\Service;
 
 use DateTime;
+use App\Service\CallApiService;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class SearchJourneyService
@@ -26,10 +29,54 @@ class SearchJourneyService
      * @var DateTime
      */
     public $flightDate;
-    /**
-     * @var string|null
-     */
-    public $depatureDate;
 
+    /**
+     * @var array|null
+     */
+    public $flights = [];
+
+   
+
+    public function __construct(string $departureCity, string $arrivalCity, string $flightDate)
+    {
+        $this->departureCity = $departureCity;
+        $this->arrivalCity = $arrivalCity;
+        $this->flightDate = $flightDate;
+    }
+
+    //will loop over airport list to match airport iatacode
+    public function searchAirportIataCode($airportList ): array
+    {  
+       
+        foreach($airportList as $airportData) {
+            $airportCity = $airportData['nameAirport'];
+            
+            $airportIataCode = $airportData['codeIataAirport'];
+            if($this->departureCity === $airportCity) {
+                $this->flights['iataCodeDepartureCity'] = $airportIataCode;
+                
+            }
+            if($this->arrivalCity === $airportCity) {
+                $this->flights['iataCodeArrivalCity'] = $airportIataCode;
+            }
+        }
+       
+
+        return $this->flights;
+    }
     
-}
+    //will find results in API for flight query
+    public function getFlights($callApiService): array
+    {   
+        $this->flights = $callApiService->callApiFlights($this->flights['iataCodeDepartureCity'], $this->flights['iataCodeArrivalCity'], $this->flightDate);
+        
+        
+       
+        
+        return $this->flights;
+    }
+        
+    
+
+        
+    }

@@ -1,4 +1,21 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+<div id="departureCity" class="mb-3 w-75">
+
+    {{ form_label(form.departureCity, null, {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.departureCity) }}
+</div>
+<div class="mb-3 w-75">
+    {{ form_label(form.arrivalCity, null, {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.arrivalCity) }}
+</div>
+<div class="mb-3 w-50">
+    {{ form_label(form.flightDate, null, {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.flightDate) }}
+</div>
+<div class="mb-3 w-50">
+    {{ form_label(form.submit, null, {'label_attr': {'class': 'btn
+    btn-outline-dark'}}) }}
+    {{ form_widget(form.submit) }}
+</div>
+    
 {{ form_end(form) }}

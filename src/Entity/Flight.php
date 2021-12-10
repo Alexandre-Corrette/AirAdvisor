@@ -2,10 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\FlightRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use DateTime;
+use DateTimeInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\FlightRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass=FlightRepository::class)
@@ -22,7 +25,7 @@ class Flight
     /**
      * @ORM\Column(type="string", length=55, nullable=true)
      */
-    private $flightNumber;
+    public $flightNumber;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -39,9 +42,15 @@ class Flight
      */
     private $comments;
 
+    /**
+     * @ORM\Column(type="date")
+     */
+    protected ?DateTime $flightDate;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+       
     }
 
     public function getId(): ?int
@@ -116,5 +125,18 @@ class Flight
     }
     public function __toString() {
         return $this->flightNumber;
+    }
+
+    public function getFlightDate(): ?DateTime
+    {   
+        
+        return$this->flightDate;
+    }
+
+    public function setFlightDate(?\DateTime $flightDate): self
+    {
+        $this->flightDate = $flightDate;
+
+        return $this;
     }
 }

@@ -3,13 +3,17 @@
 namespace App\Controller;
 
 use App\Entity\Flight;
+use DateTimeInterface;
 use App\Form\FlightType;
+use App\Service\SearchJourney;
+use App\Service\CallApiService;
+use DateTime as GlobalDateTime;
 use App\Repository\FlightRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Service\SearchJourney;
+use Symfony\Component\Validator\Constraints\DateTime;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("/flight")
@@ -19,7 +23,7 @@ class FlightController extends AbstractController
     /**
      * @Route("/", name="flight_index", methods={"GET"})
      */
-    public function index(FlightRepository $flightRepository): Response
+    public function index(FlightRepository $flightRepository ): Response
     {
         return $this->render('flight/index.html.twig', [
             'flights' => $flightRepository->findAll(),
@@ -33,22 +37,27 @@ class FlightController extends AbstractController
     /**
      * @Route("/new", name="flight_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, CallApiService $callApi, FlightRepository $flightRepository): Response
     {
         $flight = new Flight();
         $form = $this->createForm(FlightType::class, $flight);
         $form->handleRequest($request);
-
+        
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($flight);
-            $entityManager->flush();
+     
+            
+                
+                
+            
+            
 
-            return $this->redirectToRoute('flight_index');
+            return $this->redirectToRoute('flight_index', 
+               
+            );
         }
 
         return $this->render('flight/new.html.twig', [
-            'flight' => $flight,
+            
             'form' => $form->createView(),
         ]);
     }

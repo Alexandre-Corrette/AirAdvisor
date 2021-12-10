@@ -31,6 +31,11 @@ class CallApiService
      */
     public $airline;
 
+    /**
+     * @var array
+     */
+    public $flights;
+
     private $client;
  
     /**
@@ -41,63 +46,49 @@ class CallApiService
     public function __construct(HttpClientInterface $client)
     { 
         $this->client = $client;
+        $this->departureCity = '';
+    }
+
+    public function callApi(string $var) {
+
+        $response = $this->client->request(
+            'GET',
+            'https://aviation-edge.com/v2/public/'.$var
+        );
+        $statusCode = $response->getStatusCode();
+        
+        // $statusCode = 200
+        $contentType = $response->getHeaders()['content-type'][0];
+        //$contentType = 'application/json'
+        $content = $response->getContent();
+        
+    
+        $response = $response->toArray();
+       
+        return $response;
+
     }
 
     public function callApiAirports() {
-        $response = $this->client->request(
-            'GET',
-            'https://aviation-edge.com/v2/public/airportDatabase?key='.$this->accessKey.''
-        );
-        $statusCode = $response->getStatusCode();
-        
-        // $statusCode = 200
-        $contentType = $response->getHeaders()['content-type'][0];
-        //$contentType = 'application/json'
-        $content = $response->getContent();
-        
-    
-        $airports = $response->toArray();
+       
 
-        return $airports;
+        return $this->callApi('airportDatabase?key='.$this->accessKey);
 
     }
 
 
-    public function callApiHistoricalFlights(array $query): array
+    public function callApiFlights(string $airportIataCodeDepartureCity, string $airportIataCodeArrivalCity, string $departureDate): array
     {   
-        $flights = [];
             
-            $dataContent['arrivalCity'] = $query['arrivalCity'];
-            $dataContent['departureCity'] = $query['departureCity'];
-            $dataContent['departureDate'] = date('Y-m-d',strtotime($query['flightDate']));
-            $airports = $this->callApiAirports();
-            foreach ($airports as $airport) {
-                if($dataContent['departureCity'] === $airport['nameAirport']) {
-                $airportIataCodeDepartureCity = $airport['codeIataAirport'];
-                }
-                if($dataContent['arrivalCity'] === $airport['nameAirport']) {
-                    $airportIataCodeArrivalCity = $airport['codeIataAirport'];
-                    }
-            }
-            var_dump($airportIataCodeDepartureCity);
+            
         
-       $response = $this->client->request(
-            'GET',
-            'http://aviation-edge.com/v2/public/flightsFuture?key='.$this->accessKey.'&type=departure&iataCode='.$airportIataCodeDepartureCity.'&arr_iataCode='.$airportIataCodeArrivalCity.'&date='.$dataContent['departureDate'].''
-        );
-        $statusCode = $response->getStatusCode();
-        
-        // $statusCode = 200
-        $contentType = $response->getHeaders()['content-type'][0];
-        //$contentType = 'application/json'
-        $content = $response->getContent();
-        
-    
-        $dataContent['flights'] = $response->toArray();
-        
-         
+       return $this->callApi('flightsFuture?key='.$this->accessKey.'&type=departure&iataCode='.$airportIataCodeDepartureCity.'&arr_iataCode='.$airportIataCodeArrivalCity.'&date='.$departureDate.'');
        
+        
+    }
 
-        return $dataContent;
+    public function getAllFlights(): ?array 
+    {
+        return $this->flights;
     }
 }

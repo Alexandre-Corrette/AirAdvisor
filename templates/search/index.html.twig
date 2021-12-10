@@ -8,55 +8,33 @@
     <div class="row justify-content-center mb-4">
         <h2 class=" w-25">Recherche de vol</h2>
     </div>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-12 col-md-4 d-flex justify-content-center">
-
-                <div class="d-flex flex-column w-75 ">
-                    {{ form_start(searchForm) }}
-                    <div id="departureCity" class="mb-3 w-75">
-
-                        {{ form_label(searchForm.departureCity, null, {'label_attr': {'class': 'form-label'}}) }}
-                        {{ form_widget(searchForm.departureCity) }}
-                    </div>
-                    <div class="mb-3 w-75">
-                        {{ form_label(searchForm.arrivalCity, null, {'label_attr': {'class': 'form-label'}}) }}
-                        {{ form_widget(searchForm.arrivalCity) }}
-                    </div>
-                    <div class="mb-3 w-50">
-                        {{ form_label(searchForm.flightDate, null, {'label_attr': {'class': 'form-label'}}) }}
-                        {{ form_widget(searchForm.flightDate) }}
-                    </div>
-                    <div class="mb-3 w-50">
-                        {{ form_label(searchForm.submit, null, {'label_attr': {'class': 'btn
-                        btn-outline-dark'}}) }}
-                        {{ form_widget(searchForm.submit) }}
-                    </div>
-                    {{ form_end(searchForm) }}
-                </div>
-
-
-            </div>
-        </div>
-
-    </div>
+    
 </section>
 
 <section class="container bg-white rounded mt-4 p-4">
     <div class="row">
         <div class="col-12 p-4">
+            {% if departureCity and arrivalCity and departureDate %}
             <h3>Vos résultats pour un voyage de {{ departureCity }} vers {{ arrivalCity }} le {{ departureDate | date("d/m/Y")}}</h3>
+            {% endif %}
+            
         </div>
         {% if flights %}
+       {% dump(flights) %}
         {% for flight in flights %}
         <div class="col-3">
             <div class="card m-2">
                 <div class="card-body">
-                    <h5 class="card-title">Aéroport de départ : {{ flight.departure.iataCode }}</h5>
-                    <h5 class="card-title">Aéroport d'arrivée' : {{ flight.arrival.iataCode }}</h5>
+                    <h5 class="card-title">VOL {{ flight.departure.iataCode | upper }} - {{ flight.arrival.iataCode | upper }} </h5>
+                    <p><span>Décollage: {{ flight.departure.scheduledTime}}</span> <span>terminal: {{flight.departure.terminal | upper}}</span></p>
+                    
+                    <p><span>Aterrissage: {{ flight.arrival.scheduledTime}}</span> <span>terminal: {{flight.arrival.terminal | upper}}</span></p>
                     <p class="card-text">
-    
+                        <span>Compagnie aérienne: {% if flight.airline.name %} {{ flight.airline.name | upper}} {% else %}
+                           <span>Unknown</span>  {% endif %} </span>
+                        
                     </p>
+                    <p><span>Numéro de vol: {{ flight.flight.iataNumber | upper }}</span></p>
                 </div>
             </div>
         </div>
