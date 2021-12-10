@@ -1,0 +1,71 @@
+{% extends "base.html.twig" %}
+{% block header %}
+{{ include('_navigation.html.twig') }}
+{% endblock %}
+{% block body %}
+
+<div class="container bg-white mt-2 pt-5">
+    <div class="row justify-content-center mt-5 mb-4">
+        <h1 class="">Les résultats de votre recherche pour le vol de :</h1>
+        <h3>{{results.departureCity}} vers {{results.arrivalCity}} le {{results.flightDate|date("d/m/Y")}}</h3>
+    </div>
+
+ <pre>
+     {{ dump(results) }}
+ </pre>
+  
+</div>
+<div class="container">
+    <div class="row row-cols-md-3 g-4">
+        {% if results %}
+            
+           {% for flight in results.flights %}
+           
+            <div class="col">
+                <div class="card mb-3 pb-3 shadow">
+                    <div class="card-header"> VOL {{flight.flight.iataNumber|upper}} {% if flight.codeshared is defined %} <br> <span>Compagnie : {{flight.codeshared.airline.name|upper}}</span> {% else %} <br> <span>Compagnie : Unknown</span> {% endif %} </div>
+                    <div class="card-body">
+                        <h5 class="card-title text-decoration-underline">
+                            Départ : {{flight.departure.scheduledTime}}
+                        </h5>
+                        <div class="card-text mb-2">
+                           <span class="">terminal : {{flight.departure.terminal|upper}}</span>
+                           <span>gate : {{flight.departure.gate|upper}}</span>
+                            
+                        </div>
+                        <h5 class="card-title text-decoration-underline">
+                            Arrivée : {{flight.arrival.scheduledTime}}
+                           
+                        </h5>
+                        <div class="card-text">
+                            terminal : {{flight.arrival.terminal|upper}}
+                            gate : {{flight.arrival.gate|upper}}
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2 d-flex justify-content-center">
+                        <button type="button" class="btn btn-outline-dark  mx-1">Voir les avis</button>
+                        <button type="button" class="btn btn-outline-dark  mx-1">Ecrire un avis</button>
+                        <button type="button" class="btn btn-outline-dark  mx-1">Détails du vol</button>
+                    </div>
+                    
+                </div>
+            </div>
+                
+
+               
+           {% endfor %}
+                
+          
+        {% else %}
+            <p>Il n'y a pas de résultat pour {{results.arrivalCity}} le {{results.flightDate|date("d/m/Y")}} au départ de {{results.departureCity}}</p>
+        {% endif %}
+        
+    </div>
+</div>
+
+
+
+
+
+{% endblock %}
+{% block footer %} {{ include('_footer.html.twig') }} {% endblock %}

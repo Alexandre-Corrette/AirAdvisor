@@ -1,22 +1,24 @@
-<div class="container bg-white">
-    
+
+    <div class="navbar-fixed">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
                 <a class="navbar-brand" href="{{ path('index') }}">
                     <h1 class="main title">AirAdvisor</h1>
                 </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <a class="nav-link" href="{{ app.user? path('comment_new', {'pseudo': app.user.firstName }): path('app_login') }}">
+                    <p class="text-white"> Ajouter un avis </p>
+                </a>
+                <a class="nav-link" href="{{ path('app_login') }}">
+                    <p class="text-white"> login/Inscription </p>
+                </a>
             </div>
            
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <a class="nav-link" href="{{ app.user? path('comment_new', {'pseudo': app.user.firstName }): path('app_login') }}">
-                <p> Ajouter un avis </p>
-            </a>
-            <a class="nav-link" href="{{ path('app_login') }}">
-                <p> login/Inscription </p>
-            </a>
+           
 
         </nav>
+    </div>
+       
     
-</div>

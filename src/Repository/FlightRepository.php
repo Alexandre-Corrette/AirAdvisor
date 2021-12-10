@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Flight;
 use App\Service\SearchJourneyService;
+use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
@@ -48,7 +49,7 @@ class FlightRepository extends ServiceEntityRepository
         ;
     }
     */
-
+    
     /**
      * @return Flight[] Returns an array of Flight objects
      */

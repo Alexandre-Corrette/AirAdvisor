@@ -40,14 +40,7 @@ $(document).ready(function(){
     }
     
     )},
-      /*select: function(event, ui){
-      $('.js-user-autocomplete').val(ui.item.value);
-      return false;
-
-    }*/
-      
-    
-    
+ 
     
   })._renderItemData = function( input, item ) {
     console.log(item)
@@ -60,24 +53,9 @@ $(document).ready(function(){
     
 };})
 $( function() {
-  $( ".datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });
+  $( ".datepicker" ).datepicker({ 
+  dateFormat: 'yy-m-d',
+  showOtherMonths: true,
+  selectOtherMonths: true });
 } );
-  /*$("input").autocomplete({
-    source: function (request, response) {
-        $.getJSON("http://ws.geonames.org/postalCodeSearchJSON?callback=?", 
-          { 'postalcode_startsWith': request.term, maxRows: 12, style: "full" }, 
-          function(data) {
-              if(data.postalCodes){
-                  var x = $.map(data.postalCodes, function(v, i){
-                      console.log(v)
-                      return {
-                          label: v.placeName + ' - ' + v.postalCode, 
-                          v: v.postalCode
-                      }
-                  });
-                  response(x);
-              }
-          }
-        );        
-    }
-});*/
+ 

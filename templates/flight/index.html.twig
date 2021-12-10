@@ -3,37 +3,50 @@
 {% block title %}Flight index{% endblock %}
 
 {% block body %}
-    <h1>Flight index</h1>
+<div class="container bg-white ">
+    
+    <h1>Vols vers </h1>
 
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>FlightNumber</th>
-                <th>DepartureCity</th>
-                <th>ArrivalCity</th>
+                <th>Company/Compagnie</th>
+                <th>Flight Number/Numéro de vol</th>
+                <th>Departure City/Aéroport de Départ</th>
+                <th>Arrival City/Aéroport d'arrivée</th>
+                <th>Scheduled at/ Prévu à</th>
+                <th>Terminal</th>
                 <th>actions</th>
             </tr>
         </thead>
         <tbody>
-        {% for flight in flights %}
+            
+        
+        {% if flights %}
+            {% for flight in flights %}
             <tr>
-                <td>{{ flight.id }}</td>
-                <td>{{ flight.flightNumber }}</td>
+                <td></td>
+                <td>{{ flight.flightNumber | upper }}</td>
                 <td>{{ flight.departureCity }}</td>
                 <td>{{ flight.arrivalCity }}</td>
+                <td></td>
+                <td></td>
                 <td>
                     <a href="{{ path('flight_show', {'id': flight.id}) }}">show</a>
                     <a href="{{ path('flight_edit', {'id': flight.id}) }}">edit</a>
                 </td>
             </tr>
+            {% endfor %}
+           
         {% else %}
             <tr>
                 <td colspan="5">no records found</td>
             </tr>
-        {% endfor %}
+            {% endif %}
         </tbody>
     </table>
 
     <a href="{{ path('flight_new') }}">Create new</a>
+</div>
+    
 {% endblock %}

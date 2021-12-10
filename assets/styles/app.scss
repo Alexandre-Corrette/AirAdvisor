@@ -8,23 +8,38 @@ html{
 }
 
 body {
-    background-color: HSL(212,100%,14%,0.1);
-    font-size: 14px;
+    
+    font-size: 16px;
     min-height: 100vw;
     margin: 5px;
 }
-h1, h2 {
+h1, h2, h3, h4, h5, h6 {
     font-family: 'Abril Fatface', cursive;
     color: HSL(212,100%,14%);
 
+}
+.navbar-fixed {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 999;
+}
+.navbar {
+    background-color: HSL(212,100%,14%) !important;
+    position: relative;
 }
 select {
     max-width: 200px;
 }
+footer {
+    background-color: HSL(212,100%,14%) !important;
+    p {
+        color:#ffffff !important;
+    }
+}
 
 .main.title  {
-    font-family: 'Abril Fatface', cursive;
-    color: HSL(212,100%,14%);
+    color: #ffffff;
     padding-left: 5px;
 }
 p {

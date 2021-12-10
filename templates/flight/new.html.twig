@@ -3,11 +3,18 @@
 {% block title %}New Flight{% endblock %}
 
 {% block body %}
-<div class="newFlight item">
-    <h1>Ajouter un vol</h1>
-
-    {{ include('flight/_form.html.twig') }}
-
-    <a href="{{ path('flight_index') }}">back to list</a>
+<div class="container mt-2 pt-5">
+    <div class="row  justify-content-center ">
+        <div class="col-6 mt-2 pt-5">
+            <div class="card p-4">
+                <h1 class="text-center">Rechercher un vol</h1>
+            
+                {{ include('flight/_form.html.twig') }}
+            
+                <a href="{{ path('flight_index') }}">back to list</a>
+            </div>
+        </div>
+    </div>
 </div>
+
 {% endblock %}
