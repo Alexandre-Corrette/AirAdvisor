@@ -58,6 +58,17 @@ class SearchJourneyController extends AbstractController
                 
             }
         }
+        
+        if($flightData['codeshared']['airline']['name']) {
+        
+            $flightData['pathToLogo'] = file_exists('/Users/alexandrecorrette/www/airadvisor/assets/images/logo-'.str_replace(" ", "", $flightData['codeshared']['airline']['name']).'.png');
+            
+         
+        } else {
+            $flightData['pathToLogo'] = file_exists('/Users/alexandrecorrette/www/airadvisor/public/assets/images/logo-'.$flightData['airline']['name'].'.png');
+        }
+     
+        
         return $this->render('flight/show.html.twig',['flight'=> $flightData]);
 
     }

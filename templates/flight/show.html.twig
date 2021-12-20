@@ -4,7 +4,7 @@
 {% block header %}
 {{ include('_navigation.html.twig') }}
 {% endblock %}
-{% block body %}
+{% block content %}
     <div class="container mt-5 pt-5">
        
         <div class="row">
@@ -12,11 +12,16 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="card-Title mb-3">
+                            {% if (flight.pathToLogo) %} 
+                                {% set logo = asset(('build/images/logo-' ~ (flight.codeshared.airline.name|replace({' ':''})) ~ '.png'))  %}
+                                        <img class="w-100" src="  {{  logo  }}   " alt="">
+                            {% else %}
+                            {{'compagnie non informée'}}
+                            {% endif %}
                             
-                            <img class="w-100" src=" {{asset('build/images/AirFrance-LogoPNG1.png')}} " alt="">
                         </div>
                         <div class="card-text mt-5">
-                            <div class="container">
+                            <div class="container"> 
                                 <div class="row mb-5">
                                     <div class="col-6">
                                         <p>Aéroport de départ : </p>
@@ -122,3 +127,4 @@
 
     
 {% endblock %}
+{% block footer %} {{ parent() }}{% endblock %}

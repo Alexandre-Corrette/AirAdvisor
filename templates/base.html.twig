@@ -22,7 +22,7 @@
                 {{ encore_entry_script_tags('app') }}
                 
                 {% endblock %}
-            <div id="footer" class="footer">{% block footer %} <p>blabla</p> {% endblock %}</div> 
+            <div id="footer" class="footer">{% block footer %} {{ include('_footer.html.twig') }} {% endblock %}</div> 
             {% endblock %}
             
       
