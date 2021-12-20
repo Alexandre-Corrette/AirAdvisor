@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 @import "~bootstrap/scss/bootstrap";
 @import "jquery-ui.css";
 @import "jquery-ui.structure.css";
@@ -12,6 +13,7 @@ body {
     font-size: 16px;
     min-height: 100vw;
     margin: 5px;
+    padding-bottom: 120px;
 }
 h1, h2, h3, h4, h5, h6 {
     font-family: 'Abril Fatface', cursive;
@@ -31,11 +33,20 @@ h1, h2, h3, h4, h5, h6 {
 select {
     max-width: 200px;
 }
-footer {
+.footer {
     background-color: HSL(212,100%,14%) !important;
+    position: fixed;
+    height: 100px;
+    bottom: 0;
+    width: 100%;
+    
     p {
         color:#ffffff !important;
     }
+}
+
+.flight-number {
+    font-family: 'Bebas Neue', cursive !important;
 }
 
 .main.title  {

@@ -1,34 +1,124 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Flight{% endblock %}
-
+{% block title %}Vol {{flight.flight.iataNumber|upper}}{% endblock %}
+{% block header %}
+{{ include('_navigation.html.twig') }}
+{% endblock %}
 {% block body %}
-    <h1>Flight</h1>
+    <div class="container mt-5 pt-5">
+       
+        <div class="row">
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-Title mb-3">
+                            
+                            <img class="w-100" src=" {{asset('build/images/AirFrance-LogoPNG1.png')}} " alt="">
+                        </div>
+                        <div class="card-text mt-5">
+                            <div class="container">
+                                <div class="row mb-5">
+                                    <div class="col-6">
+                                        <p>Aéroport de départ : </p>
+                                        <p>{{flight.departure.iataCode|upper}}</p>
+                                        <p>Aéroport d'arrivée : </p>
+                                        <p>{{flight.arrival.iataCode|upper}}</p>
+                                        
+                                    </div>
+                                    <div class="col-6">
+                                        <h3 class="flight-number" >Vol N°{{flight.flight.iataNumber|upper}}</h3>
+                                        <h3 class="flight-number">Prévu à : {{flight.departure.scheduledTime}}</h3>
+                                    </div>
+                                </div>
+                                <table class="table mt-5">
+                                    <thead>
+                                        <th colspan="2" >Départ</th>
+                                        <th colspan="2" >Arrivée</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope='col'>Terminal</th>
+                                            <th scope='col'>Porte</th>
+                                            <th scope='col'>Terminal</th>
+                                            <th scope='col'>Porte</th>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">{{flight.departure.terminal|upper}}</th>
+                                            <td>{{flight.departure.gate|upper}}</td>
+                                            <td>{{flight.arrival.terminal|upper}}</td>
+                                            <td>{{flight.arrival.gate|upper}}</td>
+                                        </tr>
+                                        
+                                    </tbody>
+                            
+                                </table>
+                            </div>
+                            
+                            
+                            
+                            
+                            
+                        </div>
+                        <div>
+                            
+                        </div>
+                    </div>
+                      
+                            
+                            <pre>
+                                {{ dump(flight) }}
+                            </pre>
+                        
+                         
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="card-title">
+                            <h3>Le meilleur vol de ma vie!!</h3>
+                        </div>
+                        <div class="card-text">
+                            <p>
+                                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Vitae dicta esse quo delectus optio non quae doloremque accusantium, nesciunt, deserunt numquam explicabo. Quisquam sunt ad pariatur incidunt molestiae commodi ducimus?
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="card-title">
+                            <h3>Le meilleur vol de ma vie!!</h3>
+                        </div>
+                        <div class="card-text">
+                            <p>
+                                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Vitae dicta esse quo delectus optio non quae doloremque accusantium, nesciunt, deserunt numquam explicabo. Quisquam sunt ad pariatur incidunt molestiae commodi ducimus?
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="card-title">
+                            <h3>Le meilleur vol de ma vie!!</h3>
+                        </div>
+                        <div class="card-text">
+                            <p>
+                                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Vitae dicta esse quo delectus optio non quae doloremque accusantium, nesciunt, deserunt numquam explicabo. Quisquam sunt ad pariatur incidunt molestiae commodi ducimus?
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ flight.id }}</td>
-            </tr>
-            <tr>
-                <th>FlightNumber</th>
-                <td>{{ flight.flightNumber }}</td>
-            </tr>
-            <tr>
-                <th>DepartureCity</th>
-                <td>{{ flight.departureCity }}</td>
-            </tr>
-            <tr>
-                <th>ArrivalCity</th>
-                <td>{{ flight.arrivalCity }}</td>
-            </tr>
-        </tbody>
-    </table>
+   
 
-    <a href="{{ path('flight_index') }}">back to list</a>
+   
 
-    <a href="{{ path('flight_edit', {'id': flight.id}) }}">edit</a>
+    <a href="">edit</a>
 
-    {{ include('flight/_delete_form.html.twig') }}
+    
 {% endblock %}

@@ -35,9 +35,14 @@ class SearchJourneyService
      */
     public $flights = [];
 
+    /**
+     * @var array|null
+     */
+    public $error = [];
+
    
 
-    public function __construct(string $departureCity, string $arrivalCity, string $flightDate)
+    public function __construct(?string $departureCity, ?string $arrivalCity, ?string $flightDate)
     {
         $this->departureCity = $departureCity;
         $this->arrivalCity = $arrivalCity;
@@ -70,12 +75,14 @@ class SearchJourneyService
     {   
         $this->flights = $callApiService->callApiFlights($this->flights['iataCodeDepartureCity'], $this->flights['iataCodeArrivalCity'], $this->flightDate);
         
-        
+        if($this->flights['success'] != false) {
+            return $this->flights;
+        } else return $this->error;
        
         
-        return $this->flights;
-    }
         
+    }
+
     
 
         

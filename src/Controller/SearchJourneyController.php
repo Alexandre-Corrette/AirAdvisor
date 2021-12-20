@@ -23,26 +23,43 @@ use Symfony\Component\HttpClient\HttpClient;
 
 class SearchJourneyController extends AbstractController
 {
-     /**
-     * @Route("/results/departueCity/{departureCity}/arrivalCity/{arrivalCity}/flightDate/{flightDate}", name="results", methods={"GET"})
-     */
-    public function listResults( CallApiService $callApiService,$departureCity, $arrivalCity,$flightDate) {
-       
-        $data = new SearchJourneyService($departureCity,$arrivalCity,$flightDate);
-        //create an airport list
-        $airportList = $callApiService->callApiAirports();
-        //Get the IataCode for departure & arrival airports
-        $data->searchAirportIataCode($airportList);
-        //get a list of flights for destination requested
-        $data->getFlights($callApiService);
+    /**
+    * @Route("/results/departureCity/{departureCity}/arrivalCity/{arrivalCity}/flightDate/{flightDate}", name="results", methods={"GET"})
+    */
+    public function listResults( CallApiService $callApiService,string $departureCity,string $arrivalCity,string $flightDate): Response
+    {
+        
+        $departureCityIataCode = substr($departureCity, -3);
+        $arrivalCityIataCode = substr($arrivalCity, -3);
         
         return $this->render('landing/listresults.html.twig', 
             [
-            'results' =>$data,
+            'results' =>$callApiService->callApiFlights($departureCityIataCode, $arrivalCityIataCode, $flightDate),
+            'departureCity' => $departureCity,
+            'arrivalCity' => $arrivalCity,
+            'flightDate' => $flightDate,
             'website' => 'AirAdvisor'
             ]
         );
+    }
+
+    /**
+     * @Route("/flight/{id}/departure/{iataCode}/date/{flightDate}/flightNumber/{flightNumber}", name="flight")
+     */
+    public function showFlight($id,$flightDate,$iataCode,$flightNumber, CallApiService $callApiService): Response
+    {
     
-}
+        $flights = $callApiService->getFlightByFlightNumber($iataCode,$flightDate,$id);
+        
+        foreach($flights as $flight) {
+            if($flightNumber === $flight['flight']['iataNumber'])
+            {
+                $flightData = $flight;
+                
+            }
+        }
+        return $this->render('flight/show.html.twig',['flight'=> $flightData]);
+
+    }
 
 }
