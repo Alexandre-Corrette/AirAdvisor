@@ -2,24 +2,20 @@
 {% block header %}
 {{ include('_navigation.html.twig') }}
 {% endblock %}
-{% block body %}
+{% block content %}
 
 <div class="container bg-white mt-2 pt-5">
     <div class="row justify-content-center mt-5 mb-4">
         <h1 class="">Les résultats de votre recherche pour le vol de :</h1>
-        <h3>{{results.departureCity}} vers {{results.arrivalCity}} le {{results.flightDate|date("d/m/Y")}}</h3>
+        <h3>{{departureCity}} vers {{arrivalCity}} le {{flightDate|date("d/m/Y")}}</h3>
     </div>
-
- <pre>
-     {{ dump(results) }}
- </pre>
   
 </div>
 <div class="container">
     <div class="row row-cols-md-3 g-4">
-        {% if results %}
+        {% if results.error is not defined %}
             
-           {% for flight in results.flights %}
+           {% for flight in results %}
            
             <div class="col">
                 <div class="card mb-3 pb-3 shadow">
@@ -43,9 +39,9 @@
                         </div>
                     </div>
                     <div class="d-grid gap-2 d-flex justify-content-center">
-                        <button type="button" class="btn btn-outline-dark  mx-1">Voir les avis</button>
+                        <button type="button" class="btn btn-outline-dark  mx-1">Voir les avis</button>  
                         <button type="button" class="btn btn-outline-dark  mx-1">Ecrire un avis</button>
-                        <button type="button" class="btn btn-outline-dark  mx-1">Détails du vol</button>
+                        <a href=" {{ path('search_flight', {'iataCode':flight.departure.iataCode, 'id': flight.codeshared.flight.iataNumber ?? flight.flight.iataNumber , 'flightNumber': flight.flight.iataNumber, 'flightDate': flightDate }) }}  " class="btn btn-outline-dark  mx-1">Détails du vol</a>
                     </div>
                     
                 </div>
@@ -57,7 +53,27 @@
                 
           
         {% else %}
-            <p>Il n'y a pas de résultat pour {{results.arrivalCity}} le {{results.flightDate|date("d/m/Y")}} au départ de {{results.departureCity}}</p>
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">
+                            Il n'y a pas de vol pour {{arrivalCity}} le {{flightDate|date("d/m/Y")}} au départ de {{departureCity}}
+                        </h3>
+                        <div class="card-text">
+                            <p>Merci de vérifier le: </p>
+                            <ul>
+                                <li>Nom de l'aéroport de départ</li>
+                                <li>Nom de l'aéroport d'arrivée</li>
+                                <li>La date de départ</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p>
+               
+            </p>
+           
         {% endif %}
         
     </div>
@@ -68,4 +84,4 @@
 
 
 {% endblock %}
-{% block footer %} {{ include('_footer.html.twig') }} {% endblock %}
+{% block footer %} {{ parent() }}{% endblock %}

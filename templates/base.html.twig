@@ -14,16 +14,20 @@
     <body>
         
             {% block body %}
-                <div class="container-fluid p-5">
+                <div  id="content" class="container-fluid mt-5">
                     {% block content %}{% endblock %}
                 </div>
+                {% block javascripts %}
+               
+                {{ encore_entry_script_tags('app') }}
+                
+                {% endblock %}
+            <div id="footer" class="footer">{% block footer %} {{ include('_footer.html.twig') }} {% endblock %}</div> 
             {% endblock %}
-        
-        {% block javascripts %}
-        <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
-        {{ encore_entry_script_tags('app') }}
-    {% endblock %}
+            
+      
     </body>
-    <footer> {% block footer %} {{ include('_footer.html.twig') }} {% endblock %} </footer>
+    
+   
     
 </html>

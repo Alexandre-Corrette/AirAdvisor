@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use DateTime; 
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
  
 class CallApiService
@@ -46,7 +47,8 @@ class CallApiService
     public function __construct(HttpClientInterface $client)
     { 
         $this->client = $client;
-        $this->departureCity = '';
+        
+       
     }
 
     public function callApi(string $var) {
@@ -59,9 +61,10 @@ class CallApiService
         
         // $statusCode = 200
         $contentType = $response->getHeaders()['content-type'][0];
+       
         //$contentType = 'application/json'
         $content = $response->getContent();
-        
+       
     
         $response = $response->toArray();
        
@@ -90,5 +93,11 @@ class CallApiService
     public function getAllFlights(): ?array 
     {
         return $this->flights;
+    }
+
+    public function getFlightByFlightNumber(string $iataCode, string $flightDate,string $flightNumber): array
+    {   
+       
+        return $this->callApi('flightsFuture?key='.$this->accessKey.'&type=departure&iataCode='.$iataCode.'&date='.$flightDate.'&flight_num='.$flightNumber.'');
     }
 }

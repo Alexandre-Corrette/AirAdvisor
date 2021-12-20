@@ -36,7 +36,7 @@ class LandingController extends AbstractController
                 
                 return $this->redirectToRoute('search_results',[
                     'departureCity' => $_GET['search_journey']['departureCity'] ,
-                    'arrivalCity' => $_GET['search_journey']['arrivalCity'], 
+                    'arrivalCity' => $_GET['search_journey']['arrivalCity'] , 
                     'flightDate' => $_GET['search_journey']['flightDate']]);
             }
             
