@@ -16,7 +16,7 @@
                                 {% set logo = asset(('build/images/logo-' ~ (flight.codeshared.airline.name|replace({' ':''})) ~ '.png'))  %}
                                         <img class="w-100" src="  {{  logo  }}   " alt="">
                             {% else %}
-                            {{'compagnie non informée'}}
+                            <h3>{{'compagnie non informée'}}</h3> 
                             {% endif %}
                             
                         </div>
