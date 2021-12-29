@@ -11,14 +11,20 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class RegistrationFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('email')
+            ->add('email', EmailType::class, [
+                'label' => 'Votre email',
+                'attr' => [ 'placeholder' => 'name@example.com ', 'class' => 'form-control']
+
+            ])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
                 'constraints' => [
@@ -42,16 +48,24 @@ class RegistrationFormType extends AbstractType
                         'max' => 4096,
                     ]),
                 ],
+                'attr' => ['class' => 'form-control']
             ])
             ->add('firstName', TextType::class, [
-                'label'=>'prénom']
+                'label'=>'prénom',
+                'attr' => [ 'placeholder' => 'John', 'class' => 'form-control']]
             )
             ->add('lastName', TextType::class, [
-                'label'=>'Nom'
+                'label'=>'Nom',
+                'attr' => [ 'placeholder' => 'doe', 'class' => 'form-control']
             ])
             ->add('departureCity', TextType::class, [
-                'label'=>'Votre aéroport de départ'
+                'label'=>'Votre ville de départ',
+                'attr' => [ 'placeholder' => 'Paris', 'class' => 'form-control']
             ])
+            ->add('Inscription', SubmitType::class, [
+                'attr' => [ 'class' => 'btn btn-outline-dark',
+
+            ]])
         ;
     }
 

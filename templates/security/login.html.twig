@@ -3,45 +3,51 @@
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
-<div class="loginContainer">
-<form class="loginForm" method="post">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
-
-    {% if app.user %}
-        <div class="mb-3">
-            You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
-        </div>
-    {% endif %}
-
-    <h1 class="main title">AirAdvisor</h1>
-    <div class="login item">
-        <h2>LOG IN</h2>
-        <label for="inputEmail">votre email</label>
-        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" required autofocus>
-        <label for="inputPassword">Mot de passe</label>
-        <input type="password" name="password" id="inputPassword" class="form-control" required>
-        <input type="hidden" name="_csrf_token"
-            value="{{ csrf_token('authenticate') }}"
-        >
-
-        {#
-            Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-            See https://symfony.com/doc/current/security/remember_me.html
-
-            <div class="checkbox mb-3">
-                <label>
-                    <input type="checkbox" name="_remember_me"> Remember me
-                </label>
+<div class="row mt-5 pt-5 justify-content-center">
+    <div class="col col-md-3">
+        <div class="card">
+            <form class="form" method="post">
+                {% if error %}
+                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                {% endif %}
+            
+                {% if app.user %}
+                    <div class="mb-3">
+                        You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+                    </div>
+                {% endif %}
+                    <div class="card-body">
+                        <h1 class="car-title text-center">AirAdvisor </h1>
+                        <h2 class="text-center" >LOG IN</h2>
+               
+                   
+                    <div class="card-text">
+                        <label for="inputEmail">votre email</label>
+                        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" required autofocus>
+                        <label for="inputPassword">Mot de passe</label>
+                        <input type="password" name="password" id="inputPassword" class="form-control" required>
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                
+                        {#
+                            Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
+                            See https://symfony.com/doc/current/security/remember_me.html
+                
+                            <div class="checkbox mb-3">
+                                <label>
+                                    <input type="checkbox" name="_remember_me"> Remember me
+                                </label>
+                            </div>
+                        #}
+                        <a href="{{ path('app_register') }}"  class="mb-3" ><p>Pas encore inscrit? je crée mon compte</p></a>
+                
+                       
+                    </div>
+                    <button class="btn btn-outline-dark mt-3" type="submit">Go!</button>
+                </form>
             </div>
-        #}
-        <a href="{{ path('app_register') }}"><p>Pas encore inscrit? je crée mon compte</p></a>
+            </div>
 
-        <button class="button go" type="submit">
-            Go!
-        </button>
-    </form>
+    </div>
 </div>
-</div>
+
 {% endblock %}

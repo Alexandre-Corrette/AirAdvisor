@@ -1,118 +1,111 @@
 {% extends "base.html.twig" %}
 
-{% block header %}
-   {{ include('_navigation.html.twig') }}
-{% endblock %}
+
 
 {% block content %}
 
-   <div class ="row bg-white p-5">
-      <div class="col-6">
-         <img class="img-fluid w-100 rounded" src="{{ asset('build/images/plane_main.png') }}">
-      </div>
-      <div class="col-6">
-         <div class="card h-100 shadow">
-            <div class="card-title mt-3">
-               <a class="indexTitle" href="{{ path('flight_new') }}"><h1 >Ne voyagez plus par hasard!</h1></a>
-            </div>
-            <div class="card-text text-center mb-3">
-               <p>Consultez les avis sur les compagnies aériennes et sélectionnez la meilleure pour votre prochain vol</p> 
-            </div>
-            <div class="container">
-               <div class="row justify-content-center">
-                   <div class="col-6 d-flex flex-column justify-content-center">
-                     {{ form_start(searchForm) }}
-                    
-                          
-                           <div id="departureCity" class=" m-2">
-       
-                               {{ form_label(searchForm.departureCity, null, {'label_attr': {'class': 'form-label'}}) }}
-                               {{ form_widget(searchForm.departureCity) }}
-                           </div>
-                           <div class="m-2 ">
-                               {{ form_label(searchForm.arrivalCity, null, {'label_attr': {'class': 'form-label'}}) }}
-                               {{ form_widget(searchForm.arrivalCity) }}
-                           </div>
-                     
-                           <div class=" m-2">
-                               {{ form_label(searchForm.flightDate, null, {'label_attr': {'class': 'form-label'}}) }}
-                               {{ form_widget(searchForm.flightDate) }}
-                           </div>
-                           <div class="mr-2 ml-2 mt-3 p-2">
-                               {{ form_label(searchForm.submit, null, {'label_attr': {'class': 'btn
-                               btn-outline-dark'}}) }}
-                               {{ form_widget(searchForm.submit) }}
-                           </div>
-                          
-                      
-       
-                       {{ form_end(searchForm) }}
-                   </div>
+<div class="row bg-white p-5">
+   <div class="col-6">
+      <img class="img-fluid w-100 rounded  shadow" src="{{ asset('build/images/plane_main.png') }}">
+   </div>
+   <div class="col-6">
+      <div class="card h-100 shadow">
+         <div class="card-title mt-3">
+            <a class="indexTitle" href="{{ path('flight_new') }}">
+               <h1>Ne voyagez plus par hasard!</h1>
+            </a>
+         </div>
+         <div class="card-text text-center mb-3">
+            <p>Consultez les avis sur les compagnies aériennes et sélectionnez la meilleure pour votre prochain vol</p>
+         </div>
+         <div class="container">
+            <div class="row justify-content-center">
+               <div class="col-6 d-flex flex-column justify-content-center">
+                  {{ form_start(searchForm) }}
+
+
+                  <div id="departureCity" class=" m-2">
+
+                     {{ form_label(searchForm.departureCity, null, {'label_attr': {'class': 'form-label'}}) }}
+                     {{ form_widget(searchForm.departureCity) }}
+                  </div>
+                  <div class="m-2 ">
+                     {{ form_label(searchForm.arrivalCity, null, {'label_attr': {'class': 'form-label'}}) }}
+                     {{ form_widget(searchForm.arrivalCity) }}
+                  </div>
+
+                  <div class=" m-2">
+                     {{ form_label(searchForm.flightDate, null, {'label_attr': {'class': 'form-label'}}) }}
+                     {{ form_widget(searchForm.flightDate) }}
+                  </div>
+                  <div class="mr-2 ml-2 mt-3 p-2">
+                     {{ form_label(searchForm.submit, null, {'label_attr': {'class': 'btn
+                     btn-outline-dark'}}) }}
+                     {{ form_widget(searchForm.submit) }}
+                  </div>
+                  {{ form_end(searchForm) }}
                </div>
-       
-           </div>
+            </div>
          </div>
       </div>
-         
-         
-         </div>
-   
-      <div class="row gx-3 p-5">
-         <div class="col-3 mb-3 bg-white">
-            <div class="card shadow m-1 p-2">
-               <div class="row g-0">
-                  <div class="col-4">
-                     <img class="img-fluid rounded-start" src="https://via.placeholder.com/70.png"> 
-                  </div>
-                  <div class="col-8">
-                     <div class="card-body">
-                        
-                           <h5 class="card-title">Title Title</h5>
-                           <p class="card-text">Lorem ipsum dolor sit amet,
-                           consectetur adipiscing elit...
-                           </p>
-                        
-                     </div>
-                  </div>
-               </div>
-               
-               
+   </div>
+</div>
+<div class="row gx-3 p-5 bg-white ">
+   <div class="col-3 mb-3 ">
+      <div class="card shadow m-1 p-2">
+         <div class="row g-0">
+            <div class="col-4">
+               <img class="img-fluid rounded-start" src="https://via.placeholder.com/70.png">
             </div>
-         </div>
-      
-         <div class="col-6 mb-3 bg-white">
-            {% for flight in flights %}
-            <div class="card mb-3 shadow p-2">
-                
-                  <div class="row">
-                     <div class="col-3">
-                        <img class="img-fluid" src="https://via.placeholder.com/140.png">
-                     </div>
-                     
-                        <div class="col-9"> 
-                           <h5 class="card-title"> De : {{ flight.departureCity }} vers : {{ flight.arrivalCity }}</h5>
-                           <p class="card-text">Vol N° {{ flight.flightNumber | upper }}</p>
-                        </div>
-                  </div>
-               
-            </div>
-            {% endfor %}
-         </div>
-         <div class="col-3 mb-3 bg-white">
-            <div class="card mb-3 shadow p-2">
+            <div class="col-8">
                <div class="card-body">
+
                   <h5 class="card-title">Title Title</h5>
                   <p class="card-text">Lorem ipsum dolor sit amet,
-                  consectetur adipiscing elit...
+                     consectetur adipiscing elit...
                   </p>
+
                </div>
-               
             </div>
          </div>
+
+
       </div>
-         
-         
-         
-  
+   </div>
+
+   <div class="col-6 mb-3 bg-white">
+      {% for flight in flights %}
+      <div class="card mb-3 shadow p-2">
+
+         <div class="row">
+            <div class="col-3">
+               <img class="img-fluid" src="https://via.placeholder.com/140.png">
+            </div>
+
+            <div class="col-9">
+               <h5 class="card-title"> De : {{ flight.departureCity }} vers : {{ flight.arrivalCity }}</h5>
+               <p class="card-text">Vol N° {{ flight.flightNumber | upper }}</p>
+            </div>
+         </div>
+
+      </div>
+      {% endfor %}
+   </div>
+   <div class="col-3 mb-3 bg-white">
+      <div class="card mb-3 shadow p-2">
+         <div class="card-body">
+            <h5 class="card-title">Title Title</h5>
+            <p class="card-text">Lorem ipsum dolor sit amet,
+               consectetur adipiscing elit...
+            </p>
+         </div>
+
+      </div>
+   </div>
+</div>
+
+
+
+
 
 {% endblock %}

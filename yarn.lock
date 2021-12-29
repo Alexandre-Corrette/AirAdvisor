@@ -843,6 +843,11 @@
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.2.tgz#8f03a22a04de437254e8ce8cc84ba39689288752"
   integrity sha512-HyYEUDeIj5rRQU2Hk5HTB2uHsbRQpF70nvMhVzi+VJR0X+xNEhjPui4/kBf3VeH/wqD28PT4sVOm8qqLjBrSZg==
 
+"@fortawesome/fontawesome-free@^5.15.4":
+  version "5.15.4"
+  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free/-/fontawesome-free-5.15.4.tgz#ecda5712b61ac852c760d8b3c79c96adca5554e5"
+  integrity sha512-eYm8vijH/hpzr/6/1CJ/V/Eb1xQFW2nnUKArb3z+yUWv7HTwj6M7SP957oMjfZjAHU6qpoNc2wQvIxBLWYa/Jg==
+
 "@nodelib/fs.scandir@2.1.4":
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.scandir/-/fs.scandir-2.1.4.tgz#d4b3549a5db5de2683e0c1071ab4f140904bbf69"
@@ -871,6 +876,11 @@
   dependencies:
     mkdirp "^1.0.4"
     rimraf "^3.0.2"
+
+"@popperjs/core@^2.11.0":
+  version "2.11.0"
+  resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.0.tgz#6734f8ebc106a0860dff7f92bf90df193f0935d7"
+  integrity sha512-zrsUxjLOKAzdewIDRWy9nsV1GQsKBCWaGwsZQlCgr6/q+vjyZhFgqedLfFBuI9anTPEUT4APq9Mu0SZBTzIcGQ==
 
 "@stimulus/core@^2.0.0":
   version "2.0.0"
@@ -1507,6 +1517,11 @@ boolbase@^1.0.0, boolbase@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/boolbase/-/boolbase-1.0.0.tgz#68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
   integrity sha1-aN/1++YMUes3cl6p4+0xDcwed24=
+
+bootstrap-icons@^1.7.2:
+  version "1.7.2"
+  resolved "https://registry.yarnpkg.com/bootstrap-icons/-/bootstrap-icons-1.7.2.tgz#4024e081e2c850602552e1fed6451e682d09322a"
+  integrity sha512-NiR2PqC73AQOPdVSu6GJfnk+hN2z6powcistXk1JgPnKuoV2FSdSl26w931Oz9HYbKCcKUSB6ncZTYJAYJl3QQ==
 
 bootstrap@^5.1.3:
   version "5.1.3"
@@ -2567,6 +2582,13 @@ execa@^5.0.0:
     onetime "^5.1.2"
     signal-exit "^3.0.3"
     strip-final-newline "^2.0.0"
+
+exports-loader@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/exports-loader/-/exports-loader-3.1.0.tgz#a68040b902da8ef24f9f6db716be904ac2455284"
+  integrity sha512-zkMR5OHDn8qHq2w5BLv6SnLmUK5QAtPkjTA7CNIYBB9kIxBFIeA+TA1GcMw3p/vn5Avnmq80L7MviA4tZclRmQ==
+  dependencies:
+    source-map "^0.6.1"
 
 express@^4.17.1:
   version "4.17.1"

@@ -33,6 +33,8 @@
                             Arrivée : {{flight.arrival.scheduledTime}}
                            
                         </h5>
+
+
                         <div class="card-text">
                             terminal : {{flight.arrival.terminal|upper}}
                             gate : {{flight.arrival.gate|upper}}
@@ -40,7 +42,8 @@
                     </div>
                     <div class="d-grid gap-2 d-flex justify-content-center">
                         <button type="button" class="btn btn-outline-dark  mx-1">Voir les avis</button>  
-                        <button type="button" class="btn btn-outline-dark  mx-1">Ecrire un avis</button>
+                        
+                        <a href="{{ path('comment_new', {'pseudo' : app.user.firstName, 'flightNumber': flight.flight.iataNumber})}}" class="btn btn-outline-dark  mx-1">Ecrire un avis</a>
                         <a href=" {{ path('search_flight', {'iataCode':flight.departure.iataCode, 'id': flight.codeshared.flight.iataNumber ?? flight.flight.iataNumber , 'flightNumber': flight.flight.iataNumber, 'flightDate': flightDate }) }}  " class="btn btn-outline-dark  mx-1">Détails du vol</a>
                     </div>
                     

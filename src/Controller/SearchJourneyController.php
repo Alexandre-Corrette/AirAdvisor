@@ -73,4 +73,28 @@ class SearchJourneyController extends AbstractController
 
     }
 
+    /**
+     * @Route("/flight/search", name="flight_by_flightNumber")
+     */
+
+    public function searchFlightByNumber(Request $request, CallApiService $callApiService) {
+
+        $form = $this->createForm(SearchCompanyFlightType::class);
+        $form->handleRequest($request);
+        
+        if ($form->isSubmitted() && $form->isValid()) {
+           
+            
+            
+            return $this->redirectToRoute('comment_new', 
+               ['flightNumber' => $_GET['search_company_flight']['flightNumber'] ], 
+            );
+        }
+        return $this->render('search/new.html.twig', [
+            
+            'form' => $form->createView(),
+            'website' => 'AirAdvisor',
+        ]);
+    }
+
 }

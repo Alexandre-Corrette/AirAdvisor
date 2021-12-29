@@ -38,6 +38,11 @@ class Comment
      */
     private $rate;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $titre;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -94,5 +99,17 @@ class Comment
     public function __toString()
     {
         return $this->author;
+    }
+
+    public function getTitre(): ?string
+    {
+        return $this->titre;
+    }
+
+    public function setTitre(string $titre): self
+    {
+        $this->titre = $titre;
+
+        return $this;
     }
 }

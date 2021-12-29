@@ -1,24 +1,30 @@
 
-    <div class="navbar-fixed">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="{{ path('index') }}">
-                    <h1 class="main title">AirAdvisor</h1>
-                </a>
+    <div class="navbar-fixed shadow ">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light px-5">
+            <div class="container-fluid px-5">
+                <a class="navbar-brand" href="{{ path('index') }}"><img class="logo-nav" src="{{asset('build/images/logo-flight-advisor.png')}}" alt=""></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <a class="nav-link" href="{{ app.user? path('comment_new', {'pseudo': app.user.firstName }): path('app_login') }}">
-                    <p class="text-white"> Ajouter un avis </p>
-                </a>
-                <a class="nav-link" href="{{ path('app_login') }}">
-                    <p class="text-white"> login/Inscription </p>
-                </a>
+                <a class="link" href="{{ app.user ? path('search_flight_by_flightNumber') : path('app_login')}}"><i class="fas fa-plus mx-2"></i>Ajouter un avis </a>
+                <div class="mr-3">
+                    <div class="dropdown">
+                        
+                        <a href="#" class="dropdown-toggle link" id="dropdown"  type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user mx-2"></i>{{app.user ? app.user.firstName|title : 'Profil'}}</a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdown">
+                            <li><a class="dropdown-item" href="{{ app.user ? path('user_profile', {'id' :  app.user.id })}}">Mon profil</a></li>
+                            <li><a class="dropdown-item" href="#">Mes destinations</a></li>
+                            <li><a class="dropdown-item" href="#">Mes avis</a></li>
+                            {% if app.user %}
+                                <li><a class="dropdown-item" href="{{ path('app_logout') }}">déconnexion</a></li> 
+                            {% else %}
+                            <li><a class="dropdown-item" href="{{ path('app_login') }}"> login/Inscription </a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+                
             </div>
-           
-           
-
         </nav>
     </div>
-       
     

@@ -4,6 +4,7 @@
         "@symfony/webpack-encore": "^1.0.0",
         "bootstrap": "^5.1.3",
         "core-js": "^3.0.0",
+        "exports-loader": "^3.1.0",
         "node-sass": "^4.0.0",
         "regenerator-runtime": "^0.13.2",
         "sass-loader": "^9.0.1",
@@ -21,6 +22,9 @@
     "dependencies": {
         "@algolia/autocomplete-js": "^1.5.0",
         "@algolia/autocomplete-theme-classic": "^1.5.0",
+        "@fortawesome/fontawesome-free": "^5.15.4",
+        "@popperjs/core": "^2.11.0",
+        "bootstrap-icons": "^1.7.2",
         "file-loader": "^6.2.0",
         "jquery": "^3.6.0"
     }

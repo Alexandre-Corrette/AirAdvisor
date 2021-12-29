@@ -52,7 +52,9 @@ class Flight
         $this->comments = new ArrayCollection();
        
     }
-
+    public function getFlight() {
+        return $this;
+    }
     public function getId(): ?int
     {
         return $this->id;
@@ -95,11 +97,11 @@ class Flight
     }
 
     /**
-     * @return Collection|Comment[]
+     * @return array
      */
-    public function getComments(): Collection
+    public function getComments(): array
     {
-        return $this->comments;
+        return $this->comments->toArray();
     }
 
     public function addComment(Comment $comment): self

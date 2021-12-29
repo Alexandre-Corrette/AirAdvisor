@@ -11,6 +11,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
@@ -19,20 +20,20 @@ class CommentType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('comment', TextareaType::class)
-            ->add('rate', IntegerType::class)
-            ->add('author', EntityType::class,[
-                'class' => User::class,
-                'choice_label' => 'firstName',
-                'multiple' => false,
-                'expanded' => false,
+            ->add('titre', textType::class,[
+                'attr' => ['class' => 'form-control', 'placeholder' => 'le titre de votre commentaire'],
+                'required' => true,
             ])
-            ->add('flight', EntityType::class, [
-                'class' => Flight::class,
-                'choice_label' => 'flightNumber',
-                'multiple' => false,
-                'expanded' => false,
+            ->add('comment', TextareaType::class,[
+                'attr' =>[ 'class' => 'form-control']
             ])
+            ->add('rate', IntegerType::class,[
+                'label' => 'Note',
+            ])
+            ->add('submit', SubmitType::class, [
+                'label' => 'Publiez',
+                'attr' => ['class' => 'btn btn-outline-dark w-100']
+            ]);;
         ;
     }
 

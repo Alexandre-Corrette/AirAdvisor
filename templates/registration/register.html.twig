@@ -3,29 +3,57 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
-    <div class="registerContainer">
-        {% for flashError in app.flashes('verify_email_error') %}
+    <div class="container">
+        <div class="row justify-content-center mt-5 pt-5">
+            <div class="col col-md-6">
+                {% for flashError in app.flashes('verify_email_error') %}
             <div class="alert alert-danger" role="alert">{{ flashError }}</div>
         {% endfor %}
-        
-            <h1 class="main title">AirAdvisor</h1>
-            <div class="register item">
-                <h2 class="inscription">Inscription</h2>
-                <div class="register_form">
-                    {{ form_start(registrationForm) }}
-                        <p>{{ form_row(registrationForm.email) }}</p>
-                        <p>{{ form_row(registrationForm.plainPassword, {
-                            label: 'Password'
-                        }) }}</p>
-                        <p>{{ form_row(registrationForm.firstName)}}</p>
-                        <p>{{ form_row(registrationForm.lastName)}}</p>
-                        <p>{{ form_row(registrationForm.departureCity)}}</p>
-
-                        <p class="agree"> {{ form_row(registrationForm.agreeTerms) }} </p>
-
-                        <button type="submit" class="button go">S'inscrire</button>
-                    {{ form_end(registrationForm) }}
+            <div class="card">
+                <div class="card-body ">
+                    <div class="text-center mb-5">
+                        <img class="img-fluid logo " src="{{asset('build/images/logo-flight-advisor.png')}}" alt="">
+                    </div>
+                    
+                <div class="card-text">
+                    <h3 class="card-title">Inscription</h3>
+                    <div class="">
+                        {{ form_start(registrationForm) }}
+                        <div class="mb-3">
+                        {{ form_label(registrationForm.email, null, {'label_attr': {'class': 'form-label'}})}}
+                            {{ form_widget(registrationForm.email, {'label_attr': {'class': 'form-control'}}) }}
+                        </div>
+                            <div class="mb-3">
+                                {{ form_label(registrationForm.plainPassword, null, { label: 'Mot de passe' ,'label_attr': {'class': 'form-label'}})}}
+                                {{ form_widget(registrationForm.plainPassword, {
+                                    label: 'Password',
+                                    'label_attr': {'class': 'form-control', },
+                                   
+                                }) }}
+                            </div>
+                            <div class="mb-3">
+                                <p>{{ form_row(registrationForm.firstName)}}</p>
+                            </div>
+                            <div class="mb-3">
+                                <p>{{ form_row(registrationForm.lastName)}}</p>
+                            </div>
+                            <div class="mb-3">
+                                <p>{{ form_row(registrationForm.departureCity)}}</p>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <p> {{ form_row(registrationForm.agreeTerms) }} </p>
+                            </div>
+                        {{ form_end(registrationForm) }}
+                    </div>
                 </div>
+                </div>
+                
             </div>
+            
+
+            </div>
+        </div>
+        
     </div>
 {% endblock %}
