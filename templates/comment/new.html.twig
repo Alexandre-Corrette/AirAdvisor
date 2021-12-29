@@ -2,14 +2,44 @@
 
 {% block title %}New Comment{% endblock %}
 
-{% block body %}
-<div class="mainContainer">
-    <div class="newComment">
-        <h1>Create new Comment</h1>
-
-        {{ include('comment/_form.html.twig') }}
-
-        <a class="button back" href="{{ path('comment_index') }}">back to list</a>
-    </div>
-</div>
+{% block header %}
+{{ include('_navigation.html.twig') }}
 {% endblock %}
+{% block content %}
+    {% if flightNumber is defined %}
+    <div class="row justify-content-center">
+        <div class="col col-md-6">
+            <div class="card mb-3 mt-5">
+                <div class="card-body">
+                    <h1 class="card-title">Create new Comment</h1>
+                    <h3>Vo N° {{flightNumber}}</h3>
+                    <h3>auteur : {{app.user}}</h3>
+            
+                    {{ include('comment/_form.html.twig') }}
+            
+                    
+                </div>
+            </div>
+            <a class="btn btn-outline-dark" href="{{ path('comment_index') }}">back to list</a>
+        </div>
+    </div>
+    {% else %}
+    <div class="row mt-5 pt-5 justify-content-center">
+        <div class="col col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title text-center">{{error}}</h4>
+                </div>
+                
+            </div>
+            
+        </div>   
+    </div>
+        
+    {% endif %}
+    
+
+{% endblock %}
+
+
+

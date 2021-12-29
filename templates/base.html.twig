@@ -7,25 +7,27 @@
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
+        
 
        
     </head>
-    <header>{% block header %}{% endblock %}</header>
+    
     <body>
-        
             {% block body %}
-                <div  id="content" class="container-fluid mt-5">
-                    {% block content %}{% endblock %}
-                </div>
+          
+            <header>{% block header %}{{ include('_navigation.html.twig') }}{% endblock %}</header>
+            
+                    <div  id="content" class="container-fluid mt-5 pt-5">{% block content %}{% endblock %}</div>
                 {% block javascripts %}
                
                 {{ encore_entry_script_tags('app') }}
-                
                 {% endblock %}
-            <div id="footer" class="footer">{% block footer %} {{ include('_footer.html.twig') }} {% endblock %}</div> 
+                <div class="footer">{% block footer %} {{ include('_footer.html.twig') }} {% endblock %}</div> 
+         
+                
+                
+                
             {% endblock %}
-            
-      
     </body>
     
    

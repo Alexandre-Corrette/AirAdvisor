@@ -7,15 +7,19 @@
 
 // any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.scss';
-
-// start the Stimulus application
-import './bootstrap';
-
-//import './js/airportList';
+import 'jquery';
+import $ from 'jquery';
 
 import './js/jquery-ui.js';
+import '@popperjs/core';
+// start the Stimulus application
 
-import  $ from 'jquery';
+import './bootstrap';
+require ('bootstrap');
+
+
+
+
 
 var keyAccess = 'b064ee-021d46';
 $(document).ready(function(){
@@ -68,6 +72,13 @@ $(document).ready(function(){
     }
     
 };})
+
+
+
+
+
+
+
 
 
 

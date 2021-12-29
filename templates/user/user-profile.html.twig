@@ -1,0 +1,64 @@
+{% extends "base.html.twig" %}
+{% block title %} {{ website }} | {{user.firstname|title}} {{ user.lastname|upper}}{% endblock %}
+{% block content %}
+<pre>
+    {{ dump(user) }}
+</pre>
+<div class="container-fluid ">
+    <div class="row pt-5 pb-5 justify-content-center">
+        <div class="col col-6">
+            
+            <div class="card shadow rounded">
+                <div style="min-height: 120px; max-height: 120px;background-color: #ff814d;"></div>
+                {% set imgprofile = asset(('build/images/user/user-profile/img-profile-' ~ ( user.firstname ) ~ '-' ~ ( user.lastname|lower ) ~ '.jpeg')) %}
+                <img src="{{imgprofile}}" class="img-profile mb-3 ms-3" style="margin-top: -110px;" alt="">
+                <div class="card-body">
+                    <div class="row">
+                        
+                    
+                        <h1 class="card-title col-11">
+                            {{user.firstname|title }} {{user.lastname|upper}}
+                       </h1>
+                       <a class="link col-1 text-center " href="#"><i class="fas fa-user-edit"></i></a>
+                    
+                   
+                    <p class="card-text"> {{user.departureCity}} - <a class="link" href=""><span class="fw-bold">Mes Coordonnées</span></a></p> 
+
+                 
+                    </div>
+                   
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3 justify-content-center">
+        <div class="col col-6">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h3 class="card-title">Mes Avis</h3>
+                    {% if user.comments is not null %}
+                  
+                        {% for comment in user.comments %}
+                        <pre>
+                            {{ dump(comment.comment) }}
+                        </pre>
+                        {% if comment.comment is not null %}
+                            {{comment.comment}}
+                            {% else %}
+                            <p>Vous n'avez pas encore publié d'avis</p><a href="#" class="btn"><i class="far fa-comment"></i></a>
+                        {% endif %}
+                            
+                        {% endfor %}
+                        
+                    {% endif %}
+                    
+                </div>
+               
+
+               </h3>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

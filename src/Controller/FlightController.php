@@ -16,12 +16,12 @@ use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
- * @Route("/flight")
+ * @Route("/flight", name="flight_")
  */
 class FlightController extends AbstractController
 {
     /**
-     * @Route("/", name="flight_index", methods={"GET"})
+     * @Route("/", name="index", methods={"GET"})
      */
     public function index(FlightRepository $flightRepository ): Response
     {
@@ -35,7 +35,7 @@ class FlightController extends AbstractController
      */
 
     /**
-     * @Route("/new", name="flight_new", methods={"GET","POST"})
+     * @Route("/new", name="new", methods={"GET","POST"})
      */
     public function new(Request $request, CallApiService $callApi, FlightRepository $flightRepository): Response
     {
@@ -63,17 +63,21 @@ class FlightController extends AbstractController
     }
 
     /**
-     * @Route("/{id}}", name="flight_show", methods={"GET"})
+     * @Route("/{id}}", name="show", methods={"GET"})
      */
     public function show(Flight $flight): Response
-    {
+    {   
+
+        $comments = $flight->getComments();
+        //dd($comments);
         return $this->render('flight/show.html.twig', [
             'flight' => $flight,
+            'comments' => $comments,
         ]);
     }
 
     /**
-     * @Route("/{id}/edit", name="flight_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Flight $flight): Response
     {
@@ -93,7 +97,7 @@ class FlightController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="flight_delete", methods={"DELETE"})
+     * @Route("/{id}", name="delete", methods={"DELETE"})
      */
     public function delete(Request $request, Flight $flight): Response
     {

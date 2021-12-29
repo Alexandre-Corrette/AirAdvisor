@@ -7,11 +7,12 @@ use Doctrine\DBAL\Types\DateTimeType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Date;
+use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Validator\Constraints\DateTime;
 
 class FlightType extends AbstractType
 {
@@ -28,8 +29,6 @@ class FlightType extends AbstractType
             'label' => 'Date de Départ',
             'required' => true,
             'widget' => 'single_text',
-            // prevents rendering it as type="date", to avoid HTML5 date pickers
-            'html5' => false,
             // adds a class that can be selected in JavaScript
             'attr' => ['class' => 'datepicker'],
         ])
@@ -37,6 +36,11 @@ class FlightType extends AbstractType
             'label' => 'Aéroport d\'arrivée',
             'required' => false,
             'attr' => ['class' => 'form-control js-user-autocomplete']
+        ])
+        ->add('flightNumber', HiddenType::class, [
+            'label' => 'Numéro de vol : ',
+            'required' => true,
+            'attr' => ['class' => 'form-control', 'type' => 'hidden']
         ])
         ->add('submit', SubmitType::class, [
             'label' => 'GO!',

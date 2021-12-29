@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use DateTime; 
+use App\Entity\Flight;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
  
@@ -23,9 +24,9 @@ class CallApiService
      */
     public $flightDate;
     /**
-     * @var string|null
+     * @var string
      */
-    public $depatureDate;
+    public $departureDate;
 
     /**
      * @var string
@@ -36,6 +37,12 @@ class CallApiService
      * @var array
      */
     public $flights;
+
+    /**
+     * @var string
+     */
+
+     public $flightNumber;
 
     private $client;
  
@@ -99,5 +106,28 @@ class CallApiService
     {   
        
         return $this->callApi('flightsFuture?key='.$this->accessKey.'&type=departure&iataCode='.$iataCode.'&date='.$flightDate.'&flight_num='.$flightNumber.'');
+    }
+
+    public function callOneFlight(string $flightNumber) 
+    {
+        return $this->callApi('flights?key='.$this->accessKey.'&flightIata='.$flightNumber.'&limit=10');
+    }
+
+    public function callApitHistoricFlights() 
+    {
+        return $this->callApi('flightsHistory?key='.$this->accessKey.'&type=departure&code='.$this->departureCity.'&date='.$this->departureDate.'&flight_number='.$this->flightNumber);
+    }
+
+    public function setFlight() 
+    {
+        $flight = new Flight();
+        $date = new DateTime($this->departureDate);
+        //dd($this->departureDate);
+        $flight->setFlightNumber($this->flightNumber);
+        $flight->setFlightDate($date);
+        $flight->setDepartureCity($this->departureCity);
+        $flight->setArrivalCity($this->arrivalCity);
+
+        return $flight;
     }
 }

@@ -42,12 +42,7 @@ class SearchJourneyService
 
    
 
-    public function __construct(?string $departureCity, ?string $arrivalCity, ?string $flightDate)
-    {
-        $this->departureCity = $departureCity;
-        $this->arrivalCity = $arrivalCity;
-        $this->flightDate = $flightDate;
-    }
+   
 
     //will loop over airport list to match airport iatacode
     public function searchAirportIataCode($airportList ): array

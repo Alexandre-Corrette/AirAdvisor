@@ -31,9 +31,6 @@ class LandingController extends AbstractController
         $searchForm->handleRequest($request);
         if (($searchForm->isSubmitted() && $searchForm->isValid())) 
             {  
-                
-                
-                
                 return $this->redirectToRoute('search_results',[
                     'departureCity' => $_GET['search_journey']['departureCity'] ,
                     'arrivalCity' => $_GET['search_journey']['arrivalCity'] , 
