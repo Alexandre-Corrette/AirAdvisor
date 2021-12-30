@@ -39,66 +39,52 @@ class CommentController extends AbstractController
         $comment = new Comment();
         $flight = new flight;
         $flightDatas = $flightRepository->findOneByFlightNumber($flightNumber);
-    
-        if(empty($flightDatas)) {
+        if(empty($flightDatas)) 
+        {
+            $error = 'Nous n\'avons pas trouvé de vol avec ce numéro, vous pouvez affiner votre recherche' ;
             $form = $this->createForm(FlightType::class, $flight);
             $form->handleRequest($request);
-            if ($form->isSubmitted() && $form->isValid()) {
+            if ($form->isSubmitted() && $form->isValid()) 
+            {
                 
-                $callApiService->departureCity = substr($_POST['flight']['departureCity'], -3);
+                $callApiService->departureCity = substr($_POST['flight']['departureCity'],-3);
                 $callApiService->arrivalCity = substr($_POST['flight']['arrivalCity'], -3);
                 $callApiService->departureDate = $_POST['flight']['flightDate'];
-                
                 $callApiService->flightNumber = substr($flightNumber, 2);
                 //dd($callApiService);
                 $callApiService->callApitHistoricFlights();
-                
                 $flight = $callApiService->setFlight();
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($flight);
                 $entityManager->flush();
-
-                
-                    return $this->redirectToRoute('flight_show', [
-                        'id' => $flight->getId(),
-                    ]);
-    
-                
-            
-                
-
-                
+                return $this->redirectToRoute('flight_show', [
+                    'flightNumber' => $flight->getFlightNumber(),
+                ]);
             }
-            
-               
-
-            
             return $this->render('flight/new.html.twig',[
-                'error' => $error = "il n'y a pas de vol avec  ce numéro, vous pouvez créer ce vol",
-                'form' => $form->createView(),
-                'flightNumber' => $flightNumber,
+            'error' => $error ,
+            'form' => $form->createView(),
+            'flightNumber' => $flightNumber,
             ]); 
-        
-          
-        } else 
-        $form = $this->createForm(CommentType::class, $comment);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $comment->setAuthor($this->getUser());
-            $comment->setFlight($flight);
-            $entityManager->persist($comment);
-            $entityManager->flush();
-        
-            return $this->redirectToRoute('comment_index');
-        }
-        
+        } else {
+            $form = $this->createForm(CommentType::class, $comment);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $comment->setAuthor($this->getUser());
+                $comment->setFlight($flight);
+                $entityManager->persist($comment);
+                $entityManager->flush();
+            
+                return $this->redirectToRoute('comment_index');
+            }
         return $this->render('comment/new.html.twig',[
             'comment' => $comment,
             'flightNumber' => $flightNumber,
             'form' => $form->createView(),
-        ]);  
-    }
+            ]); 
+        }
+    } 
 
     /**
      * @Route("/{id}", name="comment_show", methods={"GET"})

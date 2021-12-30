@@ -63,7 +63,7 @@ class FlightController extends AbstractController
     }
 
     /**
-     * @Route("/{id}}", name="show", methods={"GET"})
+     * @Route("/{flightNumber}", name="show", methods={"GET"})
      */
     public function show(Flight $flight): Response
     {   
