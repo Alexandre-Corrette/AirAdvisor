@@ -47,6 +47,66 @@ class Flight
      */
     protected ?DateTime $flightDate;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $status;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $scheduledTime;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $departureIataCode;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $arrivalIataCode;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $arrivalScheduledTime;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $flightIataCode;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $codesharedAirlineName;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $codesharedAirlineIataCode;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $airlineName;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $airlineIataCode;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $codesharedFlightNumber;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $codesharedFlightIataNumber;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -138,6 +198,150 @@ class Flight
     public function setFlightDate(?\DateTime $flightDate): self
     {
         $this->flightDate = $flightDate;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?string $status): self
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getScheduledTime(): ?\DateTimeInterface
+    {
+        return $this->scheduledTime;
+    }
+
+    public function setScheduledTime(?\DateTimeInterface $scheduledTime): self
+    {
+        $this->scheduledTime = $scheduledTime;
+
+        return $this;
+    }
+
+    public function getDepartureIataCode(): ?string
+    {
+        return $this->departureIataCode;
+    }
+
+    public function setDepartureIataCode(?string $departureIataCode): self
+    {
+        $this->departureIataCode = $departureIataCode;
+
+        return $this;
+    }
+
+    public function getArrivalIataCode(): ?string
+    {
+        return $this->arrivalIataCode;
+    }
+
+    public function setArrivalIataCode(?string $arrivalIataCode): self
+    {
+        $this->arrivalIataCode = $arrivalIataCode;
+
+        return $this;
+    }
+
+    public function getArrivalScheduledTime(): ?\DateTimeInterface
+    {
+        return $this->arrivalScheduledTime;
+    }
+
+    public function setArrivalScheduledTime(?\DateTimeInterface $arrivalScheduledTime): self
+    {
+        $this->arrivalScheduledTime = $arrivalScheduledTime;
+
+        return $this;
+    }
+
+    public function getFlightIataCode(): ?string
+    {
+        return $this->flightIataCode;
+    }
+
+    public function setFlightIataCode(?string $flightIataCode): self
+    {
+        $this->flightIataCode = $flightIataCode;
+
+        return $this;
+    }
+
+    public function getCodesharedAirlineName(): ?string
+    {
+        return $this->codesharedAirlineName;
+    }
+
+    public function setCodesharedAirlineName(?string $codesharedAirlineName): self
+    {
+        $this->codesharedAirlineName = $codesharedAirlineName;
+
+        return $this;
+    }
+
+    public function getCodesharedAirlineIataCode(): ?string
+    {
+        return $this->codesharedAirlineIataCode;
+    }
+
+    public function setCodesharedAirlineIataCode(?string $codesharedAirlineIataCode): self
+    {
+        $this->codesharedAirlineIataCode = $codesharedAirlineIataCode;
+
+        return $this;
+    }
+
+    public function getAirlineName(): ?string
+    {
+        return $this->airlineName;
+    }
+
+    public function setAirlineName(?string $airlineName): self
+    {
+        $this->airlineName = $airlineName;
+
+        return $this;
+    }
+
+    public function getAirlineIataCode(): ?string
+    {
+        return $this->airlineIataCode;
+    }
+
+    public function setAirlineIataCode(?string $airlineIataCode): self
+    {
+        $this->airlineIataCode = $airlineIataCode;
+
+        return $this;
+    }
+
+    public function getCodesharedFlightNumber(): ?int
+    {
+        return $this->codesharedFlightNumber;
+    }
+
+    public function setCodesharedFlightNumber(?int $codesharedFlightNumber): self
+    {
+        $this->codesharedFlightNumber = $codesharedFlightNumber;
+
+        return $this;
+    }
+
+    public function getCodesharedFlightIataNumber(): ?string
+    {
+        return $this->codesharedFlightIataNumber;
+    }
+
+    public function setCodesharedFlightIataNumber(?string $codesharedFlightIataNumber): self
+    {
+        $this->codesharedFlightIataNumber = $codesharedFlightIataNumber;
 
         return $this;
     }
