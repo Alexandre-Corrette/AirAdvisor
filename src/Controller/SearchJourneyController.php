@@ -43,52 +43,30 @@ class SearchJourneyController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/flight/{id}/departure/{iataCode}/date/{flightDate}/flightNumber/{flightNumber}", name="flight")
-     */
-    public function showFlight($id,$flightDate,$iataCode,$flightNumber, CallApiService $callApiService): Response
-    {
     
-        $flights = $callApiService->getFlightByFlightNumber($iataCode,$flightDate,$id);
-        
-        foreach($flights as $flight) {
-            if($flightNumber === $flight['flight']['iataNumber'])
-            {
-                $flightData = $flight;
-                
-            }
-        }
-        
-        if($flightData['codeshared']['airline']['name']) {
-        
-            $flightData['pathToLogo'] = file_exists('/Users/alexandrecorrette/www/airadvisor/assets/images/logo-'.str_replace(" ", "", $flightData['codeshared']['airline']['name']).'.png');
-            
-         
-        } else {
-            $flightData['pathToLogo'] = file_exists('/Users/alexandrecorrette/www/airadvisor/public/assets/images/logo-'.$flightData['airline']['name'].'.png');
-        }
-     
-        
-        return $this->render('flight/show.html.twig',['flight'=> $flightData]);
-
-    }
 
     /**
-     * @Route("/flight/search", name="flight_by_flightNumber")
+     * @Route("/search", name="flight_by_flightNumber")
      */
 
-    public function searchFlightByNumber(Request $request, CallApiService $callApiService) {
+    public function searchFlightByNumber(Request $request, FlightRepository $flightRepository) {
 
         $form = $this->createForm(SearchCompanyFlightType::class);
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
+           //check if flight exists in DB
+            $flight = $flightRepository->findOneFlightByFlightNumber($_GET['search_company_flight']['flightNumber']);
+            if(!empty($flight)) 
+            {
+                return $this->redirectToRoute('flight_show', 
+                    ['flightNumber' => $_GET['search_company_flight']['flightNumber'] ], 
+             );
+            } else {
+                return $this->redirectToRoute('flight_new');
+            }
+            
            
-            
-            
-            return $this->redirectToRoute('comment_new', 
-               ['flightNumber' => $_GET['search_company_flight']['flightNumber'] ], 
-            );
         }
         return $this->render('search/new.html.twig', [
             

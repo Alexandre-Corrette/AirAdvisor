@@ -1,12 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Vol {#{{flight.flight.iataNumber|upper}}#}{% endblock %}
+{% block title %}{{website}} | Vol {{flight.flightNumber}}{% endblock %}
 {% block header %}
 {{ include('_navigation.html.twig') }}
 {% endblock %}
 {% block content %}
     <div class="container mt-5 pt-5">
-       
+        <pre>
+            {{ dump(flight) }}
+        </pre>
         <div class="row">
             <div class="col-6">
                 <div class="card">
@@ -69,16 +71,13 @@
                         </div>
                     </div>
                       
-                            
-                            <pre>
-                                {{ dump(comments) }}
-                            </pre>
+                        
                         
                          
                 </div>
             </div>
             <div class="col-6">
-                {% if comments is not empty %}
+                {#{% if comments is not empty %}
                 {% for comment in comments %}
                 <div class="card mb-3">
                     <div class="card-body">
@@ -99,7 +98,7 @@
                 {% else %}
                 <p>Il n'y a pas encore de commentaire pour ce vol</p>
                 <a href="#">Ajouter un commentaire</a> <i class="fas fa-add"></i>
-                {% endif %}
+                {% endif %}#}
                 
                
                     

@@ -44,13 +44,6 @@ class FlightController extends AbstractController
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
-     
-            
-                
-                
-            
-            
-
             return $this->redirectToRoute('flight_index', 
                
             );
@@ -65,14 +58,16 @@ class FlightController extends AbstractController
     /**
      * @Route("/{flightNumber}", name="show", methods={"GET"})
      */
-    public function show(Flight $flight): Response
+   public function show($flightNumber, FlightRepository $flightRepository): Response
     {   
+        $flight = $flightRepository->findOneFlifghtByFlightNumber($flightNumber);
 
-        $comments = $flight->getComments();
+        
         //dd($comments);
         return $this->render('flight/show.html.twig', [
             'flight' => $flight,
-            'comments' => $comments,
+            'website' => 'AirAdvisor'
+            
         ]);
     }
 
@@ -95,6 +90,36 @@ class FlightController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    /**
+     * @Route("/flight/{id}/departure/{iataCode}/date/{flightDate}/flightNumber/{flightNumber}", name="_show")
+     */
+    /*public function showFlight($id,$flightDate,$iataCode,$flightNumber, CallApiService $callApiService): Response
+    {
+    
+        $flights = $callApiService->getFlightByFlightNumber($iataCode,$flightDate,$id);
+        
+        foreach($flights as $flight) {
+            if($flightNumber === $flight['flight']['iataNumber'])
+            {
+                $flightData = $flight;
+                
+            }
+        }
+        
+        if($flightData['codeshared']['airline']['name']) {
+        
+            $flightData['pathToLogo'] = file_exists('/Users/alexandrecorrette/www/airadvisor/assets/images/logo-'.str_replace(" ", "", $flightData['codeshared']['airline']['name']).'.png');
+            
+         
+        } else {
+            $flightData['pathToLogo'] = file_exists('/Users/alexandrecorrette/www/airadvisor/public/assets/images/logo-'.$flightData['airline']['name'].'.png');
+        }
+     
+        
+        return $this->render('flight/show.html.twig',['flight'=> $flightData]);
+
+    }*/
 
     /**
      * @Route("/{id}", name="delete", methods={"DELETE"})

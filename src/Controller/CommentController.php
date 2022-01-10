@@ -32,9 +32,9 @@ class CommentController extends AbstractController
     }
 
     /**
-     * @Route("/new/flight/{flightNumber}", name="comment_new", methods={"GET","POST"})
+     * @Route("/new/flight/{flightNumber}", name="_new", methods={"GET","POST"})
      */
-    public function new(Request $request,string $flightNumber, CallApiService $callApiService, FlightRepository $flightRepository): Response
+    /*public function new(Request $request,string $flightNumber, CallApiService $callApiService, FlightRepository $flightRepository): Response
     {
         $comment = new Comment();
         $flight = new flight;
@@ -84,7 +84,7 @@ class CommentController extends AbstractController
             'form' => $form->createView(),
             ]); 
         }
-    } 
+    }*/
 
     /**
      * @Route("/{id}", name="comment_show", methods={"GET"})
