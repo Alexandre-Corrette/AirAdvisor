@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Flight{% endblock %}
+{% block title %} {{website}} | Affinez votre rechreche sur le vol {{ flight.flightNumber }} {% endblock %}
 
 {% block body %}
-    <h1>Edit Flight</h1>
+    <h1>Affinez votre recherche </h1>
 
     {{ include('flight/_form.html.twig', {'button_label': 'Update'}) }}
 

@@ -78,9 +78,9 @@ class FlightRepository extends ServiceEntityRepository
 
     }
      /**
-     * @return Flight[] Returns  Flight objects
+     * @return ?Flight[] Returns  Flight objects
      */
-    public function findOneFlightByFlightNumber(string $flightNumber): Flight
+    public function findOneFlightByFlightNumber(string $flightNumber): ?Flight
     {
         $query = $this->createQueryBuilder('f');
         if(!empty($flightNumber)) {

@@ -1,14 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{website}} | Vol {{flight.flightNumber}}{% endblock %}
+{% block title %}{{website}} | Vol {#{{flight.flightNumber}}#}{% endblock %}
 {% block header %}
 {{ include('_navigation.html.twig') }}
 {% endblock %}
 {% block content %}
     <div class="container mt-5 pt-5">
-        <pre>
-            {{ dump(flight) }}
-        </pre>
+        
         <div class="row">
             <div class="col-6">
                 <div class="card">

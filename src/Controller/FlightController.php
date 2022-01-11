@@ -43,7 +43,9 @@ class FlightController extends AbstractController
         $form = $this->createForm(FlightType::class, $flight);
         $form->handleRequest($request);
         
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) 
+        {  
+            
             return $this->redirectToRoute('flight_index', 
                
             );
@@ -52,6 +54,7 @@ class FlightController extends AbstractController
         return $this->render('flight/new.html.twig', [
             
             'form' => $form->createView(),
+            
         ]);
     }
 
@@ -60,7 +63,7 @@ class FlightController extends AbstractController
      */
    public function show($flightNumber, FlightRepository $flightRepository): Response
     {   
-        $flight = $flightRepository->findOneFlifghtByFlightNumber($flightNumber);
+        $flight = $flightRepository->findOneFlightByFlightNumber($flightNumber);
 
         
         //dd($comments);
@@ -74,12 +77,13 @@ class FlightController extends AbstractController
     /**
      * @Route("/{id}/edit", name="edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Flight $flight): Response
+    public function edit(Request $request, Flight $flight, CallApiService $callApi): Response
     {
         $form = $this->createForm(FlightType::class, $flight);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('flight_index');
@@ -88,6 +92,7 @@ class FlightController extends AbstractController
         return $this->render('flight/edit.html.twig', [
             'flight' => $flight,
             'form' => $form->createView(),
+            'website' => 'flightAdvisor'
         ]);
     }
 
