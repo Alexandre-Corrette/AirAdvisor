@@ -44,7 +44,8 @@ class SearchJourneyByFlightNumberType extends AbstractType
             ])
             ->add('flightNumber', TextType::class, [
                 'label' => 'Numéro de vol',
-                'attr' => ['class' => 'form-control'],
+                'attr' => ['class' => 'form-control',
+                'placeholder' => 'ex : 6890 '],
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'GO!',
@@ -55,7 +56,7 @@ class SearchJourneyByFlightNumberType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => CallApiService::class,
+            'data_class' => Flight::class,
             'method' => 'GET',
             'csrf_protection' => false,
         ]);

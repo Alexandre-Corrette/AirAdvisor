@@ -25,6 +25,7 @@ class CommentType extends AbstractType
                 'required' => true,
             ])
             ->add('comment', TextareaType::class,[
+                'label' => 'Votre Commentaire',
                 'attr' =>[ 'class' => 'form-control']
             ])
             ->add('rate', IntegerType::class,[

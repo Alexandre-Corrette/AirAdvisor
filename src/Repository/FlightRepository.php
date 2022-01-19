@@ -78,16 +78,20 @@ class FlightRepository extends ServiceEntityRepository
 
     }
      /**
-     * @return ?Flight[] Returns  Flight objects
+     * @return ?Flight Returns  Flight objects
      */
-    public function findOneFlightByFlightNumber(string $flightNumber): ?Flight
+    public function findOneFlightByFlightNumberAndDate(string $flightNumber, DateTime $flightDate): ?Flight
     {
         $query = $this->createQueryBuilder('f');
         if(!empty($flightNumber)) {
             $query = $query->andWhere('f.flightNumber = :flightNumber')
             ->setParameter('flightNumber', $flightNumber);
         }
-
+        
+        if(!empty($flightDate)) {
+            $query = $query->andWhere('f.flightDate = :flightDate')
+            ->setParameter('flightDate', $flightDate);
+        }
         return $query->getQuery()->getOneOrNullResult();
     }
 }

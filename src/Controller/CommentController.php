@@ -16,57 +16,30 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
- * @Route("/comment")
+ * @Route("/", name="comment_")
  */
 class CommentController extends AbstractController
 {
     /**
-     * @Route("/", name="comment_index", methods={"GET"})
+     * @Route("/", name="index", methods={"GET"})
      */
     public function index(CommentRepository $commentRepository): Response
     {   
         return $this->render('comment/index.html.twig', [
             'comments' => $commentRepository->findAll(),
+            'website' => 'flightAdvisor',
             
         ]);
     }
 
     /**
-     * @Route("/new/flight/{flightNumber}", name="_new", methods={"GET","POST"})
+     * @Route("/new/flight/{flightNumber<^[0-9]+$>}/u/{pseudo}", name="new", methods={"GET","POST"})
      */
-    /*public function new(Request $request,string $flightNumber, CallApiService $callApiService, FlightRepository $flightRepository): Response
+    public function new(Request $request,string $flightNumber, CallApiService $callApiService, FlightRepository $flightRepository): Response
     {
         $comment = new Comment();
         $flight = new flight;
-        $flightDatas = $flightRepository->findOneByFlightNumber($flightNumber);
-        if(empty($flightDatas)) 
-        {
-            $error = 'Nous n\'avons pas trouvé de vol avec ce numéro, vous pouvez affiner votre recherche' ;
-            $form = $this->createForm(FlightType::class, $flight);
-            $form->handleRequest($request);
-            if ($form->isSubmitted() && $form->isValid()) 
-            {
-                
-                $callApiService->departureCity = substr($_POST['flight']['departureCity'],-3);
-                $callApiService->arrivalCity = substr($_POST['flight']['arrivalCity'], -3);
-                $callApiService->departureDate = $_POST['flight']['flightDate'];
-                $callApiService->flightNumber = substr($flightNumber, 2);
-                //dd($callApiService);
-                $callApiService->callApitHistoricFlights();
-                $flight = $callApiService->setFlight();
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->persist($flight);
-                $entityManager->flush();
-                return $this->redirectToRoute('flight_show', [
-                    'flightNumber' => $flight->getFlightNumber(),
-                ]);
-            }
-            return $this->render('flight/new.html.twig',[
-            'error' => $error ,
-            'form' => $form->createView(),
-            'flightNumber' => $flightNumber,
-            ]); 
-        } else {
+
             $form = $this->createForm(CommentType::class, $comment);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
@@ -81,13 +54,14 @@ class CommentController extends AbstractController
         return $this->render('comment/new.html.twig',[
             'comment' => $comment,
             'flightNumber' => $flightNumber,
+            'flight' => $callApiService->getFlightDatas(),
             'form' => $form->createView(),
             ]); 
         }
-    }*/
+    
 
     /**
-     * @Route("/{id}", name="comment_show", methods={"GET"})
+     * @Route("/{id<^[0-9]+$>}", name="show", methods={"GET"})
      */
     public function show(Comment $comment): Response
     {
@@ -97,7 +71,7 @@ class CommentController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="comment_edit", methods={"GET","POST"})
+     * @Route("/{id<^[0-9]+$>}/edit", name="edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Comment $comment): Response
     {
@@ -117,7 +91,7 @@ class CommentController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="comment_delete", methods={"DELETE"})
+     * @Route("/{id<^[0-9]+$>}", name="delete", methods={"DELETE"})
      */
     public function delete(Request $request, Comment $comment): Response
     {
@@ -128,5 +102,17 @@ class CommentController extends AbstractController
         }
 
         return $this->redirectToRoute('comment_index');
+    }
+
+    /**
+     * @Route("/commentaires/vol/{flightId<^[0-9]+$>}", name="list_comments_about_one_flight")
+     */
+    public function listCommentsAboutOneFlight($flightId, CommentRepository $commentRepository)
+    {   
+         
+        return $this->render('comment/list_comments_flight.html.twig', [
+            'comments' => $commentRepository->findCommentByFlightId($flightId),
+            'website' => 'flightAdvisor',
+        ]);
     }
 }
