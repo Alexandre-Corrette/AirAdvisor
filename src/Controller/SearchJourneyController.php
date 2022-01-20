@@ -30,18 +30,33 @@ class SearchJourneyController extends AbstractController
     /**
     * @Route("/results/departureCity/{departureCity}/arrivalCity/{arrivalCity}/flightDate/{flightDate}", name="results", methods={"GET"})
     */
-    public function listResults( CallApiService $callApiService,string $departureCity,string $arrivalCity,string $flightDate): Response
+    public function listResults( CallApiService $callApiService,string $departureCity,string $arrivalCity,string $flightDate, FlightRepository $flightRepository): Response
     {
         
         $departureCityIataCode = substr($departureCity, -3);
         $arrivalCityIataCode = substr($arrivalCity, -3);
+        $results = $callApiService->callApiFlights($departureCityIataCode, $arrivalCityIataCode, $flightDate);
+        //dd($results);
+        foreach($results as $flightData)
+            {
+                $flightInDb['flight'] = $flightRepository->findOneFlightByFlightNumber($flightData['flight']['number']);
+                if(!empty($flightInDb['flight']))
+                {
+                    $results['comment'] = $flightInDb['flight']->getComments();
+                }
+                
+            }
+            dd($results);
+        
+
         
         return $this->render('landing/listresults.html.twig', 
             [
-            'results' =>$callApiService->callApiFlights($departureCityIataCode, $arrivalCityIataCode, $flightDate),
+            'results' => $results,
             'departureCity' => $departureCity,
             'arrivalCity' => $arrivalCity,
             'flightDate' => $flightDate,
+            'flightsInDb' => $flightInDb,
             'website' => 'AirAdvisor'
             ]
         );
@@ -113,61 +128,55 @@ class SearchJourneyController extends AbstractController
     public function showResultOneFlight(Request $request, CallApiService $callApiService, $flightNumber, $flightDate, $departureCity, $arrivalCity, FlightRepository $flightRepository): Response
     {   
         $callApiService->setFlightData($flightDate, substr($departureCity, -3), substr($arrivalCity, -3), $flightNumber);
-        $flights = $callApiService->callApitHistoricFlights();
-        $comment = new Comment();
-        $flight = new Flight();
-        
-        $form = $this->createForm(CommentType::class);
-        $form->handleRequest($request);
         $date = new DateTime($flightDate);
         $date->format('Y-m-d');
+        
+        $comment = new Comment();
+        $flight = new Flight();
+        $flight->setFlightNumber($flightNumber);
+        $flight->setFlightDate($date);
+        $flight->setDepartureCity($departureCity);
+        $flight->setArrivalCity($arrivalCity);
+        $flights = $callApiService->callApitHistoricFlights();
+        foreach($flights as $flightData) 
+            {
+                $flight->setFlightIataCode($flightData['flight']['iataNumber']);
+                $flight->setAirlineIataCode($flightData['airline']['iataCode']);
+                $flight->setAirlineName($flightData['airline']['name']);
+            
+            }
+        $form = $this->createForm(CommentType::class);
+        $form->handleRequest($request);
+        
         $flightDb = $flightRepository->findOneFlightByFlightNumberAndDate($flightNumber, $date);
-        if(!empty($flightDb)) {
+        if(!empty($flightDb)) 
+        {
             $comments = $flightDb->getComments();
         }
         
-        //dd($comments);
         if ($form->isSubmitted() && $form->isValid())
        
             {
                 $entityManager = $this->getDoctrine()->getManager();
-            if(empty($flightDb))
-            {
-                $flight->setFlightNumber($flightNumber);
-                $flight->setFlightDate($date);
-                $flight->setDepartureCity($departureCity);
-                $flight->setArrivalCity($arrivalCity);
-                foreach($flights as $flightData) 
-                {
-                    $flight->setFlightIataCode($flightData['flight']['iataNumber']);
-                    $flight->setAirlineIataCode($flightData['airline']['iataCode']);
-                    $flight->setAirlineName($flightData['airline']['name']);
-                
-                }
                 $comment->setComment($_POST['comment']['comment']);
                 $comment->setTitre($_POST['comment']['titre']);
                 $comment->setRate($_POST['comment']['rate']);
                 $comment->setAuthor($this->getUser());
-                $comment->setFlight($flight);
-                $entityManager->persist($comment);
-                $entityManager->persist($flight);
-                $entityManager->flush();
-            } else {
-                $comment->setComment($_POST['comment']['comment']);
-                $comment->setTitre($_POST['comment']['titre']);
-                $comment->setRate($_POST['comment']['rate']);
-                $comment->setAuthor($this->getUser());
-                $flightDb->addComment($comment);
-                $entityManager->persist($comment);
-                $entityManager->flush();
-                
-            } 
-            
-        
+                if(empty($flightDb))
+                    {
+                        $comment->setFlight($flight);
+                        $entityManager->persist($comment);
+                        $entityManager->persist($flight);
+                        $entityManager->flush();
+                    } else {
+                        $flightDb->addComment($comment);
+                        $entityManager->persist($comment);
+                        $entityManager->flush();
+                    } 
             return $this->redirectToRoute('comment_list_comments_about_one_flight',
                     ['flightId' => $flightDb->getId()]);
-
         }
+        
         return $this->render('search/results_one_flight.html.twig',
         ['flights' => $flights,
         'flightDatas' => $callApiService->getFlightDatas(),

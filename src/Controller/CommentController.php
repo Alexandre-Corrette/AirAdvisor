@@ -16,12 +16,12 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
- * @Route("/", name="comment_")
+ * @Route("/comment", name="comment_")
  */
 class CommentController extends AbstractController
 {
     /**
-     * @Route("/", name="index", methods={"GET"})
+     * @Route("/commentaires", name="index", methods={"GET"})
      */
     public function index(CommentRepository $commentRepository): Response
     {   

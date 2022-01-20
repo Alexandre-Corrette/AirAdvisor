@@ -1,31 +1,29 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{website}} | Vol {#{{flight.flightNumber}}#}{% endblock %}
-{% block header %}
-{{ include('_navigation.html.twig') }}
-{% endblock %}
+{% block title %}{{website}} | Vol {{flight.flightNumber}} {% endblock %}
 {% block content %}
-    <div class="container mt-5 pt-5">
-        
-        <div class="row">
+   
+        <div class="row justify-content-center pt-5">
             <div class="col-6">
                 <div class="card">
                     <div class="card-body">
                         <div class="card-Title mb-3">
-                           {# {% if (flight.pathToLogo) %} 
+                           {% if (flight.pathToLogo) %} 
                                 {% set logo = asset(('build/images/logo-' ~ (flight.codeshared.airline.name|replace({' ':''})) ~ '.png'))  %}
                                         <img class="w-100" src="  {{  logo  }}   " alt="">
                             {% else %}
                             <h3>{{'compagnie non informée'}}</h3> 
-                            {% endif %}#}
-                            
+                            {% endif %}
+                            <pre>
+                                {{ dump(flight) }}
+                            </pre>
                         </div>
                         <div class="card-text mt-5">
                             <div class="container"> 
                                 <div class="row mb-5">
                                     <div class="col-6">
                                         <p>Aéroport de départ : </p>
-                                        {#<p>{{flight.departure.iataCode|upper}}</p>
+                                        <p>{{flight.departure.iataCode|upper}}</p>
                                         <p>Aéroport d'arrivée : </p>
                                         <p>{{flight.arrival.iataCode|upper}}</p>
                                         
@@ -52,7 +50,7 @@
                                             <td>{{flight.departure.gate|upper}}</td>
                                             <td>{{flight.arrival.terminal|upper}}</td>
                                             <td>{{flight.arrival.gate|upper}}</td>
-                                        </tr>#}
+                                        </tr>
                                         
                                     </tbody>
                             
@@ -75,7 +73,7 @@
                 </div>
             </div>
             <div class="col-6">
-                {#{% if comments is not empty %}
+                {% if comments is not empty %}
                 {% for comment in comments %}
                 <div class="card mb-3">
                     <div class="card-body">
@@ -96,7 +94,7 @@
                 {% else %}
                 <p>Il n'y a pas encore de commentaire pour ce vol</p>
                 <a href="#">Ajouter un commentaire</a> <i class="fas fa-add"></i>
-                {% endif %}#}
+                {% endif %}
                 
                
                     
@@ -105,15 +103,6 @@
                 
             </div>
         </div>
-    </div>
-    
-
    
 
-   
-
-    <a href="">edit</a>
-
-    
 {% endblock %}
-{% block footer %} {{ parent() }}{% endblock %}

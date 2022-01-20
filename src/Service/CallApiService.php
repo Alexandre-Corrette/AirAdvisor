@@ -118,12 +118,15 @@ class CallApiService
         return $this->callApi('flightsHistory?key='.$this->accessKey.'&type=departure&code='.$this->departureCity.'&date_from='.$this->departureDate.'&arr_iataCode='.$this->arrivalCity.'&flight_number='.$this->flightNumber);
     }
 
-    public function setFlightData(string $departureDate, string $departureCity, string $arrivalCity, int $flightNumber) 
+    public function setFlightData(?string $departureDate, ?string $departureCity, ?string $arrivalCity, ?int $flightNumber) 
     {
-        $this->departureDate = $departureDate;
-        $this->flightNumber = $flightNumber;
-        $this->departureCity = $departureCity;
-        $this->arrivalCity = $arrivalCity;
+        if(!empty($departureDate) || !empty($flightNumber) || !empty($departureCity) || !empty($arrivalCity))
+        {
+            $this->departureDate = $departureDate;
+            $this->flightNumber = $flightNumber;
+            $this->departureCity = $departureCity;
+            $this->arrivalCity = $arrivalCity;
+        }
     }
 
     public function getFlightDatas(): array

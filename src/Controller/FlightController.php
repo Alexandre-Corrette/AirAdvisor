@@ -59,11 +59,11 @@ class FlightController extends AbstractController
     }
 
     /**
-     * @Route("/{flightNumber}", name="show", methods={"GET"})
+     * @Route("/{flightNumber}/d/{iataCode}/id/{id}", name="", methods={"GET"})
      */
-   public function show($flightNumber, FlightRepository $flightRepository): Response
+   /*public function show($flightNumber, FlightRepository $flightRepository): Response
     {   
-        $flight = $flightRepository->findOneFlightByFlightNumber($flightNumber);
+        $flight = $flightRepository->findOneByFlightNumber($flightNumber);
 
         
         //dd($comments);
@@ -72,7 +72,7 @@ class FlightController extends AbstractController
             'website' => 'AirAdvisor'
             
         ]);
-    }
+    }*/
 
     /**
      * @Route("/{id}/edit", name="edit", methods={"GET","POST"})
@@ -97,13 +97,13 @@ class FlightController extends AbstractController
     }
 
     /**
-     * @Route("/flight/{id}/departure/{iataCode}/date/{flightDate}/flightNumber/{flightNumber}", name="_show")
+     * @Route("/{id}/a/{iataCode}/d/{flightDate}/flightnumber/{flightNumber}", name="show")
      */
-    /*public function showFlight($id,$flightDate,$iataCode,$flightNumber, CallApiService $callApiService): Response
+    public function showFlight($id,$flightDate,$iataCode,$flightNumber, CallApiService $callApiService): Response
     {
     
-        $flights = $callApiService->getFlightByFlightNumber($iataCode,$flightDate,$id);
-        
+        $flights = $callApiService->getFlightByFlightNumber($iataCode,$flightDate,$flightNumber);
+        dd($flights);
         foreach($flights as $flight) {
             if($flightNumber === $flight['flight']['iataNumber'])
             {
@@ -124,7 +124,7 @@ class FlightController extends AbstractController
         
         return $this->render('flight/show.html.twig',['flight'=> $flightData]);
 
-    }*/
+    }
 
     /**
      * @Route("/{id}", name="delete", methods={"DELETE"})
