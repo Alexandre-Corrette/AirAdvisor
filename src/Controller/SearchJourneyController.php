@@ -14,6 +14,8 @@ use App\Form\SearchCompanyFlightType;
 use App\Service\SearchJourneyService;
 use Symfony\Component\HttpClient\HttpClient;
 use App\Form\SearchJourneyByFlightNumberType;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -28,35 +30,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class SearchJourneyController extends AbstractController
 {
     /**
-    * @Route("/results/departureCity/{departureCity}/arrivalCity/{arrivalCity}/flightDate/{flightDate}", name="results", methods={"GET"})
+    * @Route("/results/{departureCity}/{arrivalCity}", name="results", methods={"GET"})
     */
-    public function listResults( CallApiService $callApiService,string $departureCity,string $arrivalCity,string $flightDate, FlightRepository $flightRepository): Response
-    {
-        
-        $departureCityIataCode = substr($departureCity, -3);
-        $arrivalCityIataCode = substr($arrivalCity, -3);
-        $results = $callApiService->callApiFlights($departureCityIataCode, $arrivalCityIataCode, $flightDate);
-        //dd($results);
-        foreach($results as $flightData)
-            {
-                $flightInDb['flight'] = $flightRepository->findOneFlightByFlightNumber($flightData['flight']['number']);
-                if(!empty($flightInDb['flight']))
-                {
-                    $results['comment'] = $flightInDb['flight']->getComments();
-                }
-                
-            }
-            dd($results);
-        
-
-        
+    public function listResults(SearchJourneyService $search, $departureCity, $arrivalCity, FlightRepository $flightRepository): Response
+    {   
+        $search->departureCity = $departureCity;
+        $search->arrivalCity = $arrivalCity;
+        $results = $flightRepository->search($search);
+        dd($results);
         return $this->render('landing/listresults.html.twig', 
             [
             'results' => $results,
-            'departureCity' => $departureCity,
-            'arrivalCity' => $arrivalCity,
-            'flightDate' => $flightDate,
-            'flightsInDb' => $flightInDb,
             'website' => 'AirAdvisor'
             ]
         );

@@ -2,11 +2,12 @@
 
 namespace App\Controller;
 
+use ReflectionClass;
 use App\Entity\Flight;
 use App\Form\SearchJourneyType;
-use App\Controller\SearchJourneyController;
 use App\Service\CallApiService;
 use App\Service\SearchJourneyService;
+use App\Controller\SearchJourneyController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -31,10 +32,11 @@ class LandingController extends AbstractController
         $searchForm->handleRequest($request);
         if (($searchForm->isSubmitted() && $searchForm->isValid())) 
             {  
+                
                 return $this->redirectToRoute('search_results',[
-                    'departureCity' => $_GET['search_journey']['departureCity'] ,
-                    'arrivalCity' => $_GET['search_journey']['arrivalCity'] , 
-                    'flightDate' => $_GET['search_journey']['flightDate']]);
+                   'departureCity'=>substr($_GET['search_journey']['departureCity'], -3),
+                   'arrivalCity'=>substr($_GET['search_journey']['arrivalCity'], -3),        
+                ]);
             }
             
                     

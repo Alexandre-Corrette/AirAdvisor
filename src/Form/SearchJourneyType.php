@@ -26,15 +26,6 @@ class SearchJourneyType extends AbstractType
                 'attr' => ['class' => 'form-control js-user-autocomplete']
 
             ])
-            ->add('flightDate', DateType::class, [
-                'label' => 'Date de Départ',
-                'required' => true,
-                'widget' => 'single_text',
-                // prevents rendering it as type="date", to avoid HTML5 date pickers
-                
-                // adds a class that can be selected in JavaScript
-                'attr' => ['class' => 'form-control datepicker'],
-            ])
             ->add('arrivalCity', TextType::class, [
                 'label' => 'Aéroport d\'arrivée',
                 'required' => false,
@@ -49,7 +40,7 @@ class SearchJourneyType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Flight::class,
+            'data_class' => SearchJourneyService::class,
             'method' => 'GET',
             'csrf_protection' => false,
         ]);

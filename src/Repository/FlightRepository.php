@@ -68,15 +68,11 @@ class FlightRepository extends ServiceEntityRepository
             ->andWhere('f.arrivalCity = :arrivalCity')
             ->setParameter('arrivalCity', $search->arrivalCity);
         }
-        if (!empty($search->flightNumber)) {
-            $query = $query
-            ->andWhere('f.flightNumber = :flightNumber')
-            ->setParameter('flightNumber', $search->flightNumber);
-        }
 
         return $query->getQuery()->getResult();
 
     }
+    
     /**
      * @return ?Flight Returns  Flight objects
      */
