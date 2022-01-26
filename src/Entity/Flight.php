@@ -46,7 +46,7 @@ class Flight
     /**
      * @ORM\Column(type="date")
      */
-    protected ?Date $flightDate;
+    protected ?DateTime $flightDate;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
