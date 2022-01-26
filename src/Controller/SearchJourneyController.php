@@ -61,7 +61,7 @@ class SearchJourneyController extends AbstractController
             if(!empty($_GET)) 
             {   
                 return $this->redirectToRoute('search_result_one_flight', 
-                ['flightNumber' => $_GET['search_journey_by_flight_number']['flightNumber'],
+                [
                 'departureCity' => $_GET['search_journey_by_flight_number']['departureCity'],
                 'arrivalCity' => $_GET['search_journey_by_flight_number']['arrivalCity'],
                 'flightDate' => $_GET['search_journey_by_flight_number']['flightDate'] 
@@ -72,56 +72,27 @@ class SearchJourneyController extends AbstractController
         return $this->render('search/new.html.twig', [
             
             'searchForm' => $form->createView(),
-            'website' => 'AirAdvisor',
+            'website' => 'FlightAdvisor',
         ]);
     }
 
     /**
-     * @Route("/search/refine/{flightNumber<^[0-9]+$>}", name="refine")
+     * @Route("/result/flight/departure/{departureCity}/arrival/{arrivalCity}/date/{flightDate}", name="result_one_flight")
      */
-    public function refineSearch(int $flightNumber, CallApiService $callApiService, Request $request): Response
+    public function showResultOneFlight(Request $request, CallApiService $callApiService, $flightDate, $departureCity, $arrivalCity, FlightRepository $flightRepository): Response
     {   
-        $form = $this->createForm(SearchJourneyByFlightNumberType::class);
-        $flights = [];
-        $error= null; 
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            if(!empty($callApiService->setFlightData($_GET['departureDate'], $_GET['departureCity'], $_GET['arrivaCity'], $flightNumber)))
-            {
-                $flights = $callApiService->callApitHistoricFlights();
-            
-            }   else 
-            {
-                $error = 'il n\'y a pas de vol ';
-            }
-
-            
-        }
-        return $this->render('search/refine.html.twig', [
-            
-            'searchForm' => $form->createView(),
-            'website' => 'AirAdvisor',
-            'flights' => $flights,
-            'error' => $error,
-        ]);
-    }
-
-    /**
-     * @Route("/result/flight/{flightNumber<^[0-9]+$>}/departure/{departureCity}/arrival/{arrivalCity}/date/{flightDate}", name="result_one_flight")
-     */
-    public function showResultOneFlight(Request $request, CallApiService $callApiService, $flightNumber, $flightDate, $departureCity, $arrivalCity, FlightRepository $flightRepository): Response
-    {   
-        $callApiService->setFlightData($flightDate, substr($departureCity, -3), substr($arrivalCity, -3), $flightNumber);
+        //$callApiService->setFlightData($flightDate, substr($departureCity, -3), substr($arrivalCity, -3), $flightNumber);
         $date = new DateTime($flightDate);
         $date->format('Y-m-d');
         
         $comment = new Comment();
         $flight = new Flight();
-        $flight->setFlightNumber($flightNumber);
+        //$flight->setFlightNumber($flightNumber);
         $flight->setFlightDate($date);
         $flight->setDepartureCity($departureCity);
         $flight->setArrivalCity($arrivalCity);
-        $flights = $callApiService->callApitHistoricFlights();
+        $flights = $callApiService->callApitHistoricFlights($flight);
+        dd($flights);
         foreach($flights as $flightData) 
             {
                 $flight->setFlightIataCode($flightData['flight']['iataNumber']);
@@ -132,11 +103,10 @@ class SearchJourneyController extends AbstractController
         $form = $this->createForm(CommentType::class);
         $form->handleRequest($request);
         
-        $flightDb = $flightRepository->findOneFlightByFlightNumberAndDate($flightNumber, $date);
-        if(!empty($flightDb)) 
-        {
-            $comments = $flightDb->getComments();
-        }
+        $flightDb = [ 
+                    'flightByDeparture' => $flightRepository->findOneBy($departureCity),
+                    'flightByArrival' => $flightRepository->findOneBy($arrivalCity),
+        ];
         
         if ($form->isSubmitted() && $form->isValid())
        
@@ -153,18 +123,18 @@ class SearchJourneyController extends AbstractController
                         $entityManager->persist($flight);
                         $entityManager->flush();
                     } else {
-                        $flightDb->addComment($comment);
+                        $flightDb['flightByDeparture']->addComment($comment);
+                        $flightDb['flightByArrival']->addComment($comment);
                         $entityManager->persist($comment);
                         $entityManager->flush();
                     } 
             return $this->redirectToRoute('comment_list_comments_about_one_flight',
-                    ['flightId' => $flightDb->getId()]);
+                    ['flightId' => $flightDb['flightByDeparture']->getId()]);
         }
         
         return $this->render('search/results_one_flight.html.twig',
         ['flights' => $flights,
         'flightDatas' => $callApiService->getFlightDatas(),
-        'comments' => $comments,
         'error'=> $error = 'il n\'y a pas de vol ',
         'form' => $form->createView(),
         'website' => 'FlightAdvisor',
