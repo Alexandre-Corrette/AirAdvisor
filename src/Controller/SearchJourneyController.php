@@ -37,8 +37,8 @@ class SearchJourneyController extends AbstractController
         $search->departureCity = $departureCity;
         $search->arrivalCity = $arrivalCity;
         $results = $flightRepository->search($search);
-        dd($results);
-        return $this->render('landing/listresults.html.twig', 
+        //dd($results);
+        return $this->render('search/index.html.twig', 
             [
             'results' => $results,
             'website' => 'AirAdvisor'
