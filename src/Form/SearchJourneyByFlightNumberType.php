@@ -42,7 +42,14 @@ class SearchJourneyByFlightNumberType extends AbstractType
                 'required' => false,
                 'attr' => ['class' => 'form-control js-user-autocomplete']
             ])
-        
+            ->add('flightNumber', TextType::class,[
+                'label' => 'Numéro de vol',
+                'required' => True,
+                'attr' => ['class' => 'form-control',
+                'placeHolder' => 'ex : 680'],
+                
+
+            ])
             ->add('submit', SubmitType::class, [
                 'label' => 'GO!',
                 'attr' => ['class' => 'btn btn-outline-dark w-100']

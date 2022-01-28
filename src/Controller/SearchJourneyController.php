@@ -64,7 +64,9 @@ class SearchJourneyController extends AbstractController
                 [
                 'departureCity' => $_GET['search_journey_by_flight_number']['departureCity'],
                 'arrivalCity' => $_GET['search_journey_by_flight_number']['arrivalCity'],
-                'flightDate' => $_GET['search_journey_by_flight_number']['flightDate'] 
+                'flightDate' => $_GET['search_journey_by_flight_number']['flightDate'],
+                'flightNumber' => $_GET['search_journey_by_flight_number']['flightNumber'],
+
             ]);
               
             }
@@ -77,68 +79,66 @@ class SearchJourneyController extends AbstractController
     }
 
     /**
-     * @Route("/result/flight/departure/{departureCity}/arrival/{arrivalCity}/date/{flightDate}", name="result_one_flight")
+     * @Route("/result/flight/departure/{departureCity}/arrival/{arrivalCity}/date/{flightDate}/flight/{flightNumber}", name="result_one_flight")
      */
-    public function showResultOneFlight(Request $request, CallApiService $callApiService, $flightDate, $departureCity, $arrivalCity, FlightRepository $flightRepository): Response
+    public function showResultOneFlight(Request $request, CallApiService $callApiService,string $flightDate,string $departureCity,string $arrivalCity, FlightRepository $flightRepository, int $flightNumber): Response
     {   
-        //$callApiService->setFlightData($flightDate, substr($departureCity, -3), substr($arrivalCity, -3), $flightNumber);
+        $entityManager = $this->getDoctrine()->getManager();
         $date = new DateTime($flightDate);
-        $date->format('Y-m-d');
         
-        $comment = new Comment();
-        $flight = new Flight();
-        //$flight->setFlightNumber($flightNumber);
-        $flight->setFlightDate($date);
-        $flight->setDepartureCity($departureCity);
-        $flight->setArrivalCity($arrivalCity);
-        $flights = $callApiService->callApitHistoricFlights($flight);
-        dd($flights);
-        foreach($flights as $flightData) 
-            {
-                $flight->setFlightIataCode($flightData['flight']['iataNumber']);
-                $flight->setAirlineIataCode($flightData['airline']['iataCode']);
-                $flight->setAirlineName($flightData['airline']['name']);
-            
+        $flightDate = $date->format('Y-m-d');
+        $flight = $flightRepository->findOneBy([
+            'flightDate' => $date, 
+            'departureCity' => $departureCity,
+            'arrivalCity' => $arrivalCity,
+            'flightNumber' => $flightNumber,
+            ]);
+        if(empty($flight))
+        {   $flight = new Flight();
+            $callApiService->setFlightData($flightDate,substr($departureCity, -3),substr($arrivalCity, -3),$flightNumber);
+            $flights = $callApiService->callApitHistoricFlights();
+
+            //if flight is not in db, set a new flight
+            foreach($flights as $flightData) 
+            {   
+                $flight->setFlightDate($date)
+                        ->setDepartureCity($departureCity)
+                        ->setArrivalCity($arrivalCity)
+                        ->setFlightNumber($flightNumber)
+                        //->setScheduledTime($flightData['departure']['scheduledTime'])
+                        //->setArrivalScheduledTime($flightData['arrival']['scheduledTime'])
+                        ->setFlightIataCode($flightData['flight']['iataNumber'])
+                        ->setAirlineIataCode($flightData['airline']['iataCode'])
+                        ->setAirlineName($flightData['airline']['name']);
+                        $entityManager->persist($flight);
+                        $entityManager->flush();
             }
+        }
+        
+        
         $form = $this->createForm(CommentType::class);
         $form->handleRequest($request);
         
-        $flightDb = [ 
-                    'flightByDeparture' => $flightRepository->findOneBy($departureCity),
-                    'flightByArrival' => $flightRepository->findOneBy($arrivalCity),
-        ];
-        
         if ($form->isSubmitted() && $form->isValid())
-       
-            {
-                $entityManager = $this->getDoctrine()->getManager();
-                $comment->setComment($_POST['comment']['comment']);
-                $comment->setTitre($_POST['comment']['titre']);
-                $comment->setRate($_POST['comment']['rate']);
-                $comment->setAuthor($this->getUser());
-                if(empty($flightDb))
-                    {
-                        $comment->setFlight($flight);
-                        $entityManager->persist($comment);
-                        $entityManager->persist($flight);
-                        $entityManager->flush();
-                    } else {
-                        $flightDb['flightByDeparture']->addComment($comment);
-                        $flightDb['flightByArrival']->addComment($comment);
-                        $entityManager->persist($comment);
-                        $entityManager->flush();
-                    } 
-            return $this->redirectToRoute('comment_list_comments_about_one_flight',
-                    ['flightId' => $flightDb['flightByDeparture']->getId()]);
-        }
-        
-        return $this->render('search/results_one_flight.html.twig',
-        ['flights' => $flights,
-        'flightDatas' => $callApiService->getFlightDatas(),
-        'error'=> $error = 'il n\'y a pas de vol ',
-        'form' => $form->createView(),
-        'website' => 'FlightAdvisor',
-        ]);
-    }
+        {
+            $comment = new Comment();
+            $comment->setComment($_POST['comment']['comment'])
+                    ->setTitre($_POST['comment']['titre'])
+                    ->setRate($_POST['comment']['rate'])
+                    ->setAuthor($this->getUser())
+                    ->setFlight($flight);
+                    $entityManager->persist($comment);
+                    $entityManager->flush();
+                    return $this->redirectToRoute('comment_list_comments_about_one_flight',
+                    ['flightId' => $flight->getId()]);
+        } 
 
+    return $this->render('search/results_one_flight.html.twig',
+    ['flights' => $flight,
+    'error'=> $error = 'il n\'y a pas de vol ',
+    'form' => $form->createView(),
+    'website' => 'FlightAdvisor',
+    ]);
+
+    }
 }

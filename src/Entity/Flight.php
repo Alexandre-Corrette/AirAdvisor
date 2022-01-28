@@ -196,7 +196,7 @@ class Flight
         return$this->flightDate;
     }
 
-    public function setFlightDate(?\DateTime $flightDate): self
+    public function setFlightDate(?DateTime $flightDate): self
     {
         $this->flightDate = $flightDate;
 

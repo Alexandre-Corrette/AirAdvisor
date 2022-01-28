@@ -28,14 +28,29 @@ class LandingController extends AbstractController
         $flights = $this->getDoctrine()
             ->getRepository(Flight::class)
             ->findAll();
+        foreach($flights as $flight)
+        {   
+            if(!empty($flight->getComments()))
+            {
+                $numberOfComments[] = [
+                    'numberOfComments' => count($flight->getComments()),
+                    'flightNumber' => $flight->getflightNumber(),
+                    'comments' => $flight->getComments(),
+                    'departure' => $flight->getDepartureCity(),
+                    'arrival' => $flight->getArrivalCity()
+                                ];
+            }
+           
+        }
+        rsort($numberOfComments);
         $searchForm = $this->createForm(SearchJourneyType::class);
         $searchForm->handleRequest($request);
         if (($searchForm->isSubmitted() && $searchForm->isValid())) 
             {  
                 
                 return $this->redirectToRoute('search_results',[
-                   'departureCity'=>substr($_GET['search_journey']['departureCity'], -3),
-                   'arrivalCity'=>substr($_GET['search_journey']['arrivalCity'], -3),        
+                   'departureCity'=>$_GET['search_journey']['departureCity'],
+                   'arrivalCity'=>$_GET['search_journey']['arrivalCity'],        
                 ]);
             }
             
@@ -43,8 +58,9 @@ class LandingController extends AbstractController
         
         return $this->render('landing/index.html.twig', [
             
-            'website' => 'AirAdvisor',
+            'website' => 'FlightAdvisor',
             'flights' => $flights,
+            'comments' => $numberOfComments,
             'searchForm' => $searchForm->createView(),
             
      
