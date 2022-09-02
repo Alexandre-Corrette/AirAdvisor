@@ -29,22 +29,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class SearchJourneyController extends AbstractController
 {
-    /**
-    * @Route("/results/{departureCity}/{arrivalCity}", name="results", methods={"GET"})
-    */
-    public function listResults(SearchJourneyService $search, $departureCity, $arrivalCity, FlightRepository $flightRepository): Response
-    {   
-        $search->departureCity = $departureCity;
-        $search->arrivalCity = $arrivalCity;
-        $results = $flightRepository->search($search);
-        //dd($results);
-        return $this->render('search/index.html.twig', 
-            [
-            'results' => $results,
-            'website' => 'AirAdvisor'
-            ]
-        );
-    }
+   
 
     
 

@@ -33,7 +33,7 @@ class LandingController extends AbstractController
             if(!empty($flight->getComments()))
             {
                 $numberOfComments[] = [
-                    'numberOfComments' => count($flight->getComments()),
+                    'commentsNumber' => count($flight->getComments()),
                     'flightNumber' => $flight->getflightNumber(),
                     'comments' => $flight->getComments(),
                     'departure' => $flight->getDepartureCity(),
@@ -60,7 +60,7 @@ class LandingController extends AbstractController
             
             'website' => 'FlightAdvisor',
             'flights' => $flights,
-            'comments' => $numberOfComments,
+            'commentsNumber' => $numberOfComments,
             'searchForm' => $searchForm->createView(),
             
      

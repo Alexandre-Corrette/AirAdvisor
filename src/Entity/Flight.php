@@ -40,8 +40,15 @@ class Flight
 
     /**
      * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="flight")
+     * @var Collection
      */
     private $comments;
+
+     /**
+     * @ORM\OneToMany(targetEntity=User::class, mappedBy="flights")
+     * @var User[]|ArrayCollection
+     */
+    private $customers;
 
     /**
      * @ORM\Column(type="date")
@@ -111,9 +118,11 @@ class Flight
     public function __construct()
     {
         $this->comments = new ArrayCollection();
-       
+        $this->customers = new ArrayCollection();
+
     }
-    public function getFlight() {
+    public function getFlight()
+    {
         return $this;
     }
     public function getId(): ?int
@@ -186,14 +195,15 @@ class Flight
 
         return $this;
     }
-    public function __toString() {
+    public function __toString()
+    {
         return $this->flightNumber;
     }
 
     public function getFlightDate(): ?DateTime
-    {   
-        
-        return$this->flightDate;
+    {
+
+        return $this->flightDate;
     }
 
     public function setFlightDate(?DateTime $flightDate): self
@@ -345,5 +355,16 @@ class Flight
         $this->codesharedFlightIataNumber = $codesharedFlightIataNumber;
 
         return $this;
+    }
+
+
+    /**
+     * Get the value of customers
+     *
+     * @return  User[]|ArrayCollection
+     */ 
+    public function getCustomers()
+    {
+        return $this->customers;
     }
 }
