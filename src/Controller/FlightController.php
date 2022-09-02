@@ -43,14 +43,9 @@ class FlightController extends AbstractController
         $form = $this->createForm(FlightType::class, $flight);
         $form->handleRequest($request);
         
-        if ($form->isSubmitted() && $form->isValid()) {
-     
+        if ($form->isSubmitted() && $form->isValid()) 
+        {  
             
-                
-                
-            
-            
-
             return $this->redirectToRoute('flight_index', 
                
             );
@@ -59,32 +54,36 @@ class FlightController extends AbstractController
         return $this->render('flight/new.html.twig', [
             
             'form' => $form->createView(),
+            
         ]);
     }
 
     /**
-     * @Route("/{id}}", name="show", methods={"GET"})
+     * @Route("/{flightNumber}/d/{iataCode}/id/{id}", name="", methods={"GET"})
      */
-    public function show(Flight $flight): Response
+   /*public function show($flightNumber, FlightRepository $flightRepository): Response
     {   
+        $flight = $flightRepository->findOneByFlightNumber($flightNumber);
 
-        $comments = $flight->getComments();
+        
         //dd($comments);
         return $this->render('flight/show.html.twig', [
             'flight' => $flight,
-            'comments' => $comments,
+            'website' => 'AirAdvisor'
+            
         ]);
-    }
+    }*/
 
     /**
      * @Route("/{id}/edit", name="edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Flight $flight): Response
+    public function edit(Request $request, Flight $flight, CallApiService $callApi): Response
     {
         $form = $this->createForm(FlightType::class, $flight);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('flight_index');
@@ -93,7 +92,38 @@ class FlightController extends AbstractController
         return $this->render('flight/edit.html.twig', [
             'flight' => $flight,
             'form' => $form->createView(),
+            'website' => 'flightAdvisor'
         ]);
+    }
+
+    /**
+     * @Route("/{id}/a/{iataCode}/d/{flightDate}/flightnumber/{flightNumber}", name="show")
+     */
+    public function showFlight($id,$flightDate,$iataCode,$flightNumber, CallApiService $callApiService): Response
+    {
+    
+        $flights = $callApiService->getFlightByFlightNumber($iataCode,$flightDate,$flightNumber);
+        dd($flights);
+        foreach($flights as $flight) {
+            if($flightNumber === $flight['flight']['iataNumber'])
+            {
+                $flightData = $flight;
+                
+            }
+        }
+        
+        if($flightData['codeshared']['airline']['name']) {
+        
+            $flightData['pathToLogo'] = file_exists('/Users/alexandrecorrette/www/airadvisor/assets/images/logo-'.str_replace(" ", "", $flightData['codeshared']['airline']['name']).'.png');
+            
+         
+        } else {
+            $flightData['pathToLogo'] = file_exists('/Users/alexandrecorrette/www/airadvisor/public/assets/images/logo-'.$flightData['airline']['name'].'.png');
+        }
+     
+        
+        return $this->render('flight/show.html.twig',['flight'=> $flightData]);
+
     }
 
     /**

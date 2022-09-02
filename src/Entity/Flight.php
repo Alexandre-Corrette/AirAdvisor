@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\FlightRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints\Date;
 
 /**
  * @ORM\Entity(repositoryClass=FlightRepository::class)
@@ -195,7 +196,7 @@ class Flight
         return$this->flightDate;
     }
 
-    public function setFlightDate(?\DateTime $flightDate): self
+    public function setFlightDate(?DateTime $flightDate): self
     {
         $this->flightDate = $flightDate;
 

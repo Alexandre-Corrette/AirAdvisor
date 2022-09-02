@@ -19,7 +19,6 @@
             
                     <div  id="content" class="container-fluid mt-5 pt-5">{% block content %}{% endblock %}</div>
                 {% block javascripts %}
-               
                 {{ encore_entry_script_tags('app') }}
                 {% endblock %}
                 <div class="footer">{% block footer %} {{ include('_footer.html.twig') }} {% endblock %}</div> 

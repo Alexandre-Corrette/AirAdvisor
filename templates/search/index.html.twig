@@ -1,54 +1,71 @@
 {% extends "base.html.twig" %}
-{% block header %}
-{{ include('_navigation.html.twig') }}
-{% endblock %}
-{% block body %}
-
-<section class="container bg-white mt-2 pt-5">
-    <div class="row justify-content-center mb-4">
-        <h2 class=" w-25">Recherche de vol</h2>
+{% block title %}{{ website }} | Résultats {% endblock %}
+{% block content %}
+<pre>
+    {{ dump(results) }}
+</pre>
+<div class="container bg-white mt-2 pt-5">
+    <div class="row justify-content-center mt-5 mb-4">
+        <h1 class="">Les résultats de votre recherche pour le vol de :</h1>
+        <h3>data</h3>
     </div>
-    
-</section>
-
-<section class="container bg-white rounded mt-4 p-4">
-    <div class="row">
-        <div class="col-12 p-4">
-            {% if departureCity and arrivalCity and departureDate %}
-            <h3>Vos résultats pour un voyage de {{ departureCity }} vers {{ arrivalCity }} le {{ departureDate | date("d/m/Y")}}</h3>
-            {% endif %}
+  
+</div>
+<div class="container">
+    <div class="row row-cols-md-3 g-4">
+        
             
-        </div>
-        {% if flights %}
-       {% dump(flights) %}
-        {% for flight in flights %}
-        <div class="col-3">
-            <div class="card m-2">
-                <div class="card-body">
-                    <h5 class="card-title">VOL {{ flight.departure.iataCode | upper }} - {{ flight.arrival.iataCode | upper }} </h5>
-                    <p><span>Décollage: {{ flight.departure.scheduledTime}}</span> <span>terminal: {{flight.departure.terminal | upper}}</span></p>
-                    
-                    <p><span>Aterrissage: {{ flight.arrival.scheduledTime}}</span> <span>terminal: {{flight.arrival.terminal | upper}}</span></p>
-                    <p class="card-text">
-                        <span>Compagnie aérienne: {% if flight.airline.name %} {{ flight.airline.name | upper}} {% else %}
-                           <span>Unknown</span>  {% endif %} </span>
-                        
-                    </p>
-                    <p><span>Numéro de vol: {{ flight.flight.iataNumber | upper }}</span></p>
-                </div>
-            </div>
-        </div>
-        
-        
-        
-        {% endfor %}
+           {% for flight in results %}
           
-        {% else %}
-        <p class="resultSearchMessage">Il n'y a pas de résultat pour votre recherche</p>
-        {% endif %}
+            <div class="col">
+                <div class="card mb-3 p-3 shadow">
+                    <div class="card-header"> VOL {{flight.flightNumber|upper}}  <br><span>Compagnie : {{flight.airlineName|upper}}</span>  </div>
+                    <div class="card-body">
+                        <h5 class="card-title text-decoration-underline">
+                            Départ : {{flight.scheduledTime}}
+                        </h5>
+                        <div class="card-text mb-2">
+                           <span class="">terminal : {#{{flight.departure.terminal|upper}}#}</span>
+                           <span>gate : {#{{flight.departure.gate|upper}}#}</span>
+                            
+                        </div>
+                        <h5 class="card-title text-decoration-underline">
+                            Arrivée : {{flight.arrivalScheduledTime}}
+                           
+                        </h5>
+
+
+                        <div class="card-text">
+                            terminal : {#{{flight.arrival.terminal|upper}}#}
+                            gate : {#{{flight.arrival.gate|upper}}#}
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2 d-flex justify-content-center">
+                        <a href="{{path('comment_list_comments_about_one_flight', {'flightId' : flight.id })}}" class="btn btn-outline-dark  mx-1">Voir les avis</a> 
+                        
+                        
+                    </div>
+                    
+                </div>
+                
+            </div>
+
+            
+                
+         
+               
+           {% endfor %}
+                
+          
+       
+           
+       
+        
     </div>
-</section>
+</div>
+
+
+
 
 
 {% endblock %}
-{% block footer %} {{ include('_footer.html.twig') }} {% endblock %}

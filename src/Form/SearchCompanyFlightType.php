@@ -21,7 +21,7 @@ class SearchCompanyFlightType extends AbstractType
         $builder
             ->add('flightNumber',TextType::class, [
                 'label'=> 'Indiquez votre numéro de vol',
-                'attr' => [ 'placeholder' => 'ex : AF6890 ', 'class' => 'form-control'],
+                'attr' => [ 'placeholder' => 'ex : 6890 ', 'class' => 'form-control'],
                 'required'=> false,
             ])
             ->add('submit', SubmitType::class, [

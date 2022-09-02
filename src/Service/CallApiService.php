@@ -3,8 +3,10 @@
 namespace App\Service;
 
 use DateTime; 
+use DateInterval;
 use App\Entity\Flight;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
  
 class CallApiService
@@ -64,6 +66,7 @@ class CallApiService
             'GET',
             'https://aviation-edge.com/v2/public/'.$var
         );
+      
         $statusCode = $response->getStatusCode();
         
         // $statusCode = 200
@@ -105,7 +108,7 @@ class CallApiService
     public function getFlightByFlightNumber(string $iataCode, string $flightDate,string $flightNumber): array
     {   
        
-        return $this->callApi('flightsFuture?key='.$this->accessKey.'&type=departure&iataCode='.$iataCode.'&date='.$flightDate.'&flight_num='.$flightNumber.'');
+        return $this->callApi('flightsFuture?key='.$this->accessKey.'&type=departure&iataCode='.$iataCode.'&date='.$this->departureDate.'&flight_num='.$flightNumber.'');
     }
 
     public function callOneFlight(string $flightNumber) 
@@ -113,21 +116,32 @@ class CallApiService
         return $this->callApi('flights?key='.$this->accessKey.'&flightIata='.$flightNumber.'&limit=10');
     }
 
-    public function callApitHistoricFlights() 
-    {
-        return $this->callApi('flightsHistory?key='.$this->accessKey.'&type=departure&code='.$this->departureCity.'&date='.$this->departureDate.'&flight_number='.$this->flightNumber);
+    public function callApitHistoricFlights(): array
+    {   
+       
+        return $this->callApi('flightsHistory?key='.$this->accessKey.'&code='.$this->departureCity.'&type=departure&date_from='.$this->departureDate.'&arr_iataCode='.$this->arrivalCity.'&flight_number='.$this->flightNumber);
     }
 
-    public function setFlight() 
+    public function setFlightData(?string $departureDate, ?string $departureCity, ?string $arrivalCity, ?int $flightNumber) 
     {
-        $flight = new Flight();
-        $date = new DateTime($this->departureDate);
-        //dd($this->departureDate);
-        $flight->setFlightNumber($this->flightNumber);
-        $flight->setFlightDate($date);
-        $flight->setDepartureCity($this->departureCity);
-        $flight->setArrivalCity($this->arrivalCity);
+        if(!empty($departureDate) || !empty($flightNumber) || !empty($departureCity) || !empty($arrivalCity))
+        {
+            $this->departureDate = $departureDate;
+            $this->flightNumber = $flightNumber;
+            $this->departureCity = $departureCity;
+            $this->arrivalCity = $arrivalCity;
+        }
+    }
 
-        return $flight;
+    public function getFlightDatas(): array
+    {   
+        $flightDatas = [
+            'flightDate' => $this->departureDate,
+            'flightNumber' => $this->flightNumber,
+            'departureCity' => $this->departureCity,
+            'arrivalCity' => $this->arrivalCity
+
+        ];
+        return $flightDatas;
     }
 }

@@ -47,4 +47,25 @@ class CommentRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function findOneByFlightNumber($flightNumber): ?Comment
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.flightNumber = :flightNumber')
+            ->setParameter('flightNumber', $flightNumber)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+    public function findCommentByFlightId(int $flightId) : array
+    {
+        return $this->createQueryBuilder('c')
+        ->andWhere('c.flight = :flightId')
+        ->setParameter('flightId', $flightId)
+        ->orderBy('c.id', 'ASC')
+        ->setMaxResults(100)
+        ->getQuery()
+        ->getResult()
+        ;
+    }
 }

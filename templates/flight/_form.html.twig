@@ -9,9 +9,9 @@
     {{ form_widget(form.arrivalCity) }}
 </div>
 <div class="mb-3 w-75">
-    {{ form_label(form.flightNumber, null, {'label_attr': {'class': 'form-label', 'value' : flightNumber,}}) }} {{flightNumber}}
-    {% set type = 'hidden '%}
-    {{form_widget(form.flightNumber,  {'attr' : {'type ': type }})}}
+    {{ form_label(form.flightNumber, null, {'label_attr': {'class': 'form-label', }}) }} 
+    
+    {{form_widget(form.flightNumber)}}
     
 </div>
 

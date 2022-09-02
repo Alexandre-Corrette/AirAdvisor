@@ -68,23 +68,41 @@ class FlightRepository extends ServiceEntityRepository
             ->andWhere('f.arrivalCity = :arrivalCity')
             ->setParameter('arrivalCity', $search->arrivalCity);
         }
-        if (!empty($search->flightNumber)) {
-            $query = $query
-            ->andWhere('f.flightNumber = :flightNumber')
-            ->setParameter('flightNumber', $search->flightNumber);
-        }
 
         return $query->getQuery()->getResult();
 
     }
-
-    public function findOneFlifghtByFlightNumber(string $flightNumber)  {
+    
+    /**
+     * @return ?Flight Returns  Flight objects
+     */
+    public function findOneFlightByFlightNumber(string $flightNumber): ?Flight
+    {
         $query = $this->createQueryBuilder('f');
         if(!empty($flightNumber)) {
             $query = $query->andWhere('f.flightNumber = :flightNumber')
             ->setParameter('flightNumber', $flightNumber);
         }
+        
+        return $query->getQuery()->getOneOrNullResult();
+    }
 
-        return $query->getQuery()->getResult();
+
+     /**
+     * @return ?Flight Returns  Flight objects
+     */
+    public function findOneFlightByFlightNumberAndDate(string $flightNumber, DateTime $flightDate): ?Flight
+    {
+        $query = $this->createQueryBuilder('f');
+        if(!empty($flightNumber)) {
+            $query = $query->andWhere('f.flightNumber = :flightNumber')
+            ->setParameter('flightNumber', $flightNumber);
+        }
+        
+        if(!empty($flightDate)) {
+            $query = $query->andWhere('f.flightDate = :flightDate')
+            ->setParameter('flightDate', $flightDate);
+        }
+        return $query->getQuery()->getOneOrNullResult();
     }
 }

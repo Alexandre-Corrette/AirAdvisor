@@ -2,11 +2,12 @@
 
 namespace App\Controller;
 
+use ReflectionClass;
 use App\Entity\Flight;
 use App\Form\SearchJourneyType;
-use App\Controller\SearchJourneyController;
 use App\Service\CallApiService;
 use App\Service\SearchJourneyService;
+use App\Controller\SearchJourneyController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -27,22 +28,39 @@ class LandingController extends AbstractController
         $flights = $this->getDoctrine()
             ->getRepository(Flight::class)
             ->findAll();
+        foreach($flights as $flight)
+        {   
+            if(!empty($flight->getComments()))
+            {
+                $numberOfComments[] = [
+                    'numberOfComments' => count($flight->getComments()),
+                    'flightNumber' => $flight->getflightNumber(),
+                    'comments' => $flight->getComments(),
+                    'departure' => $flight->getDepartureCity(),
+                    'arrival' => $flight->getArrivalCity()
+                                ];
+            }
+           
+        }
+        rsort($numberOfComments);
         $searchForm = $this->createForm(SearchJourneyType::class);
         $searchForm->handleRequest($request);
         if (($searchForm->isSubmitted() && $searchForm->isValid())) 
             {  
+                
                 return $this->redirectToRoute('search_results',[
-                    'departureCity' => $_GET['search_journey']['departureCity'] ,
-                    'arrivalCity' => $_GET['search_journey']['arrivalCity'] , 
-                    'flightDate' => $_GET['search_journey']['flightDate']]);
+                   'departureCity'=>$_GET['search_journey']['departureCity'],
+                   'arrivalCity'=>$_GET['search_journey']['arrivalCity'],        
+                ]);
             }
             
                     
         
         return $this->render('landing/index.html.twig', [
             
-            'website' => 'AirAdvisor',
+            'website' => 'FlightAdvisor',
             'flights' => $flights,
+            'comments' => $numberOfComments,
             'searchForm' => $searchForm->createView(),
             
      

@@ -7,15 +7,19 @@
 
 // any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.scss';
-import 'jquery';
-import $ from 'jquery';
+//import 'jquery';
+//import $ from 'jquery';
+const $ = require('jquery');
+global.$ = global.jQuery = $;
+
 
 import './js/jquery-ui.js';
 import '@popperjs/core';
 // start the Stimulus application
 
 import './bootstrap';
-require ('bootstrap');
+window.bootstrap = require('bootstrap');
+
 
 
 
@@ -72,6 +76,8 @@ $(document).ready(function(){
     }
     
 };})
+
+var myModal = new bootstrap.Modal(document.getElementById('myModal'))
 
 
 

@@ -1,0 +1,101 @@
+{% extends "base.html.twig" %}
+{% block title %}{{website}} | vol {{flights.flightNumber}}{% endblock %}
+
+{% block content %}
+<pre>
+    {{ dump(flights) }}
+</pre>
+<section class="container-fluid bg-white mt-2 pt-5">
+  <div class="row justify-content-center mb-4">
+    <h2 class=" w-25">Résultat pour le vol {{flights.flightNumber}}</h2>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-8 p-4">
+      <!-- Modal -->
+      <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Rédigez votre avis</h5>
+              <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              {% include "./comment/_form.html.twig" %}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% if flights %}
+    <div class="col-6 mb-5 p-4">
+      <div class="card m-2 p-3">
+        <div class="card-body">
+          <h3 class="card-title">VOL {{ flights.departureCity | upper }} - {{ flights.arrivalCity | upper }}</h3>
+          <h4>{{flights.comments|length > 1 ? (flights.comments|length ~ ' commentaires' ) : (flights.comments|length ~ ' commentaire')}} </h4>
+          <div class="row">
+            <div class="col-4">
+              <p class="card-text">le {{flights.flightDate|date('d-m-Y')}}</p>
+            </div>
+            <div class="col-4">
+              <p class="card-text">Compagnie : {{flights.airlineName|upper}}</p>
+            </div>
+            <div class="col-4">
+              <p class="card-text">Vol N° : {{flights.flightIataCode|upper}}</p>
+            </div>
+          </div>
+          
+        </div>
+        
+      </div>
+    </div>
+    {% else %}
+    <p class="resultSearchMessage">Il n'y a pas de résultat pour votre recherche</p>
+    {% endif %}
+  </div>
+</section>
+
+<section class="container-fluid bg-white rounded mt-4 p-4">
+  
+  
+  <div class="row justify-content-center">
+    <div class="col-6 ">
+      <h1 class="mb-5">Les avis des passagers</h1>
+      {% if flights.comments is not empty %}
+        {% for comment in flights.comments%}
+        <div class="card mb-3 round shadow p-2">
+          <h3>{{comment.author.firstName|title}} {{comment.author.lastName|title}}</h3>
+          <h4>{{comment.author.departureCity}} - {{comment.author.comments|length}}</h4>
+
+          <pre>
+            {{ dump(comment.author) }}
+          </pre>
+          <h3 class="card-title mt-2 mb-2">{{comment.titre |upper}}</h3>
+          <h5>Vol N° : {{comment.flight}}</h5>
+          
+          <p class="card-text mt-2 mb-2">{{comment.comment}}</p>
+          {% if app.user is same as comment.author %}
+          <a href="" class="btn btn-outline-dark mt-2 mb-2 w-25">Modifier Mon commentaire</a>
+          {% endif %}
+        </div>
+       
+        
+    {% endfor %}
+      <!-- Button trigger modal -->
+      <button type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#myModal">
+        Donnez votre avis
+      </button>
+    {% else %}
+      
+         <!-- Button trigger modal -->
+         <button type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#myModal">
+          Soyez le premier à donner votre avis
+        </button>
+    {% endif %}
+  </div>
+  </div>
+  
+</section>
+{% endblock %}
