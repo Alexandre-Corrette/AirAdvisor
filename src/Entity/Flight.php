@@ -11,6 +11,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints\Date;
 
+
+
 /**
  * @ORM\Entity(repositoryClass=FlightRepository::class)
  */
@@ -40,12 +42,15 @@ class Flight
 
     /**
      * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="flight")
-     * @var Collection
+     * @var Comment[]|ArrayCollection
      */
     private $comments;
 
-     /**
-     * @ORM\OneToMany(targetEntity=User::class, mappedBy="flights")
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="flights")
+     * @ORM\JoinTable(name="flight_customers")
+     *
+     *          
      * @var User[]|ArrayCollection
      */
     private $customers;

@@ -64,6 +64,13 @@ class User implements UserInterface
      */
     private $comments;
 
+    /**
+ * 
+ *
+ * @ORM\ManyToMany(targetEntity="Flight", mappedBy="customers")
+ */
+private $flights;
+
 
     public function __construct()
     {
