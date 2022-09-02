@@ -9,6 +9,7 @@ use App\Service\SearchJourney;
 use App\Service\CallApiService;
 use DateTime as GlobalDateTime;
 use App\Repository\FlightRepository;
+use App\Service\SearchJourneyService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -28,6 +29,22 @@ class FlightController extends AbstractController
         return $this->render('flight/index.html.twig', [
             'flights' => $flightRepository->findAll(),
         ]);
+    }
+     /**
+    * @Route("/results/{departureCity}/{arrivalCity}", name="results", methods={"GET"})
+    */
+    public function listFlights(SearchJourneyService $search, $departureCity, $arrivalCity, FlightRepository $flightRepository): Response
+    {   
+        $search->departureCity = $departureCity;
+        $search->arrivalCity = $arrivalCity;
+        $results = $flightRepository->search($search);
+        //dd($results);
+        return $this->render('search/index.html.twig', 
+            [
+            'results' => $results,
+            'website' => 'AirAdvisor'
+            ]
+        );
     }
 
     /**

@@ -20,11 +20,14 @@ class Comment
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="comments")
+     * @var User
+     * 
      */
     private $author;
 
     /**
      * @ORM\ManyToOne(targetEntity=Flight::class, inversedBy="comments")
+     * @var Flight
      */
     private $flight;
 
