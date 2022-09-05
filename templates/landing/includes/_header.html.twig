@@ -1,0 +1,17 @@
+<div class="col-6">
+    <img class="img-fluid w-100 rounded  shadow" src="{{ asset('build/images/plane_main.png') }}">
+ </div>
+ <div class="col-6">
+    <div class="card h-100 shadow">
+       <div class="card-title mt-3">
+          <a class="indexTitle" href="{{ path('flight_new') }}">
+             <h1>Ne voyagez plus par hasard!</h1>
+          </a>
+       </div>
+       <div class="card-text text-center mb-3">
+          <p>Consultez les avis sur les compagnies aériennes et sélectionnez la meilleure pour votre prochain vol</p>
+       </div>
+       
+       {{ include('landing/includes/_searchFlight_form.html.twig') }}
+    </div>
+ </div>

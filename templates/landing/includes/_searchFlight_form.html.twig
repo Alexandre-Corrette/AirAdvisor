@@ -1,0 +1,26 @@
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-6 d-flex flex-column justify-content-center">
+            {{ form_start(searchForm) }}
+
+
+            <div id="departureCity" class=" m-2">
+
+                {{ form_label(searchForm.departureCity, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(searchForm.departureCity) }}
+            </div>
+            <div class="m-2 ">
+                {{ form_label(searchForm.arrivalCity, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(searchForm.arrivalCity) }}
+            </div>
+
+
+            <div class="mr-2 ml-2 mt-3 p-2">
+                {{ form_label(searchForm.submit, null, {'label_attr': {'class': 'btn
+                btn-outline-dark'}}) }}
+                {{ form_widget(searchForm.submit) }}
+            </div>
+            {{ form_end(searchForm) }}
+        </div>
+    </div>
+</div>

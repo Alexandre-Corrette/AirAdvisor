@@ -24,32 +24,44 @@ class FlightController extends AbstractController
     /**
      * @Route("/", name="index", methods={"GET"})
      */
-    public function index(FlightRepository $flightRepository ): Response
+    public function index(FlightRepository $flightRepository): Response
     {
         return $this->render('flight/index.html.twig', [
             'flights' => $flightRepository->findAll(),
         ]);
     }
-     /**
-    * @Route("/results/{departureCity}/{arrivalCity}", name="results", methods={"GET"})
-    */
-    public function listFlights(SearchJourneyService $search, $departureCity, $arrivalCity, FlightRepository $flightRepository): Response
-    {   
-        $search->departureCity = $departureCity;
-        $search->arrivalCity = $arrivalCity;
-        $results = $flightRepository->search($search);
-        //dd($results);
-        return $this->render('search/index.html.twig', 
-            [
-            'results' => $results,
-            'website' => 'AirAdvisor'
-            ]
-        );
+    /**
+     * @Route("/results", name="results", methods={"GET"})
+     */
+    public function listFlights(Request $request, SearchJourneyService $search, FlightRepository $flightRepository): Response
+    {
+        $form = $this->createForm(SearchJourneyType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            if (!$flightRepository->findBy([
+                'departure_city' => $form['departureCity'],
+                'arrival_city' => $form['arrivalCity']
+            ])) {
+                $search->departureCity = $form['departureCity'];
+                $search->arrivalCity = $form['arrivalCity'];
+                $results = $flightRepository->search($search);
+            } else {
+                $results = $flightRepository->findBy([
+                    'departure_city' => $form['departureCity'],
+                    'arrival_city' => $form['arrivalCity']
+                ]);
+            }
+
+            return $this->render(
+                'search/index.html.twig',
+                [
+                    'results' => $results,
+                    'website' => 'AirAdvisor'
+                ]
+            );
+        }
     }
 
-    /**
-     * @route("/)
-     */
 
     /**
      * @Route("/new", name="new", methods={"GET","POST"})
@@ -59,26 +71,26 @@ class FlightController extends AbstractController
         $flight = new Flight();
         $form = $this->createForm(FlightType::class, $flight);
         $form->handleRequest($request);
-        
-        if ($form->isSubmitted() && $form->isValid()) 
-        {  
-            
-            return $this->redirectToRoute('flight_index', 
-               
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            return $this->redirectToRoute(
+                'flight_index',
+
             );
         }
 
         return $this->render('flight/new.html.twig', [
-            
+
             'form' => $form->createView(),
-            
+
         ]);
     }
 
     /**
      * @Route("/{flightNumber}/d/{iataCode}/id/{id}", name="", methods={"GET"})
      */
-   /*public function show($flightNumber, FlightRepository $flightRepository): Response
+    /*public function show($flightNumber, FlightRepository $flightRepository): Response
     {   
         $flight = $flightRepository->findOneByFlightNumber($flightNumber);
 
@@ -116,31 +128,26 @@ class FlightController extends AbstractController
     /**
      * @Route("/{id}/a/{iataCode}/d/{flightDate}/flightnumber/{flightNumber}", name="show")
      */
-    public function showFlight($id,$flightDate,$iataCode,$flightNumber, CallApiService $callApiService): Response
+    public function showFlight($id, $flightDate, $iataCode, $flightNumber, CallApiService $callApiService): Response
     {
-    
-        $flights = $callApiService->getFlightByFlightNumber($iataCode,$flightDate,$flightNumber);
+
+        $flights = $callApiService->getFlightByFlightNumber($iataCode, $flightDate, $flightNumber);
         dd($flights);
-        foreach($flights as $flight) {
-            if($flightNumber === $flight['flight']['iataNumber'])
-            {
+        foreach ($flights as $flight) {
+            if ($flightNumber === $flight['flight']['iataNumber']) {
                 $flightData = $flight;
-                
             }
         }
-        
-        if($flightData['codeshared']['airline']['name']) {
-        
-            $flightData['pathToLogo'] = file_exists('/Users/alexandrecorrette/www/airadvisor/assets/images/logo-'.str_replace(" ", "", $flightData['codeshared']['airline']['name']).'.png');
-            
-         
-        } else {
-            $flightData['pathToLogo'] = file_exists('/Users/alexandrecorrette/www/airadvisor/public/assets/images/logo-'.$flightData['airline']['name'].'.png');
-        }
-     
-        
-        return $this->render('flight/show.html.twig',['flight'=> $flightData]);
 
+        if ($flightData['codeshared']['airline']['name']) {
+
+            $flightData['pathToLogo'] = file_exists('/Users/alexandrecorrette/www/airadvisor/assets/images/logo-' . str_replace(" ", "", $flightData['codeshared']['airline']['name']) . '.png');
+        } else {
+            $flightData['pathToLogo'] = file_exists('/Users/alexandrecorrette/www/airadvisor/public/assets/images/logo-' . $flightData['airline']['name'] . '.png');
+        }
+
+
+        return $this->render('flight/show.html.twig', ['flight' => $flightData]);
     }
 
     /**
@@ -148,7 +155,7 @@ class FlightController extends AbstractController
      */
     public function delete(Request $request, Flight $flight): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$flight->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $flight->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($flight);
             $entityManager->flush();

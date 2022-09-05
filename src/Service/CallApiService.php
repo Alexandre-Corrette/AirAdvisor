@@ -11,47 +11,13 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
  
 class CallApiService
 {   
-    /**
-     * @var string
-     */
-    public $departureCity;
-
-    /**
-     * @var string
-     */
-    public $arrivalCity;
-
-    /**
-     * @var DateTime
-     */
-    public $flightDate;
-    /**
-     * @var string
-     */
-    public $departureDate;
-
-    /**
-     * @var string
-     */
-    public $airline;
-
-    /**
-     * @var array
-     */
-    public $flights;
-
-    /**
-     * @var string
-     */
-
-     public $flightNumber;
 
     private $client;
  
     /**
      * @var string
      */
-    public $accessKey = 'b064ee-021d46';
+    private $accessKey = 'b064ee-021d46';
 
     public function __construct(HttpClientInterface $client)
     { 
@@ -122,26 +88,4 @@ class CallApiService
         return $this->callApi('flightsHistory?key='.$this->accessKey.'&code='.$this->departureCity.'&type=departure&date_from='.$this->departureDate.'&arr_iataCode='.$this->arrivalCity.'&flight_number='.$this->flightNumber);
     }
 
-    public function setFlightData(?string $departureDate, ?string $departureCity, ?string $arrivalCity, ?int $flightNumber) 
-    {
-        if(!empty($departureDate) || !empty($flightNumber) || !empty($departureCity) || !empty($arrivalCity))
-        {
-            $this->departureDate = $departureDate;
-            $this->flightNumber = $flightNumber;
-            $this->departureCity = $departureCity;
-            $this->arrivalCity = $arrivalCity;
-        }
-    }
-
-    public function getFlightDatas(): array
-    {   
-        $flightDatas = [
-            'flightDate' => $this->departureDate,
-            'flightNumber' => $this->flightNumber,
-            'departureCity' => $this->departureCity,
-            'arrivalCity' => $this->arrivalCity
-
-        ];
-        return $flightDatas;
-    }
 }

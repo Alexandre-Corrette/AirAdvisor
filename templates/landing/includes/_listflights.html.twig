@@ -1,0 +1,29 @@
+{# {{ render(path('flight_results', {max: 3})) }} #}
+{% for flight in flights %}
+{% if flight.comments is not empty %}
+
+
+
+   <div class="card mb-3 shadow p-3">
+      <div class="row p-2">
+         <div class="col-4 rounded ">
+            <h3 class="card-title p-2">Vol N° : {{flight.flightNumber}} </h3>
+            <h3 class="px-2">Départ : {{flight.departureCity}} </h3>
+            <h3 class="px-2">Arrivée : {{flight.arrivalCity}}</h3>
+            <h3>du {{flight.flightDate|date('d-m-Y')}}</h3>
+
+            <p> {{flight.comments|length}} avis</p>
+
+         </div>
+         <div class="col-8">
+            {% for comment in flight.comments %}
+            <h4 class=""> {{comment.rate}}/5 {{ comment.titre|title}} </h4>
+            <h5> by {{ comment.author }} </h5>
+            <p>{{comment.comment|capitalize}}</p>
+            {% endfor %}
+         </div>
+      </div>
+   </div>
+   
+{% endif %}
+{% endfor %}
