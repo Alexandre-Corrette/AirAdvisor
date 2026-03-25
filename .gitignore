@@ -3,6 +3,8 @@
 /.env.local
 /.env.local.php
 /.env.*.local
+/.env.prod
+/.env.prod.local
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
 /var/
@@ -18,3 +20,9 @@
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
+
+###> secrets & local config ###
+*.local
+.env.prod*
+.env.staging*
+###< secrets & local config ###
