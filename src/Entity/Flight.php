@@ -65,6 +65,11 @@ class Flight
         $this->customers = new ArrayCollection();
     }
 
+    public function __toString(): string
+    {
+        return $this->flightNumber ?? '';
+    }
+
     public function getId(): ?int
     {
         return $this->id;

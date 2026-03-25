@@ -36,6 +36,9 @@ class Review
     private ?int $ratingFood = null;
 
     #[ORM\Column]
+    private bool $isVisible = true;
+
+    #[ORM\Column]
     private \DateTimeImmutable $createdAt;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'reviews')]
@@ -146,6 +149,17 @@ class Review
     public function setAuthor(?User $author): static
     {
         $this->author = $author;
+        return $this;
+    }
+
+    public function isVisible(): bool
+    {
+        return $this->isVisible;
+    }
+
+    public function setIsVisible(bool $isVisible): static
+    {
+        $this->isVisible = $isVisible;
         return $this;
     }
 

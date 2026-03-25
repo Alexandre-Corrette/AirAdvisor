@@ -1,0 +1,44 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block page_title %}Dashboard AirAdvisor{% endblock %}
+
+{% block content_header %}
+    <h1 class="title">Dashboard</h1>
+{% endblock %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-sm-6 col-lg-3">
+            <div class="card text-bg-primary mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Utilisateurs</h5>
+                    <p class="card-text display-6">{{ userCount }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="card text-bg-success mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Avis</h5>
+                    <p class="card-text display-6">{{ reviewCount }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="card text-bg-info mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Vols</h5>
+                    <p class="card-text display-6">{{ flightCount }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="card text-bg-warning mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Note moyenne</h5>
+                    <p class="card-text display-6">{{ avgRating }}/5</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
