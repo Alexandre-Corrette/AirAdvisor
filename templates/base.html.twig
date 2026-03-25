@@ -1,34 +1,19 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{% block title %}{{ website }}{% endblock %}</title>
-        {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
-        
-
-       
-    </head>
-    
-    <body>
-            {% block body %}
-          
-            <header>{% block header %}{{ include('_navigation.html.twig') }}{% endblock %}</header>
-            
-                    <div  id="content" class="container-fluid mt-5 pt-5">{% block content %}{% endblock %}</div>
-                {% block javascripts %}
-                {{ encore_entry_script_tags('app') }}
-                {% endblock %}
-                <div class="footer">{% block footer %} {{ include('_footer.html.twig') }} {% endblock %}</div> 
-         
-                
-                
-                
-            {% endblock %}
-    </body>
-    
-   
-    
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AirAdvisor{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}Avis et notes sur les vols. Trouvez la meilleure compagnie pour votre prochain voyage.{% endblock %}">
+    {% block stylesheets %}
+    {% endblock %}
+    {% block javascripts %}
+        {% block importmap %}{{ importmap('app') }}{% endblock %}
+    {% endblock %}
+</head>
+<body class="bg-gray-50 text-gray-900">
+    {% block navbar %}{% endblock %}
+    <main>{% block body %}{% endblock %}</main>
+    {% block footer %}{% endblock %}
+</body>
 </html>
