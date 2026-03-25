@@ -2,8 +2,39 @@
 
 {% block title %}Avis vol {{ flight.flightNumber }} {{ flight.flightDate|date('Y-m-d') }} — AirAdvisor{% endblock %}
 {% block meta_description %}Consultez les {{ reviewCount }} avis des passagers du vol {{ flight.flightNumber }} ({{ flight.departureCity }} → {{ flight.arrivalCity }}) du {{ flight.flightDate|date('d/m/Y') }}.{% endblock %}
+{% block og_title %}Avis vol {{ flight.flightNumber }} — AirAdvisor{% endblock %}
+{% block og_description %}Consultez les {{ reviewCount }} avis des passagers du vol {{ flight.flightNumber }} ({{ flight.departureCity }} → {{ flight.arrivalCity }}) du {{ flight.flightDate|date('d/m/Y') }}.{% endblock %}
 
 {% block body %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Accueil", "item": "{{ url('app_home') }}"},
+        {"@type": "ListItem", "position": 2, "name": "Recherche", "item": "{{ url('app_search', {q: flight.flightNumber}) }}"},
+        {"@type": "ListItem", "position": 3, "name": "{{ flight.flightNumber }}"}
+    ]
+}
+</script>
+
+{% if reviewCount > 0 %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Vol {{ flight.flightNumber }}",
+    "description": "{{ flight.departureCity }} → {{ flight.arrivalCity }} — {{ flight.flightDate|date('d/m/Y') }}",
+    "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "{{ avgRating }}",
+        "bestRating": "5",
+        "reviewCount": "{{ reviewCount }}"
+    }
+}
+</script>
+{% endif %}
+
 <div class="max-w-5xl mx-auto px-4 py-10">
     {# Flash messages #}
     {% for label, messages in app.flashes %}
@@ -115,6 +146,13 @@
         </div>
     </div>
 
+    {# Skyscanner affiliate #}
+    {% if flight.departureIataCode and flight.arrivalIataCode %}
+        {% include 'components/_affiliate_skyscanner.html.twig' with {
+            skyscanner_url: 'https://www.skyscanner.fr/transport/vols/' ~ flight.departureIataCode ~ '/' ~ flight.arrivalIataCode ~ '/?adultsv2=1&associateId=' ~ skyscannerPartnerId ~ '&utm_source=airadvisor&utm_medium=referral'
+        } %}
+    {% endif %}
+
     {# Bouton avis #}
     {% if is_granted('ROLE_USER') %}
         <div class="mb-8">
@@ -163,6 +201,8 @@
             </div>
             {% endfor %}
         </div>
+
+        {% include 'components/_ad_slot.html.twig' %}
     </section>
     {% endif %}
 </div>

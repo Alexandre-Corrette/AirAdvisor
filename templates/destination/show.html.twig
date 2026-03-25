@@ -1,0 +1,106 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Vols vers {{ city }} — Avis passagers — AirAdvisor{% endblock %}
+{% block meta_description %}Découvrez les avis des passagers sur les vols vers {{ city }}. {{ reviewCount }} avis, note moyenne {{ avgRating|number_format(1, ',') }}/5.{% endblock %}
+{% block og_title %}Vols vers {{ city }} — AirAdvisor{% endblock %}
+{% block og_description %}Découvrez les avis des passagers sur les vols vers {{ city }}. {{ reviewCount }} avis, note moyenne {{ avgRating|number_format(1, ',') }}/5.{% endblock %}
+
+{% block body %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Accueil", "item": "{{ url('app_home') }}"},
+        {"@type": "ListItem", "position": 2, "name": "Destinations"},
+        {"@type": "ListItem", "position": 3, "name": "{{ city }}"}
+    ]
+}
+</script>
+
+<div class="max-w-5xl mx-auto px-4 py-10">
+    {# Breadcrumb #}
+    <nav class="text-sm text-gray-500 mb-6">
+        <a href="{{ path('app_home') }}" class="hover:text-blue-600 transition">Accueil</a>
+        <span class="mx-1">/</span>
+        <span class="text-gray-500">Destinations</span>
+        <span class="mx-1">/</span>
+        <span class="text-gray-900">{{ city }}</span>
+    </nav>
+
+    {# Header destination #}
+    <div class="bg-gradient-to-br from-blue-600 to-blue-800 text-white rounded-xl p-8 mb-8">
+        <h1 class="text-3xl font-extrabold mb-2">Vols vers {{ city }}</h1>
+        <div class="flex flex-wrap items-center gap-6 text-blue-100">
+            <span>{{ flights|length }} vol{{ flights|length > 1 ? 's' : '' }}</span>
+            <span>{{ reviewCount }} avis</span>
+            {% if reviewCount > 0 %}
+                <span class="flex items-center gap-1">
+                    <span class="text-yellow-300 text-lg">
+                        {% set rounded = avgRating|round(0, 'floor') %}
+                        {% for i in 1..5 %}{% if i <= rounded %}★{% else %}☆{% endif %}{% endfor %}
+                    </span>
+                    <span class="text-white font-semibold">{{ avgRating|number_format(1, ',') }}/5</span>
+                </span>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="grid lg:grid-cols-3 gap-8">
+        {# Liste des vols #}
+        <div class="lg:col-span-2">
+            <h2 class="text-xl font-bold text-gray-900 mb-6">Tous les vols vers {{ city }}</h2>
+            {% if flights is not empty %}
+            <div class="space-y-3">
+                {% for row in flights %}
+                    {% set flight = row[0] %}
+                    {% set flightAvg = row.avgRating %}
+                    {% set flightReviewCount = row.reviewCount %}
+                    <a href="{{ path('app_flight_show', {flightNumber: flight.flightNumber, date: flight.flightDate|date('Y-m-d')}) }}"
+                       class="flex flex-wrap items-center justify-between bg-white rounded-xl shadow-sm hover:shadow-md transition p-5 gap-4">
+                        <div>
+                            <div class="flex items-center gap-3 mb-1">
+                                {% if flight.airline %}
+                                    {% if flight.airline.logoUrl %}
+                                        <img src="{{ flight.airline.logoUrl }}" alt="{{ flight.airline.name }}" class="h-5 object-contain">
+                                    {% endif %}
+                                    <span class="text-sm text-gray-600">{{ flight.airline.name }}</span>
+                                {% endif %}
+                                <span class="font-mono font-bold text-blue-600">{{ flight.flightNumber }}</span>
+                            </div>
+                            <p class="text-gray-700">{{ flight.departureCity }} → {{ flight.arrivalCity }}</p>
+                        </div>
+                        <div class="flex items-center gap-4 text-sm">
+                            <span class="text-gray-500">{{ flight.flightDate|date('d/m/Y') }}</span>
+                            {% if flightReviewCount > 0 %}
+                                <span class="text-yellow-500">
+                                    {% set r = flightAvg|round(0, 'floor') %}
+                                    {% for i in 1..5 %}{% if i <= r %}★{% else %}☆{% endif %}{% endfor %}
+                                </span>
+                                <span class="text-gray-400">{{ flightReviewCount }} avis</span>
+                            {% else %}
+                                <span class="text-gray-400">Aucun avis</span>
+                            {% endif %}
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        {# Sidebar affiliations #}
+        <aside class="space-y-6">
+            {% include 'components/_affiliate_skyscanner.html.twig' with {
+                skyscanner_url: 'https://www.skyscanner.fr/transport/vols/' ~ citySlug ~ '/?adultsv2=1&associateId=' ~ skyscannerPartnerId ~ '&utm_source=airadvisor&utm_medium=referral'
+            } %}
+
+            {% include 'components/_affiliate_booking.html.twig' with {
+                city: city,
+                booking_url: 'https://www.booking.com/searchresults.fr.html?ss=' ~ city|url_encode ~ '&aid=' ~ bookingPartnerId ~ '&utm_source=airadvisor'
+            } %}
+
+            {% include 'components/_ad_slot.html.twig' %}
+        </aside>
+    </div>
+</div>
+{% endblock %}

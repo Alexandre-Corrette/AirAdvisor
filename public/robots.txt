@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /profil
+Sitemap: https://www.airadvisor.com/sitemap.xml

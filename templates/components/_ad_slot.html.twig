@@ -1,0 +1,7 @@
+{# Activer en changeant la variable ADS_ENABLED dans .env #}
+{% if ads_enabled is defined and ads_enabled %}
+<div class="my-4 text-center">
+    <!-- Google AdSense slot -->
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXX" data-ad-slot="XXXXXXXX"></ins>
+</div>
+{% endif %}

@@ -1,10 +1,81 @@
 {% extends "base.html.twig" %}
 
 {% block title %}AirAdvisor — Avis sur vos vols{% endblock %}
+{% block meta_description %}AirAdvisor : consultez les avis de passagers sur les vols et compagnies aériennes. Trouvez la meilleure compagnie pour votre prochain voyage.{% endblock %}
+{% block og_title %}AirAdvisor — Avis sur vos vols{% endblock %}
+{% block og_description %}AirAdvisor : consultez les avis de passagers sur les vols et compagnies aériennes. Trouvez la meilleure compagnie pour votre prochain voyage.{% endblock %}
 
 {% block body %}
-<div class="max-w-4xl mx-auto px-4 py-16 text-center">
-    <h1 class="text-4xl font-bold text-blue-600 mb-4">AirAdvisor</h1>
-    <p class="text-xl text-gray-600">Donnez votre avis sur votre dernier vol.</p>
-</div>
+{# Hero #}
+<section class="bg-gradient-to-br from-blue-600 to-blue-800 text-white">
+    <div class="max-w-5xl mx-auto px-4 py-20 text-center">
+        <h1 class="text-5xl font-extrabold mb-4">✈️ AirAdvisor</h1>
+        <p class="text-xl text-blue-100 mb-8">Consultez les avis de passagers et trouvez la meilleure compagnie pour votre prochain vol.</p>
+        <form action="{{ path('app_search') }}" method="GET" class="max-w-2xl mx-auto flex">
+            <input type="text" name="q" placeholder="Rechercher un vol, une compagnie, une ville…"
+                   class="flex-1 px-5 py-3 rounded-l-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-300">
+            <button type="submit" class="bg-yellow-500 hover:bg-yellow-400 text-gray-900 font-semibold px-6 py-3 rounded-r-lg transition">
+                Rechercher
+            </button>
+        </form>
+    </div>
+</section>
+
+{# Derniers avis #}
+{% if latestReviews is not empty %}
+<section class="max-w-7xl mx-auto px-4 py-16">
+    <h2 class="text-2xl font-bold text-gray-900 mb-8">Derniers avis</h2>
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {% for review in latestReviews %}
+        <a href="{{ path('app_flight_show', {flightNumber: review.flight.flightNumber, date: review.flight.flightDate|date('Y-m-d')}) }}"
+           class="block bg-white rounded-xl shadow-sm hover:shadow-md transition p-6">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-yellow-500 text-lg tracking-wide">
+                    {% for i in 1..5 %}{% if i <= review.rating %}★{% else %}☆{% endif %}{% endfor %}
+                </span>
+                <span class="text-xs text-gray-400">{{ review.createdAt|date('d/m/Y') }}</span>
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-1">{{ review.title }}</h3>
+            <p class="text-sm text-gray-600 mb-3 line-clamp-2">{{ review.content|length > 120 ? review.content|slice(0, 120) ~ '…' : review.content }}</p>
+            <div class="flex items-center justify-between text-xs text-gray-500">
+                <span>{{ review.flight.airline.name }}</span>
+                <span>{{ review.flight.departureCity }} → {{ review.flight.arrivalCity }}</span>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+{# Compagnies populaires #}
+{% if topAirlines is not empty %}
+<section class="bg-white border-t">
+    <div class="max-w-7xl mx-auto px-4 py-16">
+        <h2 class="text-2xl font-bold text-gray-900 mb-8">Compagnies populaires</h2>
+        <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+            {% for row in topAirlines %}
+                {% set airline = row[0] %}
+                {% set avgRating = row.avgRating %}
+                {% set reviewCount = row.reviewCount %}
+                <div class="bg-gray-50 rounded-xl p-6 text-center hover:shadow-md transition">
+                    {% if airline.logoUrl %}
+                        <img src="{{ airline.logoUrl }}" alt="{{ airline.name }}" class="h-12 mx-auto mb-3 object-contain">
+                    {% else %}
+                        <div class="h-12 flex items-center justify-center mb-3">
+                            <span class="text-2xl font-bold text-blue-600">{{ airline.iataCode }}</span>
+                        </div>
+                    {% endif %}
+                    <h3 class="font-semibold text-gray-900 mb-1">{{ airline.name }}</h3>
+                    <div class="text-yellow-500 text-sm mb-1">
+                        {% set rounded = avgRating|round(0, 'floor') %}
+                        {% for i in 1..5 %}{% if i <= rounded %}★{% else %}☆{% endif %}{% endfor %}
+                        <span class="text-gray-600 ml-1">{{ avgRating|number_format(1, ',') }}</span>
+                    </div>
+                    <p class="text-xs text-gray-400">{{ reviewCount }} avis</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
 {% endblock %}

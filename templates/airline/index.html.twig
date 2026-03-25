@@ -1,0 +1,62 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Compagnies aériennes — Avis passagers — AirAdvisor{% endblock %}
+{% block meta_description %}Découvrez les avis et notes des passagers sur toutes les compagnies aériennes. Comparez les compagnies et trouvez la meilleure pour votre prochain vol.{% endblock %}
+{% block og_title %}Compagnies aériennes — AirAdvisor{% endblock %}
+{% block og_description %}Découvrez les avis et notes des passagers sur toutes les compagnies aériennes. Comparez les compagnies et trouvez la meilleure pour votre prochain vol.{% endblock %}
+
+{% block body %}
+<div class="max-w-7xl mx-auto px-4 py-10">
+    {# Breadcrumb #}
+    <nav class="text-sm text-gray-500 mb-6">
+        <a href="{{ path('app_home') }}" class="hover:text-blue-600 transition">Accueil</a>
+        <span class="mx-1">/</span>
+        <span class="text-gray-900">Compagnies</span>
+    </nav>
+
+    <h1 class="text-3xl font-extrabold text-gray-900 mb-8">Compagnies aériennes</h1>
+
+    {% if airlines is not empty %}
+    <div class="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        {% for row in airlines %}
+            {% set airline = row[0] %}
+            {% set avgRating = row.avgRating %}
+            {% set reviewCount = row.reviewCount %}
+            {% set flightCount = row.flightCount %}
+            <a href="{{ path('app_airline_show', {slug: airline.slug}) }}"
+               class="block bg-white rounded-xl shadow-sm hover:shadow-md transition p-6">
+                <div class="text-center mb-4">
+                    {% if airline.logoUrl %}
+                        <img src="{{ airline.logoUrl }}" alt="{{ airline.name }}" class="h-14 mx-auto mb-3 object-contain">
+                    {% else %}
+                        <div class="h-14 flex items-center justify-center mb-3">
+                            <span class="text-3xl font-bold text-blue-600">{{ airline.iataCode }}</span>
+                        </div>
+                    {% endif %}
+                    <h2 class="font-bold text-gray-900 text-lg">{{ airline.name }}</h2>
+                    {% if airline.country %}
+                        <p class="text-sm text-gray-500">{{ airline.country }}</p>
+                    {% endif %}
+                </div>
+                <div class="border-t pt-4 space-y-2">
+                    {% if reviewCount > 0 %}
+                        <div class="flex items-center justify-center gap-1">
+                            <span class="text-yellow-500">
+                                {% set rounded = avgRating|round(0, 'floor') %}
+                                {% for i in 1..5 %}{% if i <= rounded %}★{% else %}☆{% endif %}{% endfor %}
+                            </span>
+                            <span class="text-sm font-semibold text-gray-700">{{ avgRating|number_format(1, ',') }}</span>
+                        </div>
+                        <p class="text-xs text-gray-400 text-center">{{ reviewCount }} avis · {{ flightCount }} vol{{ flightCount > 1 ? 's' : '' }}</p>
+                    {% else %}
+                        <p class="text-xs text-gray-400 text-center">Aucun avis · {{ flightCount }} vol{{ flightCount > 1 ? 's' : '' }}</p>
+                    {% endif %}
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+    {% else %}
+        <p class="text-gray-500">Aucune compagnie enregistrée.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}AirAdvisor{% endblock %}</title>
     <meta name="description" content="{% block meta_description %}Avis et notes sur les vols. Trouvez la meilleure compagnie pour votre prochain voyage.{% endblock %}">
+    <link rel="canonical" href="{{ app.request.uri }}">
+    {% block og_tags %}
+    <meta property="og:title" content="{% block og_title %}AirAdvisor{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Avis et notes sur les vols. Trouvez la meilleure compagnie pour votre prochain voyage.{% endblock %}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ app.request.uri }}">
+    <meta name="twitter:card" content="summary">
+    {% endblock %}
     {% block stylesheets %}
     {% endblock %}
     {% block javascripts %}
@@ -35,6 +43,7 @@
     </nav>
     {% endblock %}
     <main>{% block body %}{% endblock %}</main>
+    {% block ads %}{% endblock %}
     {% block footer %}{% endblock %}
 </body>
 </html>
