@@ -1,5 +1,33 @@
 @import "tailwindcss";
 
 body {
-    background-color: skyblue;
+    background-color: white;
 }
+
+/*
+  Safelist — classes générées dynamiquement en Twig (non détectées par le scanner Tailwind)
+  Ne pas supprimer ces commentaires, ils forcent l'inclusion des classes.
+*/
+
+/* Cards avis — gradient header selon note */
+/* bg-gradient-to-r from-green-500 to-slate-700 */
+/* bg-gradient-to-r from-blue-500 to-slate-700 */
+/* bg-gradient-to-r from-yellow-500 to-slate-700 */
+/* bg-gradient-to-r from-red-500 to-slate-700 */
+
+/* Étoiles */
+/* text-yellow-400 text-gray-200 */
+
+/* Utilitaires dynamiques divers */
+/* line-clamp-1 line-clamp-2 */
+/* backdrop-blur-sm */
+/* bg-slate-900/60 */
+/* bg-white/10 */
+/* border-white/20 */
+
+.card-gradient-green  { @apply bg-gradient-to-r from-green-500 to-slate-700; }
+.card-gradient-blue   { @apply bg-gradient-to-r from-blue-500 to-slate-700; }
+.card-gradient-yellow { @apply bg-gradient-to-r from-yellow-500 to-slate-700; }
+.card-gradient-red    { @apply bg-gradient-to-r from-red-500 to-slate-700; }
+.star-filled          { @apply text-yellow-400; }
+.star-empty           { @apply text-gray-200; }
