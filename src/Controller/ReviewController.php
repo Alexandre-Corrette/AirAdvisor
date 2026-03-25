@@ -76,4 +76,66 @@ class ReviewController extends AbstractController
             'form' => $form,
         ]);
     }
+
+    #[Route('/avis/{id}/modifier', name: 'app_review_edit', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_USER')]
+    public function edit(
+        Review $review,
+        Request $request,
+        EntityManagerInterface $em,
+    ): Response {
+        if ($review->getAuthor() !== $this->getUser()) {
+            throw $this->createAccessDeniedException('Vous ne pouvez pas modifier cet avis.');
+        }
+
+        $form = $this->createForm(ReviewType::class, $review);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->flush();
+
+            $this->addFlash('success', 'Avis modifié');
+
+            $flight = $review->getFlight();
+
+            return $this->redirectToRoute('app_flight_show', [
+                'flightNumber' => $flight->getFlightNumber(),
+                'date' => $flight->getFlightDate()->format('Y-m-d'),
+            ]);
+        }
+
+        return $this->render('review/edit.html.twig', [
+            'review' => $review,
+            'flight' => $review->getFlight(),
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/avis/{id}/supprimer', name: 'app_review_delete', methods: ['POST'])]
+    #[IsGranted('ROLE_USER')]
+    public function delete(
+        Review $review,
+        Request $request,
+        EntityManagerInterface $em,
+    ): Response {
+        if ($review->getAuthor() !== $this->getUser()) {
+            throw $this->createAccessDeniedException('Vous ne pouvez pas supprimer cet avis.');
+        }
+
+        if (!$this->isCsrfTokenValid('delete-review-' . $review->getId(), $request->request->get('_token'))) {
+            throw $this->createAccessDeniedException('Token CSRF invalide.');
+        }
+
+        $flight = $review->getFlight();
+
+        $em->remove($review);
+        $em->flush();
+
+        $this->addFlash('success', 'Avis supprimé');
+
+        return $this->redirectToRoute('app_flight_show', [
+            'flightNumber' => $flight->getFlightNumber(),
+            'date' => $flight->getFlightDate()->format('Y-m-d'),
+        ]);
+    }
 }

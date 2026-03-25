@@ -1,0 +1,116 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Mon profil — AirAdvisor{% endblock %}
+
+{% block body %}
+<div class="max-w-4xl mx-auto px-4 py-10">
+    {# Flash messages #}
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="mb-4 p-4 rounded-lg text-sm
+                {% if label == 'success' %}bg-green-50 text-green-800 border border-green-200
+                {% elseif label == 'warning' %}bg-yellow-50 text-yellow-800 border border-yellow-200
+                {% else %}bg-red-50 text-red-800 border border-red-200{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    {# Header profil #}
+    <div class="bg-white rounded-xl shadow-sm p-8 mb-8">
+        <div class="flex items-center gap-6">
+            <div class="w-16 h-16 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-xl shrink-0">
+                {{ (user.pseudo ?? user.firstName)|upper|slice(0, 2) }}
+            </div>
+            <div>
+                <h1 class="text-2xl font-extrabold text-gray-900">{{ user.pseudo ?? user.firstName }}</h1>
+                {% if user.departureCity %}
+                    <p class="text-gray-500">{{ user.departureCity }}</p>
+                {% endif %}
+                <p class="text-sm text-gray-400">Membre depuis {{ user.createdAt|date('d/m/Y') }}</p>
+            </div>
+        </div>
+    </div>
+
+    {# Stats #}
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-8">
+        <div class="bg-white rounded-xl shadow-sm p-6 text-center">
+            <div class="text-3xl font-extrabold text-blue-600">{{ nbReviews }}</div>
+            <p class="text-sm text-gray-500">Avis</p>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm p-6 text-center">
+            <div class="text-3xl font-extrabold text-blue-600">{{ avgRating > 0 ? avgRating|number_format(1, ',') : '—' }}</div>
+            <p class="text-sm text-gray-500">Note moyenne donnée</p>
+        </div>
+        {% if preferredAirline %}
+        <div class="bg-white rounded-xl shadow-sm p-6 text-center">
+            <div class="text-lg font-extrabold text-blue-600">{{ preferredAirline }}</div>
+            <p class="text-sm text-gray-500">Compagnie préférée</p>
+        </div>
+        {% endif %}
+    </div>
+
+    {# Modifier profil #}
+    <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+        <h2 class="text-lg font-bold text-gray-900 mb-4">Modifier mon profil</h2>
+        {{ form_start(form, {action: path('app_profile_edit'), attr: {class: 'flex flex-wrap items-end gap-4'}}) }}
+            <div class="flex-1 min-w-[200px]">
+                {{ form_label(form.pseudo, null, {label_attr: {class: 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                {{ form_widget(form.pseudo, {attr: {class: 'w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition'}}) }}
+            </div>
+            <div class="flex-1 min-w-[200px]">
+                {{ form_label(form.departureCity, null, {label_attr: {class: 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                {{ form_widget(form.departureCity, {attr: {class: 'w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition'}}) }}
+            </div>
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg transition">
+                Enregistrer
+            </button>
+        {{ form_end(form) }}
+    </div>
+
+    {# Mes avis #}
+    <section>
+        <h2 class="text-xl font-bold text-gray-900 mb-6">Mes avis</h2>
+        {% if reviews|length > 0 %}
+        <div class="space-y-4">
+            {% for review in reviews %}
+            <div class="bg-white rounded-xl shadow-sm p-6">
+                <div class="flex flex-wrap items-start justify-between gap-4">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-3 mb-2">
+                            {% if review.flight.airline and review.flight.airline.logoUrl %}
+                                <img src="{{ review.flight.airline.logoUrl }}" alt="{{ review.flight.airline.name }}" class="h-5 object-contain">
+                            {% endif %}
+                            <a href="{{ path('app_flight_show', {flightNumber: review.flight.flightNumber, date: review.flight.flightDate|date('Y-m-d')}) }}" class="text-sm text-blue-600 hover:text-blue-700 font-medium transition">
+                                Vol {{ review.flight.flightNumber }}
+                            </a>
+                            {% if review.flight.airline %}
+                                <span class="text-xs text-gray-400">{{ review.flight.airline.name }}</span>
+                            {% endif %}
+                        </div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-yellow-500">
+                                {% for i in 1..5 %}{% if i <= review.rating %}★{% else %}☆{% endif %}{% endfor %}
+                            </span>
+                            <span class="text-xs text-gray-400">{{ review.createdAt|date('d/m/Y') }}</span>
+                        </div>
+                        <h3 class="font-medium text-gray-900 mb-1">{{ review.title }}</h3>
+                        <p class="text-sm text-gray-600">{{ review.content|length > 150 ? review.content|slice(0, 150) ~ '…' : review.content }}</p>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <a href="{{ path('app_review_edit', {id: review.id}) }}" class="text-sm text-blue-600 hover:text-blue-700 font-medium transition">Modifier</a>
+                        <form method="post" action="{{ path('app_review_delete', {id: review.id}) }}" onsubmit="return confirm('Supprimer cet avis ?')">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete-review-' ~ review.id) }}">
+                            <button type="submit" class="text-sm text-red-600 hover:text-red-700 font-medium transition">Supprimer</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+            <p class="text-gray-400">Vous n'avez pas encore donné d'avis.</p>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

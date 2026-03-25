@@ -20,8 +20,10 @@
                     AirAdvisor
                 </a>
                 <div class="flex items-center gap-4">
+                    <a href="{{ path('app_airline_index') }}" class="text-sm text-gray-600 hover:text-gray-900 transition">Compagnies</a>
+                    <a href="{{ path('app_search') }}" class="text-sm text-gray-600 hover:text-gray-900 transition">Recherche</a>
                     {% if app.user %}
-                        <span class="text-sm text-gray-700 font-medium">{{ app.user.pseudo ?? app.user.firstName }}</span>
+                        <a href="{{ path('app_profile') }}" class="text-sm text-gray-700 font-medium hover:text-blue-600 transition">{{ app.user.pseudo ?? app.user.firstName }}</a>
                         <a href="{{ path('app_logout') }}" class="text-sm text-gray-500 hover:text-gray-700 transition">Déconnexion</a>
                     {% else %}
                         <a href="{{ path('app_login') }}" class="text-sm text-gray-600 hover:text-gray-900 transition">Connexion</a>

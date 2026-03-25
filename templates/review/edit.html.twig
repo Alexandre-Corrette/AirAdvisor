@@ -1,0 +1,155 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Modifier mon avis — Vol {{ flight.flightNumber }} — AirAdvisor{% endblock %}
+
+{% block body %}
+<div class="max-w-3xl mx-auto px-4 py-10">
+    {# Breadcrumb #}
+    <nav class="text-sm text-gray-500 mb-6">
+        <a href="{{ path('app_home') }}" class="hover:text-blue-600 transition">Accueil</a>
+        <span class="mx-1">/</span>
+        <a href="{{ path('app_flight_show', {flightNumber: flight.flightNumber, date: flight.flightDate|date('Y-m-d')}) }}" class="hover:text-blue-600 transition">Vol {{ flight.flightNumber }}</a>
+        <span class="mx-1">/</span>
+        <span class="text-gray-900">Modifier mon avis</span>
+    </nav>
+
+    {# Flight info header #}
+    <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+        <div class="flex items-center gap-3 mb-2">
+            {% if flight.airline and flight.airline.logoUrl %}
+                <img src="{{ flight.airline.logoUrl }}" alt="{{ flight.airline.name }}" class="h-6 object-contain">
+            {% endif %}
+            {% if flight.airline %}
+                <span class="text-gray-600 text-sm">{{ flight.airline.name }}</span>
+            {% endif %}
+        </div>
+        <h1 class="text-2xl font-extrabold text-gray-900 mb-1">Modifier mon avis sur le vol {{ flight.flightNumber }}</h1>
+        <p class="text-gray-600">
+            {{ flight.departureCity }} → {{ flight.arrivalCity }} · {{ flight.flightDate|date('d/m/Y') }}
+        </p>
+    </div>
+
+    {# Flash messages #}
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="mb-4 p-4 rounded-lg text-sm
+                {% if label == 'success' %}bg-green-50 text-green-800 border border-green-200
+                {% elseif label == 'warning' %}bg-yellow-50 text-yellow-800 border border-yellow-200
+                {% else %}bg-red-50 text-red-800 border border-red-200{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    {# Form #}
+    {{ form_start(form, {attr: {class: 'space-y-6'}}) }}
+        <div class="bg-white rounded-xl shadow-sm p-6 space-y-6">
+            {# Title #}
+            <div>
+                {{ form_label(form.title, null, {label_attr: {class: 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                {{ form_widget(form.title, {attr: {class: 'w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition', placeholder: 'Ex : Vol agréable et ponctuel'}}) }}
+                {{ form_errors(form.title, {attr: {class: 'text-red-600 text-sm mt-1'}}) }}
+            </div>
+
+            {# Content #}
+            <div>
+                {{ form_label(form.content, null, {label_attr: {class: 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                {{ form_widget(form.content, {attr: {class: 'w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition h-32 resize-y', placeholder: 'Décrivez votre expérience (20 caractères minimum)'}}) }}
+                {{ form_errors(form.content, {attr: {class: 'text-red-600 text-sm mt-1'}}) }}
+            </div>
+
+            {# Star ratings #}
+            <div class="border-t pt-6">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">Notes</h2>
+
+                {% set ratingFields = [
+                    {field: 'rating', label: 'Note globale', required: true},
+                    {field: 'ratingComfort', label: 'Confort', required: false},
+                    {field: 'ratingPunctuality', label: 'Ponctualité', required: false},
+                    {field: 'ratingStaff', label: 'Personnel', required: false},
+                    {field: 'ratingFood', label: 'Nourriture', required: false}
+                ] %}
+
+                <div class="space-y-4">
+                    {% for item in ratingFields %}
+                    <div class="flex items-center gap-4">
+                        <span class="text-sm font-medium text-gray-700 w-32">
+                            {{ item.label }}
+                            {% if item.required %}<span class="text-red-500">*</span>{% endif %}
+                        </span>
+                        <div class="star-rating" data-target="{{ form[item.field].vars.id }}">
+                            {% for i in 1..5 %}
+                            <button type="button" class="star-btn text-3xl text-gray-300 hover:text-yellow-400 transition cursor-pointer focus:outline-none" data-value="{{ i }}">
+                                <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                </svg>
+                            </button>
+                            {% endfor %}
+                        </div>
+                        {# Hidden select (visually hidden, updated by JS) #}
+                        <div class="hidden">
+                            {{ form_widget(form[item.field]) }}
+                        </div>
+                        {{ form_errors(form[item.field], {attr: {class: 'text-red-600 text-sm'}}) }}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-4">
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition">
+                Enregistrer les modifications
+            </button>
+            <a href="{{ path('app_flight_show', {flightNumber: flight.flightNumber, date: flight.flightDate|date('Y-m-d')}) }}" class="text-gray-500 hover:text-gray-700 transition">
+                Annuler
+            </a>
+        </div>
+    {{ form_end(form) }}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.star-rating').forEach(function (group) {
+        const targetId = group.dataset.target;
+        const select = document.getElementById(targetId);
+        const buttons = group.querySelectorAll('.star-btn');
+
+        function setStars(value) {
+            buttons.forEach(function (btn) {
+                const v = parseInt(btn.dataset.value, 10);
+                btn.classList.toggle('text-yellow-400', v <= value);
+                btn.classList.toggle('text-gray-300', v > value);
+            });
+        }
+
+        // Init from existing value
+        if (select.value) {
+            setStars(parseInt(select.value, 10));
+        }
+
+        buttons.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                const value = parseInt(btn.dataset.value, 10);
+                select.value = value;
+                setStars(value);
+            });
+
+            btn.addEventListener('mouseenter', function () {
+                const value = parseInt(btn.dataset.value, 10);
+                buttons.forEach(function (b) {
+                    const v = parseInt(b.dataset.value, 10);
+                    b.classList.toggle('text-yellow-400', v <= value);
+                    b.classList.toggle('text-gray-300', v > value);
+                });
+            });
+        });
+
+        group.addEventListener('mouseleave', function () {
+            const current = select.value ? parseInt(select.value, 10) : 0;
+            setStars(current);
+        });
+    });
+});
+</script>
+{% endblock %}
