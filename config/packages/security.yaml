@@ -2,17 +2,38 @@ security:
     password_hashers:
         App\Entity\User:
             algorithm: bcrypt
+        App\Entity\AirlineAccount:
+            algorithm: bcrypt
 
     providers:
         app_user_provider:
             entity:
                 class: App\Entity\User
                 property: email
+        airline_provider:
+            entity:
+                class: App\Entity\AirlineAccount
+                property: email
 
     firewalls:
         dev:
             pattern: ^/(_profiler|_wdt|assets|build)/
             security: false
+        airline:
+            pattern: ^/espace-compagnie
+            lazy: true
+            provider: airline_provider
+            form_login:
+                login_path: airline_login
+                check_path: airline_login
+                default_target_path: airline_dashboard
+                enable_csrf: true
+            logout:
+                path: airline_logout
+                target: app_home
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800
         main:
             lazy: true
             provider: app_user_provider
@@ -29,6 +50,8 @@ security:
                 lifetime: 604800
 
     access_control:
+        - { path: ^/espace-compagnie/login, roles: PUBLIC_ACCESS }
+        - { path: ^/espace-compagnie, roles: ROLE_AIRLINE }
         - { path: ^/admin, roles: ROLE_ADMIN }
 
 when@test:

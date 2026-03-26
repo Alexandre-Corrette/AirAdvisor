@@ -1,0 +1,50 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Revendiquer votre compagnie — AirAdvisor{% endblock %}
+
+{% block body %}
+<div class="max-w-2xl mx-auto px-4 py-10">
+    <h1 class="text-3xl font-extrabold text-gray-900 mb-2">Revendiquer votre page compagnie</h1>
+    <p class="text-gray-500 mb-8">Vous représentez une compagnie aérienne ? Revendiquez votre page pour répondre aux avis et accéder à vos statistiques.</p>
+
+    {% for message in app.flashes('success') %}
+        <div class="bg-green-50 border border-green-200 text-green-800 rounded-lg p-4 mb-6">{{ message }}</div>
+    {% endfor %}
+
+    {{ form_start(form, {attr: {class: 'space-y-6'}}) }}
+        <div class="bg-white rounded-xl shadow-sm p-8 space-y-5">
+            <div>
+                {{ form_label(form.companyName, null, {label_attr: {class: 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                {{ form_widget(form.companyName, {attr: {class: 'w-full rounded-lg border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500'}}) }}
+                {{ form_errors(form.companyName) }}
+            </div>
+            <div>
+                {{ form_label(form.email, null, {label_attr: {class: 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                {{ form_widget(form.email, {attr: {class: 'w-full rounded-lg border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500'}}) }}
+                {{ form_help(form.email) }}
+                {{ form_errors(form.email) }}
+            </div>
+            <div>
+                {{ form_label(form.phone, null, {label_attr: {class: 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                {{ form_widget(form.phone, {attr: {class: 'w-full rounded-lg border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500'}}) }}
+                {{ form_errors(form.phone) }}
+            </div>
+            <div>
+                {{ form_label(form.airline, null, {label_attr: {class: 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                {{ form_widget(form.airline, {attr: {class: 'w-full rounded-lg border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500'}}) }}
+                {{ form_errors(form.airline) }}
+            </div>
+            <div>
+                {{ form_label(form.message, null, {label_attr: {class: 'block text-sm font-medium text-gray-700 mb-1'}}) }}
+                {{ form_widget(form.message, {attr: {class: 'w-full rounded-lg border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500'}}) }}
+                {{ form_help(form.message) }}
+                {{ form_errors(form.message) }}
+            </div>
+        </div>
+
+        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition">
+            Envoyer ma demande
+        </button>
+    {{ form_end(form) }}
+</div>
+{% endblock %}

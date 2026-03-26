@@ -33,7 +33,10 @@
                             <span class="text-3xl font-bold text-blue-600">{{ airline.iataCode }}</span>
                         </div>
                     {% endif %}
-                    <h2 class="font-bold text-gray-900 text-lg">{{ airline.name }}</h2>
+                    <h2 class="font-bold text-gray-900 text-lg">
+                        {{ airline.name }}
+                        {% if airline.verified %}<span class="inline-flex bg-blue-100 text-blue-700 text-xs font-semibold px-1.5 py-0.5 rounded-full ml-1 align-middle" title="Verifiee">&#10003;</span>{% endif %}
+                    </h2>
                     {% if airline.country %}
                         <p class="text-sm text-gray-500">{{ airline.country }}</p>
                     {% endif %}

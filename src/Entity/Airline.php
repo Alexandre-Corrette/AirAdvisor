@@ -30,6 +30,9 @@ class Airline
     #[ORM\Column(length: 255, unique: true)]
     private ?string $slug = null;
 
+    #[ORM\Column]
+    private bool $isVerified = false;
+
     /** @var Collection<int, Flight> */
     #[ORM\OneToMany(targetEntity: Flight::class, mappedBy: 'airline')]
     private Collection $flights;
@@ -101,6 +104,17 @@ class Airline
     public function setSlug(string $slug): static
     {
         $this->slug = $slug;
+        return $this;
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): static
+    {
+        $this->isVerified = $isVerified;
         return $this;
     }
 

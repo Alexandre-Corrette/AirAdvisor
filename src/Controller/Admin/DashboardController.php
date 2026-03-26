@@ -3,6 +3,8 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Airline;
+use App\Entity\AirlineAccount;
+use App\Entity\AirlineClaim;
 use App\Entity\Flight;
 use App\Entity\Review;
 use App\Entity\User;
@@ -56,5 +58,9 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Airlines', 'fa fa-plane', Airline::class);
         yield MenuItem::linkToCrud('Flights', 'fa fa-route', Flight::class);
         yield MenuItem::linkToCrud('Reviews', 'fa fa-star', Review::class);
+
+        yield MenuItem::section('Compagnies pro');
+        yield MenuItem::linkToCrud('Demandes', 'fa fa-envelope', AirlineClaim::class);
+        yield MenuItem::linkToCrud('Comptes compagnies', 'fa fa-building', AirlineAccount::class);
     }
 }
