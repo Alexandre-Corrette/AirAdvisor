@@ -18,6 +18,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TelephoneField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
+use App\Service\StripeConnectService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
@@ -26,6 +27,7 @@ class AirlineClaimCrudController extends AbstractCrudController
 {
     public function __construct(
         private UserPasswordHasherInterface $passwordHasher,
+        private StripeConnectService $stripeService,
     ) {
     }
 
@@ -93,18 +95,30 @@ class AirlineClaimCrudController extends AbstractCrudController
         $account->setCompanyName($claim->getCompanyName());
         $account->setPhone($claim->getPhone());
         $account->setAirline($claim->getAirline());
-        $account->setIsVerified(true);
 
         $tempPassword = bin2hex(random_bytes(8));
         $account->setPassword($this->passwordHasher->hashPassword($account, $tempPassword));
 
-        $claim->getAirline()->setIsVerified(true);
+        try {
+            $stripeAccountId = $this->stripeService->createConnectedAccount($account);
+            $account->setStripeAccountId($stripeAccountId);
+        } catch (\Stripe\Exception\ApiErrorException $e) {
+            $this->addFlash('danger', sprintf('Erreur Stripe : %s', $e->getMessage()));
+
+            $url = $adminUrlGenerator
+                ->setController(self::class)
+                ->setAction(Action::INDEX)
+                ->generateUrl();
+
+            return $this->redirect($url);
+        }
 
         $em->persist($account);
         $em->flush();
 
         $this->addFlash('success', sprintf(
-            'Demande approuvée. Compte créé pour %s avec le mot de passe temporaire : %s',
+            'Demande approuvee. Compte cree pour %s (mot de passe temporaire : %s). '
+            . 'La compagnie sera verifiee apres validation Stripe.',
             $claim->getEmail(),
             $tempPassword
         ));
