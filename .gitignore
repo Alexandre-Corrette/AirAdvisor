@@ -23,6 +23,11 @@
 
 ###> secrets & local config ###
 *.local
+.env.dev
 .env.prod*
 .env.staging*
 ###< secrets & local config ###
+
+###> mcp ###
+.mcp.json
+###< mcp ###

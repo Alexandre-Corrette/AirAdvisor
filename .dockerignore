@@ -1,0 +1,13 @@
+.git
+.github
+.claude
+.phpunit.cache
+var/cache
+var/log
+vendor
+node_modules
+*.local
+.env.dev
+.env.prod*
+.env.staging*
+CLAUDE.md
