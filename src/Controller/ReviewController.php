@@ -26,7 +26,7 @@ class ReviewController extends AbstractController
         ReviewRepository $reviewRepository,
         EntityManagerInterface $em,
     ): Response {
-        $dateObj = \DateTimeImmutable::createFromFormat('Y-m-d', $date);
+        $dateObj = \DateTimeImmutable::createFromFormat('Y-m-d|', $date);
         if (!$dateObj) {
             throw new NotFoundHttpException('Date invalide.');
         }

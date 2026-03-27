@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Flight;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -48,7 +49,7 @@ class FlightRepository extends ServiceEntityRepository
             ->where('f.flightNumber = :fn')
             ->andWhere('f.flightDate = :date')
             ->setParameter('fn', $flightNumber)
-            ->setParameter('date', $date)
+            ->setParameter('date', $date, Types::DATE_IMMUTABLE)
             ->getQuery()
             ->getOneOrNullResult();
     }
