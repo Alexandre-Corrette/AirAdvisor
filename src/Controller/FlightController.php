@@ -13,7 +13,7 @@ class FlightController extends AbstractController
     #[Route("/vol/{flightNumber}/{date}", name: "app_flight_show", requirements: ["date" => "\d{4}-\d{2}-\d{2}"])]
     public function show(string $flightNumber, string $date, FlightRepository $flightRepository): Response
     {
-        $dateObj = \DateTimeImmutable::createFromFormat('Y-m-d', $date);
+        $dateObj = \DateTimeImmutable::createFromFormat('Y-m-d|', $date);
         if (!$dateObj) {
             throw new NotFoundHttpException('Date invalide.');
         }
