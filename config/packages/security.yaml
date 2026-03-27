@@ -19,6 +19,10 @@ security:
         dev:
             pattern: ^/(_profiler|_wdt|assets|build)/
             security: false
+        webhook:
+            pattern: ^/webhook/
+            stateless: true
+            security: false
         airline:
             pattern: ^/espace-compagnie
             lazy: true
@@ -50,6 +54,7 @@ security:
                 lifetime: 604800
 
     access_control:
+        - { path: ^/webhook/, roles: PUBLIC_ACCESS }
         - { path: ^/espace-compagnie/login, roles: PUBLIC_ACCESS }
         - { path: ^/espace-compagnie, roles: ROLE_AIRLINE }
         - { path: ^/admin, roles: ROLE_ADMIN }

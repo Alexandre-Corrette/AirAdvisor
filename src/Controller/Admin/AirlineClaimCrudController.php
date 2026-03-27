@@ -18,6 +18,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TelephoneField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
+use App\Service\StripeConnectService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
@@ -26,6 +27,7 @@ class AirlineClaimCrudController extends AbstractCrudController
 {
     public function __construct(
         private UserPasswordHasherInterface $passwordHasher,
+        private StripeConnectService $stripeService,
     ) {
     }
 
@@ -70,6 +72,11 @@ class AirlineClaimCrudController extends AbstractCrudController
             ->displayIf(fn (AirlineClaim $c) => $c->isPending())
             ->setCssClass('btn btn-success');
 
+        $approveManual = Action::new('approveClaimManual', 'Approuver (sans Stripe)')
+            ->linkToRoute('admin_claim_approve_manual', fn (AirlineClaim $c) => ['id' => $c->getId()])
+            ->displayIf(fn (AirlineClaim $c) => $c->isPending())
+            ->setCssClass('btn btn-warning');
+
         $reject = Action::new('rejectClaim', 'Refuser')
             ->linkToRoute('admin_claim_reject', fn (AirlineClaim $c) => ['id' => $c->getId()])
             ->displayIf(fn (AirlineClaim $c) => $c->isPending())
@@ -77,13 +84,62 @@ class AirlineClaimCrudController extends AbstractCrudController
 
         return $actions
             ->add(Crud::PAGE_INDEX, $approve)
+            ->add(Crud::PAGE_INDEX, $approveManual)
             ->add(Crud::PAGE_INDEX, $reject)
             ->add(Crud::PAGE_DETAIL, $approve)
+            ->add(Crud::PAGE_DETAIL, $approveManual)
             ->add(Crud::PAGE_DETAIL, $reject);
     }
 
     #[Route('/admin/claim/{id}/approve', name: 'admin_claim_approve')]
     public function approve(AirlineClaim $claim, EntityManagerInterface $em, AdminUrlGenerator $adminUrlGenerator): Response
+    {
+        $claim->setStatus(AirlineClaim::STATUS_APPROVED);
+        $claim->setReviewedAt(new \DateTimeImmutable());
+
+        $account = new AirlineAccount();
+        $account->setEmail($claim->getEmail());
+        $account->setCompanyName($claim->getCompanyName());
+        $account->setPhone($claim->getPhone());
+        $account->setAirline($claim->getAirline());
+
+        $tempPassword = bin2hex(random_bytes(8));
+        $account->setPassword($this->passwordHasher->hashPassword($account, $tempPassword));
+
+        try {
+            $stripeAccountId = $this->stripeService->createConnectedAccount($account);
+            $account->setStripeAccountId($stripeAccountId);
+        } catch (\Stripe\Exception\ApiErrorException $e) {
+            $this->addFlash('danger', sprintf('Erreur Stripe : %s', $e->getMessage()));
+
+            $url = $adminUrlGenerator
+                ->setController(self::class)
+                ->setAction(Action::INDEX)
+                ->generateUrl();
+
+            return $this->redirect($url);
+        }
+
+        $em->persist($account);
+        $em->flush();
+
+        $this->addFlash('success', sprintf(
+            'Demande approuvee. Compte cree pour %s (mot de passe temporaire : %s). '
+            . 'La compagnie sera verifiee apres validation Stripe.',
+            $claim->getEmail(),
+            $tempPassword
+        ));
+
+        $url = $adminUrlGenerator
+            ->setController(self::class)
+            ->setAction(Action::INDEX)
+            ->generateUrl();
+
+        return $this->redirect($url);
+    }
+
+    #[Route('/admin/claim/{id}/approve-manual', name: 'admin_claim_approve_manual')]
+    public function approveManual(AirlineClaim $claim, EntityManagerInterface $em, AdminUrlGenerator $adminUrlGenerator): Response
     {
         $claim->setStatus(AirlineClaim::STATUS_APPROVED);
         $claim->setReviewedAt(new \DateTimeImmutable());
@@ -104,7 +160,7 @@ class AirlineClaimCrudController extends AbstractCrudController
         $em->flush();
 
         $this->addFlash('success', sprintf(
-            'Demande approuvée. Compte créé pour %s avec le mot de passe temporaire : %s',
+            'Demande approuvee (sans Stripe). Compte cree pour %s (mot de passe temporaire : %s).',
             $claim->getEmail(),
             $tempPassword
         ));

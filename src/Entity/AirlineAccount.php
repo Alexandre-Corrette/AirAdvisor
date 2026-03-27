@@ -36,6 +36,9 @@ class AirlineAccount implements UserInterface, PasswordAuthenticatedUserInterfac
     #[ORM\JoinColumn(nullable: true)]
     private ?Airline $airline = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $stripeAccountId = null;
+
     #[ORM\Column]
     private \DateTimeImmutable $createdAt;
 
@@ -131,6 +134,17 @@ class AirlineAccount implements UserInterface, PasswordAuthenticatedUserInterfac
     public function setAirline(?Airline $airline): static
     {
         $this->airline = $airline;
+        return $this;
+    }
+
+    public function getStripeAccountId(): ?string
+    {
+        return $this->stripeAccountId;
+    }
+
+    public function setStripeAccountId(?string $stripeAccountId): static
+    {
+        $this->stripeAccountId = $stripeAccountId;
         return $this;
     }
 
