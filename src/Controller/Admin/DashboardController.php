@@ -2,9 +2,6 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Airline;
-use App\Entity\AirlineAccount;
-use App\Entity\AirlineClaim;
 use App\Entity\Flight;
 use App\Entity\Review;
 use App\Entity\User;
@@ -54,13 +51,13 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        yield MenuItem::linkToCrud('Users', 'fa fa-users', User::class);
-        yield MenuItem::linkToCrud('Airlines', 'fa fa-plane', Airline::class);
-        yield MenuItem::linkToCrud('Flights', 'fa fa-route', Flight::class);
-        yield MenuItem::linkToCrud('Reviews', 'fa fa-star', Review::class);
+        yield MenuItem::linkTo(UserCrudController::class, 'Users', 'fa fa-users');
+        yield MenuItem::linkTo(AirlineCrudController::class, 'Airlines', 'fa fa-plane');
+        yield MenuItem::linkTo(FlightCrudController::class, 'Flights', 'fa fa-route');
+        yield MenuItem::linkTo(ReviewCrudController::class, 'Reviews', 'fa fa-star');
 
         yield MenuItem::section('Compagnies pro');
-        yield MenuItem::linkToCrud('Demandes', 'fa fa-envelope', AirlineClaim::class);
-        yield MenuItem::linkToCrud('Comptes compagnies', 'fa fa-building', AirlineAccount::class);
+        yield MenuItem::linkTo(AirlineClaimCrudController::class, 'Demandes', 'fa fa-envelope');
+        yield MenuItem::linkTo(AirlineAccountCrudController::class, 'Comptes compagnies', 'fa fa-building');
     }
 }
